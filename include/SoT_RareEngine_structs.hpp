@@ -1,18 +1,45 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
 
-#include "SoT_Basic.hpp"
-#include "SoT_RareEngine_enums.hpp"
-#include "SoT_CoreUObject_classes.hpp"
-#include "SoT_Engine_classes.hpp"
-
 namespace SDK
 {
+//---------------------------------------------------------------------------
+//Enums
+//---------------------------------------------------------------------------
+
+// Enum RareEngine.EMemoryUsageVisualiserInstanceType
+enum class EMemoryUsageVisualiserInstanceType : uint8_t
+{
+	Server                         = 0,
+	Client                         = 1,
+	EMemoryUsageVisualiserInstanceType_MAX = 2
+};
+
+
+// Enum RareEngine.EMemoryGatheringMode
+enum class EMemoryGatheringMode : uint8_t
+{
+	Exclusive                      = 0,
+	Inclusive                      = 1,
+	EMemoryGatheringMode_MAX       = 2
+};
+
+
+// Enum RareEngine.ETestEnum
+enum class ERareEngine_ETestEnum : uint8_t
+{
+	Alpha                          = 0,
+	Beta                           = 1,
+	ETestEnum_MAX                  = 2
+};
+
+
+
 //---------------------------------------------------------------------------
 //Script Structs
 //---------------------------------------------------------------------------
@@ -22,7 +49,7 @@ namespace SDK
 struct FMemoryVisualiserStat
 {
 	struct FName                                       StatName;                                                 // 0x0000(0x0008) (Edit, ZeroConstructor, IsPlainOldData)
-	class FString                                      DisplayName;                                              // 0x0008(0x0010) (Edit, ZeroConstructor)
+	struct FString                                     DisplayName;                                              // 0x0008(0x0010) (Edit, ZeroConstructor)
 	float                                              MemoryUsageMB;                                            // 0x0018(0x0004) (ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x4];                                       // 0x001C(0x0004) MISSED OFFSET
 };
@@ -34,7 +61,7 @@ struct FMemoryVisualiserClass
 	class UClass*                                      ClassType;                                                // 0x0000(0x0008) (Edit, ZeroConstructor, IsPlainOldData)
 	TEnumAsByte<EMemoryGatheringMode>                  MemoryGatheringMode;                                      // 0x0008(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x7];                                       // 0x0009(0x0007) MISSED OFFSET
-	class FString                                      DisplayName;                                              // 0x0010(0x0010) (Edit, ZeroConstructor)
+	struct FString                                     DisplayName;                                              // 0x0010(0x0010) (Edit, ZeroConstructor)
 	float                                              MemoryUsageMB;                                            // 0x0020(0x0004) (ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData01[0x4];                                       // 0x0024(0x0004) MISSED OFFSET
 };
@@ -43,7 +70,7 @@ struct FMemoryVisualiserClass
 // 0x0058
 struct FMemoryVisualiserCategory
 {
-	class FString                                      CategoryName;                                             // 0x0000(0x0010) (Edit, ZeroConstructor)
+	struct FString                                     CategoryName;                                             // 0x0000(0x0010) (Edit, ZeroConstructor)
 	TArray<struct FMemoryVisualiserStat>               CategoryStats;                                            // 0x0010(0x0010) (Edit, ZeroConstructor)
 	TArray<struct FMemoryVisualiserClass>              CategoryClasses;                                          // 0x0020(0x0010) (Edit, ZeroConstructor)
 	bool                                               CollectOnServer;                                          // 0x0030(0x0001) (Edit, ZeroConstructor, IsPlainOldData)

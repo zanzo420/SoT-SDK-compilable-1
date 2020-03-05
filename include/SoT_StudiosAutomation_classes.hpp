@@ -1,12 +1,10 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
-
-#include "SoT_StudiosAutomation_structs.hpp"
 
 namespace SDK
 {
@@ -22,7 +20,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class StudiosAutomation.TestablePlayerController"));
+		static auto ptr = UObject::FindClass("Class StudiosAutomation.TestablePlayerController");
 		return ptr;
 	}
 
@@ -53,7 +51,7 @@ public:
 	float                                              TestTimeout;                                              // 0x043C(0x0004) (Edit, ZeroConstructor, IsPlainOldData)
 	float                                              TestPausedTimeout;                                        // 0x0440(0x0004) (Edit, ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData03[0x4];                                       // 0x0444(0x0004) MISSED OFFSET
-	TArray<class FString>                              VerboseLogCategories;                                     // 0x0448(0x0010) (Edit, ZeroConstructor)
+	TArray<struct FString>                             VerboseLogCategories;                                     // 0x0448(0x0010) (Edit, ZeroConstructor)
 	TArray<int>                                        ClientsRunning;                                           // 0x0458(0x0010) (Net, ZeroConstructor)
 	TArray<int>                                        ClientIds;                                                // 0x0468(0x0010) (Net, ZeroConstructor)
 	TArray<struct FClientPawnDetails>                  ClientPawns;                                              // 0x0478(0x0010) (Net, ZeroConstructor)
@@ -63,24 +61,24 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class StudiosAutomation.TestLevelScriptActor"));
+		static auto ptr = UObject::FindClass("Class StudiosAutomation.TestLevelScriptActor");
 		return ptr;
 	}
 
 
-	static void YieldToServer(class UObject* WorldContextObject, const struct FLatentActionInfo& LatentInfo);
+	void STATIC_YieldToServer(class UObject* WorldContextObject, const struct FLatentActionInfo& LatentInfo);
 	void YieldToOriginalServer(class UObject* WorldContextObject, const struct FLatentActionInfo& LatentInfo);
 	void YieldToDynamicServer(class UObject* WorldContextObject, const struct FLatentActionInfo& LatentInfo, int ServerIndex);
-	static void YieldToClient(class UObject* WorldContextObject, const struct FLatentActionInfo& LatentInfo, int ClientId);
-	static void WaitForPossessionAcknowledgement(class UObject* WorldContextObject, const struct FLatentActionInfo& LatentInfo);
+	void STATIC_YieldToClient(class UObject* WorldContextObject, const struct FLatentActionInfo& LatentInfo, int ClientId);
+	void STATIC_WaitForPossessionAcknowledgement(class UObject* WorldContextObject, const struct FLatentActionInfo& LatentInfo);
 	void WaitForOtherServers(class UObject* WorldContextObject, const struct FLatentActionInfo& LatentInfo, int NumberOfServers);
-	static void WaitForClients(class UObject* WorldContextObject, const struct FLatentActionInfo& LatentInfo, int NumberOfClients);
+	void STATIC_WaitForClients(class UObject* WorldContextObject, const struct FLatentActionInfo& LatentInfo, int NumberOfClients);
 	void TestTriggerServerMigration(TArray<class AActor*> ActorGroup, int TargetServerIndex);
 	bool TestCloseConnection(int ConnectionIdx);
-	static void SyncClientServer(class UObject* WorldContextObject, const struct FLatentActionInfo& LatentInfo, int NumClients, bool RegisterPawnsForMPTesting, bool ClearPawnInputBindings);
-	static class AActor* SpawnActorForMPTesting(class UObject* WorldContextObject, class UClass* ActorClass, const struct FVector& SpawnLocation, const struct FRotator& SpawnRotation);
+	void STATIC_SyncClientServer(class UObject* WorldContextObject, const struct FLatentActionInfo& LatentInfo, int NumClients, bool RegisterPawnsForMPTesting, bool ClearPawnInputBindings);
+	class AActor* STATIC_SpawnActorForMPTesting(class UObject* WorldContextObject, class UClass* ActorClass, const struct FVector& SpawnLocation, const struct FRotator& SpawnRotation);
 	void SendServerMigrationTestValueInt32(int TestValue);
-	static void RegisterPawnsForMPTesting(class UObject* WorldContextObject);
+	void STATIC_RegisterPawnsForMPTesting(class UObject* WorldContextObject);
 	void RegisterActorForMPTestingRecursively(class AActor* TargetActor);
 	void RegisterActorForMPTesting(class AActor* TargetActor);
 	void PostTestCleanup();
@@ -95,16 +93,16 @@ public:
 	void OnClientServerMigrationCompleted(const struct FGuid& MigrationId);
 	void OnClientServerMigrationAborted(const struct FGuid& MigrationId);
 	int GetServerIndex(class UObject* WorldContextObject);
-	class FString GetRemoteServerMigrationURL(int TargetServerIndex);
+	struct FString GetRemoteServerMigrationURL(int TargetServerIndex);
 	int GetPlayerIndexFromClientId(int ClientId);
 	int GetNumClientsForMultiplayerTest();
 	int GetNumAutomationClients();
 	class APawn* GetClientPawn(int ClientId, int SplitScreenIndex);
 	int GetClientId(bool ErrorOnFailure);
 	void DoServerPostTestCleanup();
-	static void ClearPawnInputBindings(class UObject* WorldContextObject);
-	void AddServer(const class FString& Name);
-	void AddClient(int Port, const class FString& Name);
+	void STATIC_ClearPawnInputBindings(class UObject* WorldContextObject);
+	void AddServer(const struct FString& Name);
+	void AddClient(int Port, const struct FString& Name);
 };
 
 
@@ -116,7 +114,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class StudiosAutomation.ActorThatLogsErrorWhenTicked"));
+		static auto ptr = UObject::FindClass("Class StudiosAutomation.ActorThatLogsErrorWhenTicked");
 		return ptr;
 	}
 
@@ -131,53 +129,54 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class StudiosAutomation.AutomationBlueprintFunctionLibrary"));
+		static auto ptr = UObject::FindClass("Class StudiosAutomation.AutomationBlueprintFunctionLibrary");
 		return ptr;
 	}
 
 
-	static void TestFinished(class UObject* ContextObject);
-	static void TestFailed(const class FString& Message, class UObject* ContextObject);
-	static void TakeAutomationScreenshotAtCamera(class UObject* WorldContextObject, const struct FLatentActionInfo& LatentInfo, class ACameraActor* Camera, const class FString& NameOverride, float DelayBeforeScreenshotSeconds);
-	static void TakeAutomationScreenshot(class UObject* WorldContextObject, const struct FLatentActionInfo& LatentInfo, const class FString& Name);
-	static void StepStarted(const class FString& StepName);
-	static void StepFinished();
-	static void SetTestTimeoutAsFatal(bool TimeoutIsFatal);
-	static void OpenLevelWithGameMode(class UObject* WorldContextObject, const struct FName& LevelName, class UClass* GameMode, bool Absolute);
-	static bool IsTravelFinished(class UObject* WorldContextObject);
-	static bool IsEditor();
-	static bool HasPerformanceDataBeenCaptured();
-	static class ATestLevelScriptActor* GetTestLevelScriptActor(bool ErrorOnFailure);
-	static int GetPlayerId(class APlayerState* State);
-	static class FString GetLevelUrl(class UObject* WorldContextObject);
-	static class FString GetCurrentMapTestName();
-	static void EndPerformanceCapture(bool DumpMemReport);
-	static void DumpFullMemReportDelayed(int FrameDelay);
-	static void DumpFullMemReport();
-	static void DelayForFramesWithDesc(class UObject* WorldContextObject, const struct FLatentActionInfo& LatentInfo, int NumFrames, const class FString& Description);
-	static void DelayForFrames(class UObject* WorldContextObject, const struct FLatentActionInfo& LatentInfo, int NumFrames);
-	static void CollectGarbageNow(bool FullPurge);
-	static void BlockAsyncLoading(bool EnableBlock);
-	static void BeginPerformanceCapture(const class FString& FolderName, bool DumpMemReport, bool PreventGarbageCollection);
-	static void AssertValue_Int(int Actual, TEnumAsByte<EComparisonMethod> ShouldBe, int Expected, const class FString& What, class UObject* ContextObject);
-	static void AssertValue_Float(float Actual, TEnumAsByte<EComparisonMethod> ShouldBe, float Expected, const class FString& What, class UObject* ContextObject);
-	static void AssertValue_DateTime(const struct FDateTime& Actual, TEnumAsByte<EComparisonMethod> ShouldBe, const struct FDateTime& Expected, const class FString& What, class UObject* ContextObject);
-	static void AssertTrue(bool Condition, const class FString& Message, class UObject* ContextObject);
-	static void AssertNotEqual_Vector(const struct FVector& Actual, const struct FVector& NotExpected, const class FString& What, class UObject* ContextObject);
-	static void AssertNotEqual_Transform(const struct FTransform& Actual, const struct FTransform& NotExpected, const class FString& What, class UObject* ContextObject);
-	static void AssertNotEqual_String(const class FString& Actual, const class FString& NotExpected, const class FString& What, class UObject* ContextObject);
-	static void AssertNotEqual_Rotator(const struct FRotator& Actual, const struct FRotator& NotExpected, const class FString& What, class UObject* ContextObject);
-	static void AssertIsValid(class UObject* Object, const class FString& Message, class UObject* ContextObject);
-	static void AssertIsNotValid(class UObject* Object, const class FString& Message, class UObject* ContextObject);
-	static void AssertFalse(bool Condition, const class FString& Message, class UObject* ContextObject);
-	static void AssertErrorOccurred(const class FString& ErrorMessage);
-	static void AssertEqual_Vector2D(const struct FVector2D& Actual, const struct FVector2D& Expected, const class FString& What, float Tolerance, class UObject* ContextObject);
-	static void AssertEqual_Vector(const struct FVector& Actual, const struct FVector& Expected, const class FString& What, float Tolerance, class UObject* ContextObject);
-	static void AssertEqual_Transform(const struct FTransform& Actual, const struct FTransform& Expected, const class FString& What, class UObject* ContextObject);
-	static void AssertEqual_String(const class FString& Actual, const class FString& Expected, const class FString& What, class UObject* ContextObject);
-	static void AssertEqual_Rotator(const struct FRotator& Actual, const struct FRotator& Expected, const class FString& What, class UObject* ContextObject);
-	static void AssertEqual_Float(float Actual, float Expected, const class FString& What, float Tolerance, class UObject* ContextObject);
-	static void AddExpectedError(const class FString& ErrorMessage);
+	void STATIC_TestFinished(class UObject* ContextObject);
+	void STATIC_TestFailed(const struct FString& Message, class UObject* ContextObject);
+	void STATIC_TakeAutomationScreenshotAtCamera(class UObject* WorldContextObject, const struct FLatentActionInfo& LatentInfo, class ACameraActor* Camera, const struct FString& NameOverride, float DelayBeforeScreenshotSeconds);
+	void STATIC_TakeAutomationScreenshot(class UObject* WorldContextObject, const struct FLatentActionInfo& LatentInfo, const struct FString& Name);
+	void STATIC_StepStarted(const struct FString& StepName);
+	void STATIC_StepFinished();
+	void STATIC_SetTestTimeoutAsFatal(bool TimeoutIsFatal);
+	void STATIC_OpenLevelWithGameMode(class UObject* WorldContextObject, const struct FName& LevelName, class UClass* GameMode, bool Absolute);
+	bool STATIC_IsTravelFinished(class UObject* WorldContextObject);
+	bool STATIC_IsFeatureToggleEnabled(const struct FName& FeatureToggleName);
+	bool STATIC_IsEditor();
+	bool STATIC_HasPerformanceDataBeenCaptured();
+	class ATestLevelScriptActor* STATIC_GetTestLevelScriptActor(bool ErrorOnFailure);
+	int STATIC_GetPlayerId(class APlayerState* State);
+	struct FString STATIC_GetLevelUrl(class UObject* WorldContextObject);
+	struct FString STATIC_GetCurrentMapTestName();
+	void STATIC_EndPerformanceCapture(bool DumpMemReport);
+	void STATIC_DumpFullMemReportDelayed(int FrameDelay);
+	void STATIC_DumpFullMemReport();
+	void STATIC_DelayForFramesWithDesc(class UObject* WorldContextObject, const struct FLatentActionInfo& LatentInfo, int NumFrames, const struct FString& Description);
+	void STATIC_DelayForFrames(class UObject* WorldContextObject, const struct FLatentActionInfo& LatentInfo, int NumFrames);
+	void STATIC_CollectGarbageNow(bool FullPurge);
+	void STATIC_BlockAsyncLoading(bool EnableBlock);
+	void STATIC_BeginPerformanceCapture(const struct FString& FolderName, bool DumpMemReport, bool PreventGarbageCollection);
+	void STATIC_AssertValue_Int(int Actual, TEnumAsByte<EComparisonMethod> ShouldBe, int Expected, const struct FString& What, class UObject* ContextObject);
+	void STATIC_AssertValue_Float(float Actual, TEnumAsByte<EComparisonMethod> ShouldBe, float Expected, const struct FString& What, class UObject* ContextObject);
+	void STATIC_AssertValue_DateTime(const struct FDateTime& Actual, TEnumAsByte<EComparisonMethod> ShouldBe, const struct FDateTime& Expected, const struct FString& What, class UObject* ContextObject);
+	void STATIC_AssertTrue(bool Condition, const struct FString& Message, class UObject* ContextObject);
+	void STATIC_AssertNotEqual_Vector(const struct FVector& Actual, const struct FVector& NotExpected, const struct FString& What, class UObject* ContextObject);
+	void STATIC_AssertNotEqual_Transform(const struct FTransform& Actual, const struct FTransform& NotExpected, const struct FString& What, class UObject* ContextObject);
+	void STATIC_AssertNotEqual_String(const struct FString& Actual, const struct FString& NotExpected, const struct FString& What, class UObject* ContextObject);
+	void STATIC_AssertNotEqual_Rotator(const struct FRotator& Actual, const struct FRotator& NotExpected, const struct FString& What, class UObject* ContextObject);
+	void STATIC_AssertIsValid(class UObject* Object, const struct FString& Message, class UObject* ContextObject);
+	void STATIC_AssertIsNotValid(class UObject* Object, const struct FString& Message, class UObject* ContextObject);
+	void STATIC_AssertFalse(bool Condition, const struct FString& Message, class UObject* ContextObject);
+	void STATIC_AssertErrorOccurred(const struct FString& ErrorMessage);
+	void STATIC_AssertEqual_Vector2D(const struct FVector2D& Actual, const struct FVector2D& Expected, const struct FString& What, float Tolerance, class UObject* ContextObject);
+	void STATIC_AssertEqual_Vector(const struct FVector& Actual, const struct FVector& Expected, const struct FString& What, float Tolerance, class UObject* ContextObject);
+	void STATIC_AssertEqual_Transform(const struct FTransform& Actual, const struct FTransform& Expected, const struct FString& What, class UObject* ContextObject);
+	void STATIC_AssertEqual_String(const struct FString& Actual, const struct FString& Expected, const struct FString& What, class UObject* ContextObject);
+	void STATIC_AssertEqual_Rotator(const struct FRotator& Actual, const struct FRotator& Expected, const struct FString& What, class UObject* ContextObject);
+	void STATIC_AssertEqual_Float(float Actual, float Expected, const struct FString& What, float Tolerance, class UObject* ContextObject);
+	void STATIC_AddExpectedError(const struct FString& ErrorMessage);
 };
 
 
@@ -190,7 +189,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class StudiosAutomation.AutomationLatentActionCallback"));
+		static auto ptr = UObject::FindClass("Class StudiosAutomation.AutomationLatentActionCallback");
 		return ptr;
 	}
 
@@ -207,7 +206,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class StudiosAutomation.BPNamedObjectMock"));
+		static auto ptr = UObject::FindClass("Class StudiosAutomation.BPNamedObjectMock");
 		return ptr;
 	}
 
@@ -222,7 +221,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class StudiosAutomation.MapFixtureTestGameMode"));
+		static auto ptr = UObject::FindClass("Class StudiosAutomation.MapFixtureTestGameMode");
 		return ptr;
 	}
 
@@ -237,7 +236,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class StudiosAutomation.TestUObject"));
+		static auto ptr = UObject::FindClass("Class StudiosAutomation.TestUObject");
 		return ptr;
 	}
 
@@ -252,7 +251,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class StudiosAutomation.OtherTestUObject"));
+		static auto ptr = UObject::FindClass("Class StudiosAutomation.OtherTestUObject");
 		return ptr;
 	}
 
@@ -267,7 +266,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class StudiosAutomation.RunUnitTestsCommandlet"));
+		static auto ptr = UObject::FindClass("Class StudiosAutomation.RunUnitTestsCommandlet");
 		return ptr;
 	}
 
@@ -282,7 +281,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class StudiosAutomation.TestAbstractActor"));
+		static auto ptr = UObject::FindClass("Class StudiosAutomation.TestAbstractActor");
 		return ptr;
 	}
 

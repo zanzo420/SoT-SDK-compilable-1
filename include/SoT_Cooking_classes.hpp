@@ -1,12 +1,10 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
-
-#include "SoT_Cooking_structs.hpp"
 
 namespace SDK
 {
@@ -22,7 +20,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Cooking.CookableInterface"));
+		static auto ptr = UObject::FindClass("Class Cooking.CookableInterface");
 		return ptr;
 	}
 
@@ -37,7 +35,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Cooking.CookingDefaultsInterface"));
+		static auto ptr = UObject::FindClass("Class Cooking.CookingDefaultsInterface");
 		return ptr;
 	}
 
@@ -52,7 +50,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Cooking.CookingStatusPublisherInterface"));
+		static auto ptr = UObject::FindClass("Class Cooking.CookingStatusPublisherInterface");
 		return ptr;
 	}
 
@@ -67,7 +65,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Cooking.CookingStateInterface"));
+		static auto ptr = UObject::FindClass("Class Cooking.CookingStateInterface");
 		return ptr;
 	}
 
@@ -92,7 +90,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Cooking.CookableComponent"));
+		static auto ptr = UObject::FindClass("Class Cooking.CookableComponent");
 		return ptr;
 	}
 
@@ -107,7 +105,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Cooking.CookerInterface"));
+		static auto ptr = UObject::FindClass("Class Cooking.CookerInterface");
 		return ptr;
 	}
 
@@ -144,7 +142,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Cooking.CookerComponent"));
+		static auto ptr = UObject::FindClass("Class Cooking.CookerComponent");
 		return ptr;
 	}
 
@@ -177,7 +175,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Cooking.CookingComponentAudioParams"));
+		static auto ptr = UObject::FindClass("Class Cooking.CookingComponentAudioParams");
 		return ptr;
 	}
 
@@ -204,7 +202,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Cooking.CookingPot"));
+		static auto ptr = UObject::FindClass("Class Cooking.CookingPot");
 		return ptr;
 	}
 
@@ -219,7 +217,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Cooking.MixableInterface"));
+		static auto ptr = UObject::FindClass("Class Cooking.MixableInterface");
 		return ptr;
 	}
 
@@ -234,7 +232,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Cooking.PottableInterface"));
+		static auto ptr = UObject::FindClass("Class Cooking.PottableInterface");
 		return ptr;
 	}
 
@@ -252,7 +250,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Cooking.PottableComponent"));
+		static auto ptr = UObject::FindClass("Class Cooking.PottableComponent");
 		return ptr;
 	}
 

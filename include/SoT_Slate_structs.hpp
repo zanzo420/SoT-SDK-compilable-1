@@ -1,19 +1,85 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
 
-#include "SoT_Basic.hpp"
-#include "SoT_Slate_enums.hpp"
-#include "SoT_SlateCore_classes.hpp"
-#include "SoT_InputCore_classes.hpp"
-#include "SoT_CoreUObject_classes.hpp"
-
 namespace SDK
 {
+//---------------------------------------------------------------------------
+//Enums
+//---------------------------------------------------------------------------
+
+// Enum Slate.ETextJustify
+enum class ETextJustify : uint8_t
+{
+	Left                           = 0,
+	Center                         = 1,
+	Right                          = 2,
+	ETextJustify_MAX               = 3
+};
+
+
+// Enum Slate.ETableViewMode
+enum class ETableViewMode : uint8_t
+{
+	List                           = 0,
+	Tile                           = 1,
+	Tree                           = 2,
+	ETableViewMode_MAX             = 3
+};
+
+
+// Enum Slate.ESelectionMode
+enum class ESelectionMode : uint8_t
+{
+	None                           = 0,
+	Single                         = 1,
+	SingleToggle                   = 2,
+	Multi                          = 3,
+	ESelectionMode_MAX             = 4
+};
+
+
+// Enum Slate.EStretch
+enum class EStretch : uint8_t
+{
+	None                           = 0,
+	Fill                           = 1,
+	ScaleToFit                     = 2,
+	ScaleToFitX                    = 3,
+	ScaleToFitY                    = 4,
+	ScaleToFill                    = 5,
+	UserSpecified                  = 6,
+	EStretch_MAX                   = 7
+};
+
+
+// Enum Slate.EStretchDirection
+enum class EStretchDirection : uint8_t
+{
+	Both                           = 0,
+	DownOnly                       = 1,
+	UpOnly                         = 2,
+	EStretchDirection_MAX          = 3
+};
+
+
+// Enum Slate.EProgressBarFillType
+enum class EProgressBarFillType : uint8_t
+{
+	LeftToRight                    = 0,
+	RightToLeft                    = 1,
+	FillFromCenter                 = 2,
+	TopToBottom                    = 3,
+	BottomToTop                    = 4,
+	EProgressBarFillType_MAX       = 5
+};
+
+
+
 //---------------------------------------------------------------------------
 //Script Structs
 //---------------------------------------------------------------------------

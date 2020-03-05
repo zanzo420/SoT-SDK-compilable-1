@@ -1,22 +1,71 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
 
-#include "SoT_Basic.hpp"
-#include "SoT_Watercrafts_enums.hpp"
-#include "SoT_Water_classes.hpp"
-#include "SoT_Engine_classes.hpp"
-#include "SoT_CoreUObject_classes.hpp"
-#include "SoT_AthenaInput_classes.hpp"
-#include "SoT_ActionStateMachine_classes.hpp"
-#include "SoT_Athena_classes.hpp"
-
 namespace SDK
 {
+//---------------------------------------------------------------------------
+//Enums
+//---------------------------------------------------------------------------
+
+// Enum Watercrafts.EOarState
+enum class EOarState : uint8_t
+{
+	Idle                           = 0,
+	InStroke                       = 1,
+	ApexOfStroke                   = 2,
+	RecoveringFromStroke           = 3,
+	Braking                        = 4,
+	EOarState_MAX                  = 5
+};
+
+
+// Enum Watercrafts.EOarIdentifier
+enum class EOarIdentifier : uint8_t
+{
+	Left                           = 0,
+	Right                          = 1,
+	EOarIdentifier_MAX             = 2
+};
+
+
+// Enum Watercrafts.ERowboatActionTelemetry
+enum class ERowboatActionTelemetry : uint8_t
+{
+	None                           = 0,
+	Mount                          = 1,
+	Unmount                        = 2,
+	ERowboatActionTelemetry_MAX    = 3
+};
+
+
+// Enum Watercrafts.EWatercraftDespawnReason
+enum class EWatercraftDespawnReason : uint8_t
+{
+	Unknown                        = 0,
+	Destroyed                      = 1,
+	ExternalRequest                = 2,
+	Migration                      = 3,
+	WorldEnding                    = 4,
+	EWatercraftDespawnReason_MAX   = 5
+};
+
+
+// Enum Watercrafts.EOarInputState
+enum class EOarInputState : uint8_t
+{
+	Inactive                       = 0,
+	Active                         = 1,
+	Braking                        = 2,
+	EOarInputState_MAX             = 3
+};
+
+
+
 //---------------------------------------------------------------------------
 //Script Structs
 //---------------------------------------------------------------------------
@@ -131,7 +180,7 @@ struct FWatercraftDespawnTelemetryEvent
 struct FWatercraftSpawnTelemetryEvent
 {
 	struct FGuid                                       WatercraftId;                                             // 0x0000(0x0010) (ZeroConstructor, IsPlainOldData)
-	class FString                                      WatercraftType;                                           // 0x0010(0x0010) (ZeroConstructor)
+	struct FString                                     WatercraftType;                                           // 0x0010(0x0010) (ZeroConstructor)
 	struct FVector                                     Location;                                                 // 0x0020(0x000C) (ZeroConstructor, IsPlainOldData)
 	struct FVector                                     Forward;                                                  // 0x002C(0x000C) (ZeroConstructor, IsPlainOldData)
 };

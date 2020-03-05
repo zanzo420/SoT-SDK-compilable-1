@@ -1,19 +1,60 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
 
-#include "SoT_Basic.hpp"
-#include "SoT_Water_enums.hpp"
-#include "SoT_CoreUObject_classes.hpp"
-#include "SoT_Engine_classes.hpp"
-#include "SoT_Maths_classes.hpp"
-
 namespace SDK
 {
+//---------------------------------------------------------------------------
+//Enums
+//---------------------------------------------------------------------------
+
+// Enum Water.EWaterQueryResult
+enum class EWaterQueryResult : uint8_t
+{
+	Success                        = 0,
+	Failed                         = 1,
+	NoWater                        = 2,
+	Count                          = 3,
+	EWaterQueryResult_MAX          = 4
+};
+
+
+// Enum Water.EBuoyancyDragSampleType
+enum class EBuoyancyDragSampleType : uint8_t
+{
+	Spherical                      = 0,
+	Planar                         = 1,
+	EBuoyancyDragSampleType_MAX    = 2
+};
+
+
+// Enum Water.EBuoyancySampleType
+enum class EBuoyancySampleType : uint8_t
+{
+	Spherical                      = 0,
+	Cuboidal                       = 1,
+	ProbeCurve                     = 2,
+	EBuoyancySampleType_MAX        = 3
+};
+
+
+// Enum Water.EWaterSplashProbeType
+enum class EWaterSplashProbeType : uint8_t
+{
+	ThresholdedRateOfChange        = 0,
+	StateChangeWaterToAir          = 1,
+	StateChangeAirToWater          = 2,
+	StateChangeAny                 = 3,
+	Continuous                     = 4,
+	EWaterSplashProbeType_MAX      = 5
+};
+
+
+
 //---------------------------------------------------------------------------
 //Script Structs
 //---------------------------------------------------------------------------
@@ -124,7 +165,7 @@ struct FBuoyancySampleMovement
 struct FWaterSplashProbe
 {
 	unsigned char                                      UnknownData00[0x8];                                       // 0x0000(0x0008) MISSED OFFSET
-	class FString                                      ProbeDebugName;                                           // 0x0008(0x0010) (Edit, ZeroConstructor)
+	struct FString                                     ProbeDebugName;                                           // 0x0008(0x0010) (Edit, ZeroConstructor)
 	struct FVector                                     LocalOffset;                                              // 0x0018(0x000C) (Edit, ZeroConstructor, IsPlainOldData)
 	float                                              Height;                                                   // 0x0024(0x0004) (Edit, ZeroConstructor, IsPlainOldData)
 	float                                              Pitch;                                                    // 0x0028(0x0004) (Edit, ZeroConstructor, IsPlainOldData)

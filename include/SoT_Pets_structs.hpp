@@ -1,25 +1,70 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
 
-#include "SoT_Basic.hpp"
-#include "SoT_Pets_enums.hpp"
-#include "SoT_Interaction_classes.hpp"
-#include "SoT_Athena_classes.hpp"
-#include "SoT_AthenaAI_classes.hpp"
-#include "SoT_Engine_classes.hpp"
-#include "AthenaCommons.hpp"
-#include "SoT_CoreUObject_classes.hpp"
-#include "SoT_AIModule_classes.hpp"
-#include "SoT_ActionStateMachine_classes.hpp"
-#include "SoT_RareAudio_classes.hpp"
-
 namespace SDK
 {
+//---------------------------------------------------------------------------
+//Enums
+//---------------------------------------------------------------------------
+
+// Enum Pets.EPetDangerHearingResponseType
+enum class EPetDangerHearingResponseType : uint8_t
+{
+	RunAway                        = 0,
+	RunToHangoutSpot               = 1,
+	TurnToward                     = 2,
+	RunToOwner                     = 3,
+	MAX                            = 4,
+	EPetDangerHearingResponseType_MAX = 5
+};
+
+
+// Enum Pets.EPetDangerHearingTarget
+enum class EPetDangerHearingTarget : uint8_t
+{
+	None                           = 0,
+	Owner                          = 1,
+	Crew                           = 2,
+	Alliance                       = 3,
+	EPetDangerHearingTarget_MAX    = 4
+};
+
+
+// Enum Pets.EHangoutRotationMode
+enum class EHangoutRotationMode : uint8_t
+{
+	Match                          = 0,
+	Randomise                      = 1,
+	EHangoutRotationMode_MAX       = 2
+};
+
+
+// Enum Pets.EWieldablePetDropRequestReason
+enum class EWieldablePetDropRequestReason : uint8_t
+{
+	None                           = 0,
+	Submerged                      = 1,
+	Escaped                        = 2,
+	EWieldablePetDropRequestReason_MAX = 3
+};
+
+
+// Enum Pets.EPetFeedingReactionType
+enum class EPetFeedingReactionType : uint8_t
+{
+	None                           = 0,
+	Sick                           = 1,
+	Happy                          = 2,
+	EPetFeedingReactionType_MAX    = 3
+};
+
+
+
 //---------------------------------------------------------------------------
 //Script Structs
 //---------------------------------------------------------------------------
@@ -119,7 +164,7 @@ struct FHangoutSpotPosition
 // 0x0018
 struct FPetCustomisation
 {
-	class FString                                      PetName;                                                  // 0x0000(0x0010) (Edit, ZeroConstructor, DisableEditOnInstance)
+	struct FString                                     PetName;                                                  // 0x0000(0x0010) (Edit, ZeroConstructor, DisableEditOnInstance)
 	struct FAIPartId                                   PetPartId;                                                // 0x0010(0x0008) (Edit, DisableEditOnInstance)
 };
 
@@ -130,7 +175,7 @@ struct FPetListingTypeEntry
 	struct FStringAssetReference                       PetPartsCategory;                                         // 0x0000(0x0010) (Edit, ZeroConstructor, DisableEditOnInstance)
 	struct FStringClassReference                       PetType;                                                  // 0x0010(0x0010) (Edit, ZeroConstructor, DisableEditOnInstance)
 	struct FName                                       FeatureToggleName;                                        // 0x0020(0x0008) (Edit, ZeroConstructor, DisableEditOnInstance, IsPlainOldData)
-	class FString                                      PetListingName;                                           // 0x0028(0x0010) (Edit, ZeroConstructor, DisableEditOnInstance)
+	struct FString                                     PetListingName;                                           // 0x0028(0x0010) (Edit, ZeroConstructor, DisableEditOnInstance)
 };
 
 // ScriptStruct Pets.PetsServiceParams
@@ -397,8 +442,8 @@ struct FPetBaseTelemetryFragmentInput : public FTelemetryFragmentInput
 // 0x0030
 struct FPetBaseTelemetryFragment
 {
-	class FString                                      OwnerId;                                                  // 0x0000(0x0010) (ZeroConstructor)
-	class FString                                      PetPartId;                                                // 0x0010(0x0010) (ZeroConstructor)
+	struct FString                                     OwnerId;                                                  // 0x0000(0x0010) (ZeroConstructor)
+	struct FString                                     PetPartId;                                                // 0x0010(0x0010) (ZeroConstructor)
 	TEnumAsByte<EItemRepresentation>                   CurrentPetRepresentation;                                 // 0x0020(0x0001) (ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x3];                                       // 0x0021(0x0003) MISSED OFFSET
 	struct FVector                                     PetLocation;                                              // 0x0024(0x000C) (ZeroConstructor, IsPlainOldData)
@@ -408,10 +453,10 @@ struct FPetBaseTelemetryFragment
 // 0x0028
 struct FWieldablePetPutOnPerchTelemetryEvent
 {
-	class FString                                      HangoutSpotName;                                          // 0x0000(0x0010) (ZeroConstructor)
+	struct FString                                     HangoutSpotName;                                          // 0x0000(0x0010) (ZeroConstructor)
 	uint32_t                                           HangoutSpotIndex;                                         // 0x0010(0x0004) (ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x4];                                       // 0x0014(0x0004) MISSED OFFSET
-	class FString                                      WieldingActorTelemetrySubjectId;                          // 0x0018(0x0010) (ZeroConstructor)
+	struct FString                                     WieldingActorTelemetrySubjectId;                          // 0x0018(0x0010) (ZeroConstructor)
 };
 
 // ScriptStruct Pets.PetDismissedTelemetryEvent
@@ -425,7 +470,7 @@ struct FPetDismissedTelemetryEvent
 // 0x0020
 struct FPetRefusedFoodTelemetryEvent
 {
-	class FString                                      TryingToFeedPlayerId;                                     // 0x0000(0x0010) (ZeroConstructor)
+	struct FString                                     TryingToFeedPlayerId;                                     // 0x0000(0x0010) (ZeroConstructor)
 	struct FGuid                                       FeedingInteractionId;                                     // 0x0010(0x0010) (ZeroConstructor, IsPlainOldData)
 };
 
@@ -442,7 +487,7 @@ struct FPetReactedToFoodTelemetryEvent
 // 0x0020
 struct FPetNotFedTelemetryEvent
 {
-	class FString                                      IgnoringPlayerId;                                         // 0x0000(0x0010) (ZeroConstructor)
+	struct FString                                     IgnoringPlayerId;                                         // 0x0000(0x0010) (ZeroConstructor)
 	struct FGuid                                       FeedingInteractionId;                                     // 0x0010(0x0010) (ZeroConstructor, IsPlainOldData)
 };
 
@@ -450,8 +495,8 @@ struct FPetNotFedTelemetryEvent
 // 0x0030
 struct FPetFedTelemetryEvent
 {
-	class FString                                      FedWithItemId;                                            // 0x0000(0x0010) (ZeroConstructor)
-	class FString                                      FeedingPlayerId;                                          // 0x0010(0x0010) (ZeroConstructor)
+	struct FString                                     FedWithItemId;                                            // 0x0000(0x0010) (ZeroConstructor)
+	struct FString                                     FeedingPlayerId;                                          // 0x0010(0x0010) (ZeroConstructor)
 	struct FGuid                                       FeedingInteractionId;                                     // 0x0020(0x0010) (ZeroConstructor, IsPlainOldData)
 };
 
@@ -459,7 +504,7 @@ struct FPetFedTelemetryEvent
 // 0x0018
 struct FPetReactedTelemetryEvent
 {
-	class FString                                      ReactId;                                                  // 0x0000(0x0010) (ZeroConstructor)
+	struct FString                                     ReactId;                                                  // 0x0000(0x0010) (ZeroConstructor)
 	TEnumAsByte<EAthenaAnimationPetRoamingState>       AnimationState;                                           // 0x0010(0x0001) (ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x7];                                       // 0x0011(0x0007) MISSED OFFSET
 };

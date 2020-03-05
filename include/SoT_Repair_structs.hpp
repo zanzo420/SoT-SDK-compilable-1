@@ -1,17 +1,29 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
 
-#include "SoT_Basic.hpp"
-#include "SoT_Repair_enums.hpp"
-#include "SoT_CoreUObject_classes.hpp"
-
 namespace SDK
 {
+//---------------------------------------------------------------------------
+//Enums
+//---------------------------------------------------------------------------
+
+// Enum Repair.ERepairableState
+enum class ERepairableState : uint8_t
+{
+	NeverDamaged                   = 0,
+	Repairable                     = 1,
+	Repairing                      = 2,
+	Repaired                       = 3,
+	ERepairableState_MAX           = 4
+};
+
+
+
 //---------------------------------------------------------------------------
 //Script Structs
 //---------------------------------------------------------------------------

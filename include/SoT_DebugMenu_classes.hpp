@@ -1,12 +1,10 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
-
-#include "SoT_DebugMenu_structs.hpp"
 
 namespace SDK
 {
@@ -25,7 +23,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class DebugMenu.DebugMenuComponent"));
+		static auto ptr = UObject::FindClass("Class DebugMenu.DebugMenuComponent");
 		return ptr;
 	}
 
@@ -40,7 +38,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class DebugMenu.DebugMenuEntryGenerator"));
+		static auto ptr = UObject::FindClass("Class DebugMenu.DebugMenuEntryGenerator");
 		return ptr;
 	}
 
@@ -59,7 +57,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class DebugMenu.DebugMenuDataAsset"));
+		static auto ptr = UObject::FindClass("Class DebugMenu.DebugMenuDataAsset");
 		return ptr;
 	}
 
@@ -75,7 +73,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class DebugMenu.DebugMenu"));
+		static auto ptr = UObject::FindClass("Class DebugMenu.DebugMenu");
 		return ptr;
 	}
 
@@ -91,7 +89,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class DebugMenu.DebugMenuComponentMock"));
+		static auto ptr = UObject::FindClass("Class DebugMenu.DebugMenuComponentMock");
 		return ptr;
 	}
 
@@ -106,18 +104,18 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class DebugMenu.DebugMenuTestFunctions"));
+		static auto ptr = UObject::FindClass("Class DebugMenu.DebugMenuTestFunctions");
 		return ptr;
 	}
 
 
-	static bool IsDebugMenuReady(class UObject* WorldContextObject);
-	static bool IsDebugMenuOpen(class UObject* WorldContextObject);
-	static bool IsDebugMenuAvailable();
-	static struct FKey GetDebugMenuToggleKeyComboBetaKeyboard();
-	static struct FKey GetDebugMenuToggleKeyComboAlphaKeyboard();
-	static struct FKey GetDebugMenuToggleButtonComboBetaGamepad();
-	static struct FKey GetDebugMenuToggleButtonComboAlphaGamepad();
+	bool STATIC_IsDebugMenuReady(class UObject* WorldContextObject);
+	bool STATIC_IsDebugMenuOpen(class UObject* WorldContextObject);
+	bool STATIC_IsDebugMenuAvailable();
+	struct FKey STATIC_GetDebugMenuToggleKeyComboBetaKeyboard();
+	struct FKey STATIC_GetDebugMenuToggleKeyComboAlphaKeyboard();
+	struct FKey STATIC_GetDebugMenuToggleButtonComboBetaGamepad();
+	struct FKey STATIC_GetDebugMenuToggleButtonComboAlphaGamepad();
 };
 
 

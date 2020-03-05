@@ -1,18 +1,78 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
 
-#include "SoT_Basic.hpp"
-#include "SoT_StudiosAutomation_enums.hpp"
-#include "SoT_CoreUObject_classes.hpp"
-#include "SoT_Engine_classes.hpp"
-
 namespace SDK
 {
+//---------------------------------------------------------------------------
+//Enums
+//---------------------------------------------------------------------------
+
+// Enum StudiosAutomation.EComparisonMethod
+enum class EComparisonMethod : uint8_t
+{
+	Equal_To                       = 0,
+	Not_Equal_To                   = 1,
+	Greater_Than_Or_Equal_To       = 2,
+	Less_Than_Or_Equal_To          = 3,
+	Greater_Than                   = 4,
+	Less_Than                      = 5,
+	EComparisonMethod_MAX          = 6
+};
+
+
+// Enum StudiosAutomation.ETestAutomationPlayModeOverride
+enum class ETestAutomationPlayModeOverride : uint8_t
+{
+	Adventure                      = 0,
+	Contest                        = 1,
+	Tutorial                       = 2,
+	NotSelectedYet                 = 3,
+	ETestAutomationPlayModeOverride_MAX = 4
+};
+
+
+// Enum StudiosAutomation.EPerformanceCaptureType
+enum class EPerformanceCaptureType : uint8_t
+{
+	None                           = 0,
+	FrameTime                      = 1,
+	StreamingMemory                = 2,
+	StreamingPositional            = 3,
+	EPerformanceCaptureType_MAX    = 4
+};
+
+
+// Enum StudiosAutomation.ETestArea
+enum class ETestArea : uint8_t
+{
+	None                           = 0,
+	Rendering                      = 1,
+	UserInterface                  = 2,
+	UserInterfaceInitialization    = 3,
+	Art                            = 4,
+	ETestArea_MAX                  = 5
+};
+
+
+// Enum StudiosAutomation.ETestCategory
+enum class ETestCategory : uint8_t
+{
+	Unit                           = 0,
+	Integration                    = 1,
+	Acceptance                     = 2,
+	Stress                         = 3,
+	Soak                           = 4,
+	Performance                    = 5,
+	ETestCategory_MAX              = 6
+};
+
+
+
 //---------------------------------------------------------------------------
 //Script Structs
 //---------------------------------------------------------------------------
@@ -21,8 +81,8 @@ namespace SDK
 // 0x0020
 struct FTestLevelMetadataEntry
 {
-	class FString                                      Property;                                                 // 0x0000(0x0010) (Edit, ZeroConstructor)
-	class FString                                      Value;                                                    // 0x0010(0x0010) (Edit, ZeroConstructor)
+	struct FString                                     Property;                                                 // 0x0000(0x0010) (Edit, ZeroConstructor)
+	struct FString                                     Value;                                                    // 0x0010(0x0010) (Edit, ZeroConstructor)
 };
 
 // ScriptStruct StudiosAutomation.ClientPawnDetails
@@ -36,7 +96,7 @@ struct FClientPawnDetails
 // 0x0018
 struct FSubstringAuditQueryData
 {
-	TArray<class FString>                              QueryStringArray;                                         // 0x0000(0x0010) (ZeroConstructor)
+	TArray<struct FString>                             QueryStringArray;                                         // 0x0000(0x0010) (ZeroConstructor)
 	int                                                SearchSetSize;                                            // 0x0010(0x0004) (ZeroConstructor, IsPlainOldData)
 	int                                                MemoryLimitForSet;                                        // 0x0014(0x0004) (ZeroConstructor, IsPlainOldData)
 };
@@ -63,7 +123,7 @@ struct FMeshAuditLimits
 // 0x0018
 struct FAssetAuditConstantEntry
 {
-	class FString                                      Name;                                                     // 0x0000(0x0010) (ZeroConstructor)
+	struct FString                                     Name;                                                     // 0x0000(0x0010) (ZeroConstructor)
 	int                                                Value;                                                    // 0x0010(0x0004) (ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x4];                                       // 0x0014(0x0004) MISSED OFFSET
 };
@@ -115,7 +175,7 @@ struct FCollectionAnimSequenceLimits
 };
 
 // ScriptStruct StudiosAutomation.CollectionLimits
-// 0x0030
+// 0x0034
 struct FCollectionLimits
 {
 	struct FName                                       CollectionName;                                           // 0x0000(0x0008) (Edit, ZeroConstructor, EditConst, IsPlainOldData)
@@ -125,6 +185,9 @@ struct FCollectionLimits
 	struct FCollectionStaticMeshLimits                 StaticMeshLimits;                                         // 0x001C(0x0008) (Edit, ZeroConstructor, IsPlainOldData)
 	struct FCollectionSkeleMeshLimits                  SkeleMeshLimits;                                          // 0x0024(0x0008) (Edit, ZeroConstructor, IsPlainOldData)
 	struct FCollectionAnimSequenceLimits               AnimLimits;                                               // 0x002C(0x0004) (Edit, ZeroConstructor, IsPlainOldData)
+	bool                                               CanUseComplexCollisionAsSimple;                           // 0x0030(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
+	bool                                               CanUseLOD0Collision;                                      // 0x0031(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
+	unsigned char                                      UnknownData01[0x2];                                       // 0x0032(0x0002) MISSED OFFSET
 };
 
 // ScriptStruct StudiosAutomation.CollectionLimitsArray

@@ -8,9 +8,6 @@
 
 #include <unordered_set>
 #include <string>
-#include "XorStr/xorstr.hpp"
-#include <ctype.h>
-#include <wchar.h>
 
 namespace SDK
 {
@@ -28,7 +25,7 @@ class FUObjectItem
 public:
 	UObject* Object;
 	int32_t Flags;
-	int32_t ClusterIndex; 
+	int32_t ClusterIndex;
 	int32_t SerialNumber;
 
 	enum class EInternalObjectFlags : int32_t
@@ -296,10 +293,19 @@ public:
 
 	inline const wchar_t* c_str() const
 	{
-		if (Data)
-			return Data;
-		return L"";
-	};
+		return Data;
+	}
+
+	std::string ToString() const
+	{
+		const auto length = std::wcslen(Data);
+
+		std::string str(length, '\0');
+
+		std::use_facet<std::ctype<wchar_t>>(std::locale()).narrow(Data, Data + length, '?', &str[0]);
+
+		return str;
+	}
 };
 
 template<class TEnum>

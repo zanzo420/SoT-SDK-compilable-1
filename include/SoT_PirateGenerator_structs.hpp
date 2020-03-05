@@ -1,18 +1,129 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
 
-#include "SoT_Basic.hpp"
-#include "SoT_PirateGenerator_enums.hpp"
-#include "SoT_CoreUObject_classes.hpp"
-#include "SoT_Engine_classes.hpp"
-
 namespace SDK
 {
+//---------------------------------------------------------------------------
+//Enums
+//---------------------------------------------------------------------------
+
+// Enum PirateGenerator.EIPGEthnicity
+enum class EIPGEthnicity : uint8_t
+{
+	UNSPECIFIED                    = 0,
+	ASIAN                          = 1,
+	BLACK                          = 2,
+	WHITE                          = 3,
+	EIPGEthnicity_MAX              = 4
+};
+
+
+// Enum PirateGenerator.EIPGGender
+enum class EIPGGender : uint8_t
+{
+	UNSPECIFIED                    = 0,
+	MALE                           = 1,
+	FEMALE                         = 2,
+	EIPGGender_MAX                 = 3
+};
+
+
+// Enum PirateGenerator.EIPGPirateType
+enum class EIPGPirateType : uint8_t
+{
+	PLAYER                         = 0,
+	NPC                            = 1,
+	EIPGPirateType_MAX             = 2
+};
+
+
+// Enum PirateGenerator.EIPGTestEnum
+enum class EIPGTestEnum : uint8_t
+{
+	RANDOM                         = 0,
+	RANDOM_OR_NONE                 = 1,
+	EIPGTestEnum_MAX               = 2
+};
+
+
+// Enum PirateGenerator.EIPGPartType
+enum class EIPGPartType : uint8_t
+{
+	DEFAULT                        = 0,
+	INVERSE                        = 1,
+	EIPGPartType_MAX               = 2
+};
+
+
+// Enum PirateGenerator.EIPGSlotType
+enum class EIPGSlotType : uint8_t
+{
+	DEFAULT                        = 0,
+	DYNAMIC                        = 1,
+	EIPGSlotType_MAX               = 2
+};
+
+
+// Enum PirateGenerator.EIPGSetMode
+enum class EIPGSetMode : uint8_t
+{
+	RANDOM                         = 0,
+	RANDOM_OR_NONE                 = 1,
+	BLEND2_FIRST_ORDER             = 2,
+	BLEND2_RANDOM                  = 3,
+	NONE                           = 4,
+	BLEND2_LAST_UNDERSCORE         = 5,
+	EIPGSetMode_MAX                = 6
+};
+
+
+// Enum PirateGenerator.EIPGBlendType
+enum class EIPGBlendType : uint8_t
+{
+	NIX                            = 0,
+	NIL                            = 1,
+	RND                            = 2,
+	ONOFF                          = 3,
+	POSNEG                         = 4,
+	MAP                            = 5,
+	ON                             = 6,
+	ONOFF_NEAREST                  = 7,
+	ONOFF_BIAS                     = 8,
+	ONOFF_BIAS_NEAREST             = 9,
+	EIPGBlendType_MAX              = 10
+};
+
+
+// Enum PirateGenerator.EPirateBakeFlags
+enum class EPirateBakeFlags : uint8_t
+{
+	None                           = 0,
+	FirstPerson                    = 1,
+	NoObjectFading                 = 2,
+	NoLODs                         = 3,
+	StripTopLOD                    = 4,
+	KeepCPUData                    = 5,
+	DiscardImmediately             = 6,
+	HighPriority                   = 7,
+	EPirateBakeFlags_MAX           = 8
+};
+
+
+// Enum PirateGenerator.EFileAccessAsyncResult
+enum class EFileAccessAsyncResult : uint8_t
+{
+	Succeeded                      = 0,
+	Failed                         = 1,
+	EFileAccessAsyncResult_MAX     = 2
+};
+
+
+
 //---------------------------------------------------------------------------
 //Script Structs
 //---------------------------------------------------------------------------
@@ -385,7 +496,8 @@ struct FClothingPart
 	struct FName                                       Name;                                                     // 0x0000(0x0008) (Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData)
 	TArray<struct FName>                               Slots;                                                    // 0x0008(0x0010) (Edit, BlueprintVisible, ZeroConstructor)
 	TEnumAsByte<EIPGGender>                            Gender;                                                   // 0x0018(0x0001) (Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData)
-	unsigned char                                      UnknownData00[0x7];                                       // 0x0019(0x0007) MISSED OFFSET
+	TEnumAsByte<EIPGPartType>                          PartType;                                                 // 0x0019(0x0001) (Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData)
+	unsigned char                                      UnknownData00[0x6];                                       // 0x001A(0x0006) MISSED OFFSET
 };
 
 // ScriptStruct PirateGenerator.ClothingItem

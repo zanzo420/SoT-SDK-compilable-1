@@ -1,21 +1,87 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
 
-#include "SoT_Basic.hpp"
-#include "SoT_NaturalDisasters_enums.hpp"
-#include "SoT_CoreUObject_classes.hpp"
-#include "SoT_Engine_classes.hpp"
-#include "SoT_Kraken_classes.hpp"
-#include "SoT_Maths_classes.hpp"
-#include "SoT_Athena_classes.hpp"
-
 namespace SDK
 {
+//---------------------------------------------------------------------------
+//Enums
+//---------------------------------------------------------------------------
+
+// Enum NaturalDisasters.EAshCloudState
+enum class EAshCloudState : uint8_t
+{
+	Spawning                       = 0,
+	Active                         = 1,
+	Dissipating                    = 2,
+	EAshCloudState_MAX             = 3
+};
+
+
+// Enum NaturalDisasters.EVolcanoTargetHitType
+enum class EVolcanoTargetHitType : uint8_t
+{
+	OnTarget                       = 0,
+	NearMiss                       = 1,
+	Random                         = 2,
+	EVolcanoTargetHitType_MAX      = 3
+};
+
+
+// Enum NaturalDisasters.EVolcanoTargetType
+enum class EVolcanoTargetType : uint8_t
+{
+	Player                         = 0,
+	Ship                           = 1,
+	Watercraft                     = 2,
+	EVolcanoTargetType_MAX         = 3
+};
+
+
+// Enum NaturalDisasters.EVolcanoState
+enum class EVolcanoState : uint8_t
+{
+	Dormant                        = 0,
+	WarmingUp                      = 1,
+	Erupting                       = 2,
+	EVolcanoState_MAX              = 3
+};
+
+
+// Enum NaturalDisasters.EEarthquakeState
+enum class EEarthquakeState : uint8_t
+{
+	Dormant                        = 0,
+	WarmingUp                      = 1,
+	Active                         = 2,
+	CoolingDown                    = 3,
+	EEarthquakeState_MAX           = 4
+};
+
+
+// Enum NaturalDisasters.EGeyserState
+enum class EGeyserState : uint8_t
+{
+	Dormant                        = 0,
+	Active                         = 1,
+	EGeyserState_MAX               = 2
+};
+
+
+// Enum NaturalDisasters.EGeyserManagerState
+enum class EGeyserManagerState : uint8_t
+{
+	Dormant                        = 0,
+	Active                         = 1,
+	EGeyserManagerState_MAX        = 2
+};
+
+
+
 //---------------------------------------------------------------------------
 //Script Structs
 //---------------------------------------------------------------------------

@@ -1,12 +1,10 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
-
-#include "SoT_GameplayDebugger_structs.hpp"
 
 namespace SDK
 {
@@ -20,26 +18,26 @@ class UGameplayDebuggingComponent : public UPrimitiveComponent
 {
 public:
 	unsigned char                                      UnknownData00[0x8];                                       // 0x0570(0x0008) MISSED OFFSET
-	class FString                                      DebugComponentClassName;                                  // 0x0578(0x0010) (ZeroConstructor, Config, GlobalConfig)
+	struct FString                                     DebugComponentClassName;                                  // 0x0578(0x0010) (ZeroConstructor, Config, GlobalConfig)
 	int                                                ShowExtendedInformatiomCounter;                           // 0x0588(0x0004) (Net, ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData01[0x4];                                       // 0x058C(0x0004) MISSED OFFSET
 	TArray<int>                                        ReplicateViewDataCounters;                                // 0x0590(0x0010) (Net, ZeroConstructor)
-	class FString                                      ControllerName;                                           // 0x05A0(0x0010) (Net, ZeroConstructor)
-	class FString                                      PawnName;                                                 // 0x05B0(0x0010) (Net, ZeroConstructor)
-	class FString                                      PawnClass;                                                // 0x05C0(0x0010) (Net, ZeroConstructor)
-	class FString                                      DebugIcon;                                                // 0x05D0(0x0010) (Net, ZeroConstructor)
-	class FString                                      MovementBaseInfo;                                         // 0x05E0(0x0010) (Net, ZeroConstructor)
-	class FString                                      MovementModeInfo;                                         // 0x05F0(0x0010) (Net, ZeroConstructor)
-	class FString                                      PathFollowingInfo;                                        // 0x0600(0x0010) (Net, ZeroConstructor)
-	class FString                                      CurrentAITask;                                            // 0x0610(0x0010) (Net, ZeroConstructor)
-	class FString                                      CurrentAIState;                                           // 0x0620(0x0010) (Net, ZeroConstructor)
-	class FString                                      CurrentAIAssets;                                          // 0x0630(0x0010) (Net, ZeroConstructor)
-	class FString                                      GameplayTasksState;                                       // 0x0640(0x0010) (Net, ZeroConstructor)
-	class FString                                      NavDataInfo;                                              // 0x0650(0x0010) (Net, ZeroConstructor)
-	class FString                                      AbilityInfo;                                              // 0x0660(0x0010) (Net, ZeroConstructor)
-	class FString                                      MontageInfo;                                              // 0x0670(0x0010) (Net, ZeroConstructor)
-	class FString                                      BrainComponentName;                                       // 0x0680(0x0010) (Net, ZeroConstructor)
-	class FString                                      BrainComponentString;                                     // 0x0690(0x0010) (Net, ZeroConstructor)
+	struct FString                                     ControllerName;                                           // 0x05A0(0x0010) (Net, ZeroConstructor)
+	struct FString                                     PawnName;                                                 // 0x05B0(0x0010) (Net, ZeroConstructor)
+	struct FString                                     PawnClass;                                                // 0x05C0(0x0010) (Net, ZeroConstructor)
+	struct FString                                     DebugIcon;                                                // 0x05D0(0x0010) (Net, ZeroConstructor)
+	struct FString                                     MovementBaseInfo;                                         // 0x05E0(0x0010) (Net, ZeroConstructor)
+	struct FString                                     MovementModeInfo;                                         // 0x05F0(0x0010) (Net, ZeroConstructor)
+	struct FString                                     PathFollowingInfo;                                        // 0x0600(0x0010) (Net, ZeroConstructor)
+	struct FString                                     CurrentAITask;                                            // 0x0610(0x0010) (Net, ZeroConstructor)
+	struct FString                                     CurrentAIState;                                           // 0x0620(0x0010) (Net, ZeroConstructor)
+	struct FString                                     CurrentAIAssets;                                          // 0x0630(0x0010) (Net, ZeroConstructor)
+	struct FString                                     GameplayTasksState;                                       // 0x0640(0x0010) (Net, ZeroConstructor)
+	struct FString                                     NavDataInfo;                                              // 0x0650(0x0010) (Net, ZeroConstructor)
+	struct FString                                     AbilityInfo;                                              // 0x0660(0x0010) (Net, ZeroConstructor)
+	struct FString                                     MontageInfo;                                              // 0x0670(0x0010) (Net, ZeroConstructor)
+	struct FString                                     BrainComponentName;                                       // 0x0680(0x0010) (Net, ZeroConstructor)
+	struct FString                                     BrainComponentString;                                     // 0x0690(0x0010) (Net, ZeroConstructor)
 	TArray<unsigned char>                              BlackboardRepData;                                        // 0x06A0(0x0010) (Net, ZeroConstructor)
 	unsigned char                                      UnknownData02[0x10];                                      // 0x06B0(0x0010) MISSED OFFSET
 	TArray<struct FVector>                             PathPoints;                                               // 0x06C0(0x0010) (Net, ZeroConstructor)
@@ -59,7 +57,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class GameplayDebugger.GameplayDebuggingComponent"));
+		static auto ptr = UObject::FindClass("Class GameplayDebugger.GameplayDebuggingComponent");
 		return ptr;
 	}
 
@@ -91,7 +89,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class GameplayDebugger.GameplayDebuggingHUDComponent"));
+		static auto ptr = UObject::FindClass("Class GameplayDebugger.GameplayDebuggingHUDComponent");
 		return ptr;
 	}
 
@@ -121,7 +119,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class GameplayDebugger.GameplayDebuggerSettings"));
+		static auto ptr = UObject::FindClass("Class GameplayDebugger.GameplayDebuggerSettings");
 		return ptr;
 	}
 
@@ -156,7 +154,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class GameplayDebugger.GameplayDebuggingControllerComponent"));
+		static auto ptr = UObject::FindClass("Class GameplayDebugger.GameplayDebuggingControllerComponent");
 		return ptr;
 	}
 
@@ -172,7 +170,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class GameplayDebugger.GaneplayDebuggerProxyHUD"));
+		static auto ptr = UObject::FindClass("Class GameplayDebugger.GaneplayDebuggerProxyHUD");
 		return ptr;
 	}
 
@@ -184,9 +182,9 @@ public:
 class AGameplayDebuggingReplicator : public AActor
 {
 public:
-	class FString                                      DebugComponentClassName;                                  // 0x0410(0x0010) (ZeroConstructor, Config)
-	class FString                                      DebugComponentHUDClassName;                               // 0x0420(0x0010) (ZeroConstructor, Config)
-	class FString                                      DebugComponentControllerClassName;                        // 0x0430(0x0010) (ZeroConstructor, Config)
+	struct FString                                     DebugComponentClassName;                                  // 0x0410(0x0010) (ZeroConstructor, Config)
+	struct FString                                     DebugComponentHUDClassName;                               // 0x0420(0x0010) (ZeroConstructor, Config)
+	struct FString                                     DebugComponentControllerClassName;                        // 0x0430(0x0010) (ZeroConstructor, Config)
 	int                                                MaxEQSQueries;                                            // 0x0440(0x0004) (ZeroConstructor, Config, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x4];                                       // 0x0444(0x0004) MISSED OFFSET
 	class UGameplayDebuggingComponent*                 DebugComponent;                                           // 0x0448(0x0008) (ExportObject, Net, ZeroConstructor, Transient, InstancedReference, IsPlainOldData)
@@ -211,7 +209,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class GameplayDebugger.GameplayDebuggingReplicator"));
+		static auto ptr = UObject::FindClass("Class GameplayDebugger.GameplayDebuggingReplicator");
 		return ptr;
 	}
 

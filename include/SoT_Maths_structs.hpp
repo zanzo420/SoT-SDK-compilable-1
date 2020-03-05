@@ -1,18 +1,37 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
 
-#include "SoT_Basic.hpp"
-#include "SoT_Maths_enums.hpp"
-#include "SoT_CoreUObject_classes.hpp"
-#include "SoT_Engine_classes.hpp"
-
 namespace SDK
 {
+//---------------------------------------------------------------------------
+//Enums
+//---------------------------------------------------------------------------
+
+// Enum Maths.EBuoyancyBlend
+enum class EBuoyancyBlend : uint8_t
+{
+	PrimaryToSecondary             = 0,
+	SecondaryToTertiary            = 1,
+	EBuoyancyBlend_MAX             = 2
+};
+
+
+// Enum Maths.EPlaneLineIntersectionType
+enum class EPlaneLineIntersectionType : uint8_t
+{
+	IntersectionWithinLineSegment  = 0,
+	IntersectionOutsideOfLineSegment = 1,
+	PlaneAndLineParallel           = 2,
+	EPlaneLineIntersectionType_MAX = 3
+};
+
+
+
 //---------------------------------------------------------------------------
 //Script Structs
 //---------------------------------------------------------------------------

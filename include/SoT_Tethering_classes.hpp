@@ -1,12 +1,10 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
-
-#include "SoT_Tethering_structs.hpp"
 
 namespace SDK
 {
@@ -22,7 +20,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tethering.CordRenderInterface"));
+		static auto ptr = UObject::FindClass("Class Tethering.CordRenderInterface");
 		return ptr;
 	}
 
@@ -41,7 +39,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tethering.CordRenderComponent"));
+		static auto ptr = UObject::FindClass("Class Tethering.CordRenderComponent");
 		return ptr;
 	}
 
@@ -61,7 +59,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tethering.HarpoonRenderComponent"));
+		static auto ptr = UObject::FindClass("Class Tethering.HarpoonRenderComponent");
 		return ptr;
 	}
 
@@ -76,7 +74,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tethering.TetherConstraintInterface"));
+		static auto ptr = UObject::FindClass("Class Tethering.TetherConstraintInterface");
 		return ptr;
 	}
 
@@ -100,7 +98,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tethering.DistanceJointComponent"));
+		static auto ptr = UObject::FindClass("Class Tethering.DistanceJointComponent");
 		return ptr;
 	}
 
@@ -115,7 +113,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tethering.TetherQueriableInterface"));
+		static auto ptr = UObject::FindClass("Class Tethering.TetherQueriableInterface");
 		return ptr;
 	}
 
@@ -130,7 +128,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tethering.TetherCustomisationInterface"));
+		static auto ptr = UObject::FindClass("Class Tethering.TetherCustomisationInterface");
 		return ptr;
 	}
 
@@ -145,7 +143,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tethering.TetherInterface"));
+		static auto ptr = UObject::FindClass("Class Tethering.TetherInterface");
 		return ptr;
 	}
 
@@ -175,7 +173,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tethering.Tether"));
+		static auto ptr = UObject::FindClass("Class Tethering.Tether");
 		return ptr;
 	}
 
@@ -197,7 +195,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tethering.TetherCustomisationComponent"));
+		static auto ptr = UObject::FindClass("Class Tethering.TetherCustomisationComponent");
 		return ptr;
 	}
 

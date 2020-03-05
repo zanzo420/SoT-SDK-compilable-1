@@ -1,18 +1,51 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
 
-#include "SoT_Basic.hpp"
-#include "SoT_GameplayTasks_enums.hpp"
-#include "SoT_Engine_classes.hpp"
-#include "SoT_CoreUObject_classes.hpp"
-
 namespace SDK
 {
+//---------------------------------------------------------------------------
+//Enums
+//---------------------------------------------------------------------------
+
+// Enum GameplayTasks.ETaskResourceOverlapPolicy
+enum class ETaskResourceOverlapPolicy : uint8_t
+{
+	StartOnTop                     = 0,
+	StartAtEnd                     = 1,
+	ETaskResourceOverlapPolicy_MAX = 2
+};
+
+
+// Enum GameplayTasks.EGameplayTaskState
+enum class EGameplayTaskState : uint8_t
+{
+	Uninitialized                  = 0,
+	AwaitingActivation             = 1,
+	Paused                         = 2,
+	Active                         = 3,
+	Finished                       = 4,
+	EGameplayTaskState_MAX         = 5
+};
+
+
+// Enum GameplayTasks.EGameplayTaskRunResult
+enum class EGameplayTaskRunResult : uint8_t
+{
+	Error                          = 0,
+	Failed                         = 1,
+	Success_Paused                 = 2,
+	Success_Active                 = 3,
+	Success_Finished               = 4,
+	EGameplayTaskRunResult_MAX     = 5
+};
+
+
+
 //---------------------------------------------------------------------------
 //Script Structs
 //---------------------------------------------------------------------------

@@ -1,21 +1,93 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
 
-#include "SoT_Basic.hpp"
-#include "SoT_Kraken_enums.hpp"
-#include "SoT_CoreUObject_classes.hpp"
-#include "SoT_AIModule_classes.hpp"
-#include "SoT_Engine_classes.hpp"
-#include "SoT_Athena_classes.hpp"
-#include "SoT_Maths_classes.hpp"
-
 namespace SDK
 {
+//---------------------------------------------------------------------------
+//Enums
+//---------------------------------------------------------------------------
+
+// Enum Kraken.EKrakenBehaviourType
+enum class EKrakenBehaviourType : uint8_t
+{
+	Idle                           = 0,
+	ShipHitting                    = 1,
+	ShipWrapping                   = 2,
+	PlayerGrabbing                 = 3,
+	EKrakenBehaviourType_MAX       = 4
+};
+
+
+// Enum Kraken.EKrakenShipWrappingTentacleState
+enum class EKrakenShipWrappingTentacleState : uint8_t
+{
+	Dormant                        = 0,
+	Wrapping                       = 1,
+	AmbientWobble                  = 2,
+	EnteringShakeAttack            = 3,
+	ShakeAttack                    = 4,
+	ExitingShakeAttack             = 5,
+	HeavyAttack                    = 6,
+	Unwrapping                     = 7,
+	EKrakenShipWrappingTentacleState_MAX = 8
+};
+
+
+// Enum Kraken.EKrakenDynamicsStateEvent
+enum class EKrakenDynamicsStateEvent : uint8_t
+{
+	Damage                         = 0,
+	Knockback                      = 1,
+	EKrakenDynamicsStateEvent_MAX  = 2
+};
+
+
+// Enum Kraken.EKrakenEQSLockReason
+enum class EKrakenEQSLockReason : uint8_t
+{
+	Spawning                       = 0,
+	EKrakenEQSLockReason_MAX       = 1
+};
+
+
+// Enum Kraken.EKrakenDespawnReason
+enum class EKrakenDespawnReason : uint8_t
+{
+	Invalid                        = 0,
+	Defeated                       = 1,
+	TimedOutWithNoTargets          = 2,
+	TimedOutWithTarget             = 3,
+	Dismissed                      = 4,
+	EKrakenDespawnReason_MAX       = 5
+};
+
+
+// Enum Kraken.EKrakenState
+enum class EKrakenState : uint8_t
+{
+	Spawning                       = 0,
+	Active                         = 1,
+	Despawning                     = 2,
+	EKrakenState_MAX               = 3
+};
+
+
+// Enum Kraken.EKrakenTentacleBehaviourDamageActions
+enum class EKrakenTentacleBehaviourDamageActions : uint8_t
+{
+	StayActive                     = 0,
+	MoveActive                     = 1,
+	FleeInactive                   = 2,
+	EKrakenTentacleBehaviourDamageActions_MAX = 3
+};
+
+
+
 //---------------------------------------------------------------------------
 //Script Structs
 //---------------------------------------------------------------------------
@@ -480,14 +552,14 @@ struct FKrakenShipWrappingBehaviourShakeAttackParams
 };
 
 // ScriptStruct Kraken.KrakenShipWrappingBehaviourHeavyAttackParams
-// 0x00A0
+// 0x00C0
 struct FKrakenShipWrappingBehaviourHeavyAttackParams
 {
 	struct FWeightedProbabilityRangeOfRanges           AttackDuration;                                           // 0x0000(0x0030) (Edit, DisableEditOnInstance)
 	float                                              ChanceOfEnteringHeavyAttack;                              // 0x0030(0x0004) (Edit, ZeroConstructor, DisableEditOnInstance, IsPlainOldData)
-	struct FKnockBackInfo                              ExteriorKnockbackParams;                                  // 0x0034(0x0034) (Edit, DisableEditOnInstance)
-	struct FKnockBackInfo                              InteriorKnockbackParams;                                  // 0x0068(0x0034) (Edit, DisableEditOnInstance)
-	unsigned char                                      UnknownData00[0x4];                                       // 0x009C(0x0004) MISSED OFFSET
+	struct FKnockBackInfo                              ExteriorKnockbackParams;                                  // 0x0034(0x0044) (Edit, DisableEditOnInstance)
+	struct FKnockBackInfo                              InteriorKnockbackParams;                                  // 0x0078(0x0044) (Edit, DisableEditOnInstance)
+	unsigned char                                      UnknownData00[0x4];                                       // 0x00BC(0x0004) MISSED OFFSET
 };
 
 // ScriptStruct Kraken.KrakenShipWrappingBehaviourDamageParams
@@ -511,7 +583,7 @@ struct FKrakenShipWrappingBehaviourHealthParams
 };
 
 // ScriptStruct Kraken.KrakenShipWrappingBehaviourParams
-// 0x03F0
+// 0x0410
 struct FKrakenShipWrappingBehaviourParams
 {
 	class UClass*                                      ShipSize;                                                 // 0x0000(0x0008) (Edit, ZeroConstructor, DisableEditOnInstance, IsPlainOldData)
@@ -520,10 +592,10 @@ struct FKrakenShipWrappingBehaviourParams
 	struct FKrakenShipWrappingBehaviourWrapParams      WrapParams;                                               // 0x00B0(0x0140) (Edit, DisableEditOnInstance)
 	struct FKrakenShipWrappingBehaviourTentacleHeadParams TentacleHeadParams;                                       // 0x01F0(0x0048) (Edit, DisableEditOnInstance)
 	struct FKrakenShipWrappingBehaviourShakeAttackParams ShakeAttackParams;                                        // 0x0238(0x0068) (Edit, DisableEditOnInstance)
-	struct FKrakenShipWrappingBehaviourHeavyAttackParams HeavyAttackParams;                                        // 0x02A0(0x00A0) (Edit, DisableEditOnInstance)
-	struct FKrakenShipWrappingBehaviourDamageParams    DamageParams;                                             // 0x0340(0x0070) (Edit, DisableEditOnInstance)
-	struct FKrakenShipWrappingBehaviourHealthParams    HealthParams;                                             // 0x03B0(0x0038) (Edit, DisableEditOnInstance)
-	unsigned char                                      UnknownData01[0x8];                                       // 0x03E8(0x0008) MISSED OFFSET
+	struct FKrakenShipWrappingBehaviourHeavyAttackParams HeavyAttackParams;                                        // 0x02A0(0x00C0) (Edit, DisableEditOnInstance)
+	struct FKrakenShipWrappingBehaviourDamageParams    DamageParams;                                             // 0x0360(0x0070) (Edit, DisableEditOnInstance)
+	struct FKrakenShipWrappingBehaviourHealthParams    HealthParams;                                             // 0x03D0(0x0038) (Edit, DisableEditOnInstance)
+	unsigned char                                      UnknownData01[0x8];                                       // 0x0408(0x0008) MISSED OFFSET
 };
 
 // ScriptStruct Kraken.KrakenWorldSettingsParams
@@ -574,14 +646,14 @@ struct FEventKrakenTentaclePreUninitializeComponents
 // 0x0010
 struct FKrakenTentacleDestroyedTelemetryEvent
 {
-	class FString                                      KrakenId;                                                 // 0x0000(0x0010) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor)
+	struct FString                                     KrakenId;                                                 // 0x0000(0x0010) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor)
 };
 
 // ScriptStruct Kraken.KrakenDespawnTelemetryEvent
 // 0x0018
 struct FKrakenDespawnTelemetryEvent
 {
-	class FString                                      KrakenId;                                                 // 0x0000(0x0010) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor)
+	struct FString                                     KrakenId;                                                 // 0x0000(0x0010) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor)
 	TEnumAsByte<EKrakenDespawnReason>                  KrakenDespawnReason;                                      // 0x0010(0x0001) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x7];                                       // 0x0011(0x0007) MISSED OFFSET
 };
@@ -590,7 +662,7 @@ struct FKrakenDespawnTelemetryEvent
 // 0x0020
 struct FKrakenSpawnTelemetryEvent
 {
-	class FString                                      KrakenId;                                                 // 0x0000(0x0010) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor)
+	struct FString                                     KrakenId;                                                 // 0x0000(0x0010) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor)
 	struct FGuid                                       ConfigSpawnId;                                            // 0x0010(0x0010) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor, IsPlainOldData)
 };
 

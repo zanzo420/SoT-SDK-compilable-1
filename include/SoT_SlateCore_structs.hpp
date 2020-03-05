@@ -1,17 +1,260 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
 
-#include "SoT_Basic.hpp"
-#include "SoT_SlateCore_enums.hpp"
-#include "SoT_CoreUObject_classes.hpp"
-
 namespace SDK
 {
+//---------------------------------------------------------------------------
+//Enums
+//---------------------------------------------------------------------------
+
+// Enum SlateCore.EFontHinting
+enum class EFontHinting : uint8_t
+{
+	Default                        = 0,
+	Auto                           = 1,
+	AutoLight                      = 2,
+	Monochrome                     = 3,
+	None                           = 4,
+	EFontHinting_MAX               = 5
+};
+
+
+// Enum SlateCore.ESelectInfo
+enum class ESelectInfo : uint8_t
+{
+	OnKeyPress                     = 0,
+	OnNavigation                   = 1,
+	OnMouseClick                   = 2,
+	Direct                         = 3,
+	ESelectInfo_MAX                = 4
+};
+
+
+// Enum SlateCore.ETextCommit
+enum class ETextCommit : uint8_t
+{
+	Default                        = 0,
+	OnEnter                        = 1,
+	OnUserMovedFocus               = 2,
+	OnCleared                      = 3,
+	ETextCommit_MAX                = 4
+};
+
+
+// Enum SlateCore.EScrollDirection
+enum class EScrollDirection : uint8_t
+{
+	Scroll_Down                    = 0,
+	Scroll_Up                      = 1,
+	Scroll_MAX                     = 2
+};
+
+
+// Enum SlateCore.EOrientation
+enum class EOrientation : uint8_t
+{
+	Orient_Horizontal              = 0,
+	Orient_Vertical                = 1,
+	Orient_MAX                     = 2
+};
+
+
+// Enum SlateCore.EMenuPlacement
+enum class EMenuPlacement : uint8_t
+{
+	MenuPlacement_BelowAnchor      = 0,
+	MenuPlacement_CenteredBelowAnchor = 1,
+	MenuPlacement_ComboBox         = 2,
+	MenuPlacement_ComboBoxRight    = 3,
+	MenuPlacement_MenuRight        = 4,
+	MenuPlacement_AboveAnchor      = 5,
+	MenuPlacement_CenteredAboveAnchor = 6,
+	MenuPlacement_MenuLeft         = 7,
+	MenuPlacement_MAX              = 8
+};
+
+
+// Enum SlateCore.EVerticalAlignment
+enum class EVerticalAlignment : uint8_t
+{
+	VAlign_Fill                    = 0,
+	VAlign_Top                     = 1,
+	VAlign_Center                  = 2,
+	VAlign_Bottom                  = 3,
+	VAlign_MAX                     = 4
+};
+
+
+// Enum SlateCore.EHorizontalAlignment
+enum class EHorizontalAlignment : uint8_t
+{
+	HAlign_Fill                    = 0,
+	HAlign_Left                    = 1,
+	HAlign_Center                  = 2,
+	HAlign_Right                   = 3,
+	HAlign_MAX                     = 4
+};
+
+
+// Enum SlateCore.EUINavigation
+enum class EUINavigation : uint8_t
+{
+	Left                           = 0,
+	Right                          = 1,
+	Up                             = 2,
+	Down                           = 3,
+	Next                           = 4,
+	Previous                       = 5,
+	Num                            = 6,
+	Invalid                        = 7,
+	EUINavigation_MAX              = 8
+};
+
+
+// Enum SlateCore.EButtonPressMethod
+enum class EButtonPressMethod : uint8_t
+{
+	DownAndUp                      = 0,
+	ButtonPress                    = 1,
+	ButtonRelease                  = 2,
+	EButtonPressMethod_MAX         = 3
+};
+
+
+// Enum SlateCore.EButtonTouchMethod
+enum class EButtonTouchMethod : uint8_t
+{
+	DownAndUp                      = 0,
+	PreciseTap                     = 1,
+	EButtonTouchMethod_MAX         = 2
+};
+
+
+// Enum SlateCore.EButtonClickMethod
+enum class EButtonClickMethod : uint8_t
+{
+	DownAndUp                      = 0,
+	MouseDown                      = 1,
+	MouseUp                        = 2,
+	PreciseClick                   = 3,
+	EButtonClickMethod_MAX         = 4
+};
+
+
+// Enum SlateCore.ESlateColorStylingMode
+enum class ESlateColorStylingMode : uint8_t
+{
+	UseColor_Specified             = 0,
+	UseColor_Specified_Link        = 1,
+	UseColor_Foreground            = 2,
+	UseColor_Foreground_Subdued    = 3,
+	UseColor_MAX                   = 4
+};
+
+
+// Enum SlateCore.ESlateBrushImageType
+enum class ESlateBrushImageType : uint8_t
+{
+	NoImage                        = 0,
+	FullColor                      = 1,
+	Linear                         = 2,
+	ESlateBrushImageType_MAX       = 3
+};
+
+
+// Enum SlateCore.ESlateBrushMirrorType
+enum class ESlateBrushMirrorType : uint8_t
+{
+	NoMirror                       = 0,
+	Horizontal                     = 1,
+	Vertical                       = 2,
+	Both                           = 3,
+	ESlateBrushMirrorType_MAX      = 4
+};
+
+
+// Enum SlateCore.ESlateBrushTileType
+enum class ESlateBrushTileType : uint8_t
+{
+	NoTile                         = 0,
+	Horizontal                     = 1,
+	Vertical                       = 2,
+	Both                           = 3,
+	ESlateBrushTileType_MAX        = 4
+};
+
+
+// Enum SlateCore.ESlateBrushDrawType
+enum class ESlateBrushDrawType : uint8_t
+{
+	NoDrawType                     = 0,
+	Box                            = 1,
+	Border                         = 2,
+	Image                          = 3,
+	ESlateBrushDrawType_MAX        = 4
+};
+
+
+// Enum SlateCore.ECheckBoxState
+enum class ECheckBoxState : uint8_t
+{
+	Unchecked                      = 0,
+	Checked                        = 1,
+	Undetermined                   = 2,
+	ECheckBoxState_MAX             = 3
+};
+
+
+// Enum SlateCore.ESlateCheckBoxType
+enum class ESlateCheckBoxType : uint8_t
+{
+	CheckBox                       = 0,
+	ToggleButton                   = 1,
+	ESlateCheckBoxType_MAX         = 2
+};
+
+
+// Enum SlateCore.EConsumeMouseWheel
+enum class EConsumeMouseWheel : uint8_t
+{
+	WhenScrollingPossible          = 0,
+	Always                         = 1,
+	EConsumeMouseWheel_MAX         = 2
+};
+
+
+// Enum SlateCore.EFocusCause
+enum class EFocusCause : uint8_t
+{
+	Mouse                          = 0,
+	Navigation                     = 1,
+	SetDirectly                    = 2,
+	Cleared                        = 3,
+	OtherWidgetLostFocus           = 4,
+	WindowActivate                 = 5,
+	EFocusCause_MAX                = 6
+};
+
+
+// Enum SlateCore.EUINavigationRule
+enum class EUINavigationRule : uint8_t
+{
+	Escape                         = 0,
+	Explicit                       = 1,
+	Wrap                           = 2,
+	Stop                           = 3,
+	Custom                         = 4,
+	Invalid                        = 5,
+	EUINavigationRule_MAX          = 6
+};
+
+
+
 //---------------------------------------------------------------------------
 //Script Structs
 //---------------------------------------------------------------------------
@@ -219,7 +462,7 @@ struct FSpinBoxStyle : public FSlateWidgetStyle
 // 0x0030
 struct FFontData
 {
-	class FString                                      FontFilename;                                             // 0x0000(0x0010) (Edit, BlueprintVisible, ZeroConstructor)
+	struct FString                                     FontFilename;                                             // 0x0000(0x0010) (Edit, BlueprintVisible, ZeroConstructor)
 	class UFontBulkData*                               BulkDataPtr;                                              // 0x0010(0x0008) (ZeroConstructor, IsPlainOldData)
 	TEnumAsByte<EFontHinting>                          Hinting;                                                  // 0x0018(0x0001) (Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x7];                                       // 0x0019(0x0007) MISSED OFFSET

@@ -1,12 +1,10 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
-
-#include "SoT_ShipDamage_structs.hpp"
 
 namespace SDK
 {
@@ -22,7 +20,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class ShipDamage.DamageablePartsInterface"));
+		static auto ptr = UObject::FindClass("Class ShipDamage.DamageablePartsInterface");
 		return ptr;
 	}
 
@@ -41,7 +39,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class ShipDamage.HullDamageInterface"));
+		static auto ptr = UObject::FindClass("Class ShipDamage.HullDamageInterface");
 		return ptr;
 	}
 
@@ -56,7 +54,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class ShipDamage.LandscapeDamagerType"));
+		static auto ptr = UObject::FindClass("Class ShipDamage.LandscapeDamagerType");
 		return ptr;
 	}
 
@@ -71,7 +69,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class ShipDamage.ShipDamagerType"));
+		static auto ptr = UObject::FindClass("Class ShipDamage.ShipDamagerType");
 		return ptr;
 	}
 
@@ -86,7 +84,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class ShipDamage.StrainDamagerType"));
+		static auto ptr = UObject::FindClass("Class ShipDamage.StrainDamagerType");
 		return ptr;
 	}
 

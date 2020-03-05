@@ -1,12 +1,10 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
-
-#include "SoT_Repair_structs.hpp"
 
 namespace SDK
 {
@@ -23,7 +21,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Repair.RepairTypeId"));
+		static auto ptr = UObject::FindClass("Class Repair.RepairTypeId");
 		return ptr;
 	}
 
@@ -38,7 +36,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Repair.RepairableInterface"));
+		static auto ptr = UObject::FindClass("Class Repair.RepairableInterface");
 		return ptr;
 	}
 
@@ -58,7 +56,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Repair.RepairingInterface"));
+		static auto ptr = UObject::FindClass("Class Repair.RepairingInterface");
 		return ptr;
 	}
 
@@ -75,7 +73,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Repair.WoodRepairTypeId"));
+		static auto ptr = UObject::FindClass("Class Repair.WoodRepairTypeId");
 		return ptr;
 	}
 

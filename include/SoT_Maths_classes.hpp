@@ -1,12 +1,10 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
-
-#include "SoT_Maths_structs.hpp"
 
 namespace SDK
 {
@@ -22,16 +20,16 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Maths.AngleMaths"));
+		static auto ptr = UObject::FindClass("Class Maths.AngleMaths");
 		return ptr;
 	}
 
 
-	static float CalculateEulerAngle(float FromAngle, float ToAngle);
-	static float AngleMoveTowardsMod180(float Angle, float TargetAngle, float Rate);
-	static float AngleMod360(float Angle);
-	static float AngleMod180(float Angle);
-	static float AngleLerpShortest(float Start, float End, float Amount);
+	float STATIC_CalculateEulerAngle(float FromAngle, float ToAngle);
+	float STATIC_AngleMoveTowardsMod180(float Angle, float TargetAngle, float Rate);
+	float STATIC_AngleMod360(float Angle);
+	float STATIC_AngleMod180(float Angle);
+	float STATIC_AngleLerpShortest(float Start, float End, float Amount);
 };
 
 
@@ -43,13 +41,13 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Maths.BuoyancyMaths"));
+		static auto ptr = UObject::FindClass("Class Maths.BuoyancyMaths");
 		return ptr;
 	}
 
 
-	static float CalculateMagnitude(float InSubmersedVolume, float InFluidDensity, float InGravity);
-	static float CalcBlendedProbeCurveBuoyancy(class UCurveFloat* PrimaryBuoyancyCurve, class UCurveFloat* SecondaryBuoyancyCurve, class UCurveFloat* TertiaryBuoyancyCurve, float UnaryDistUnderwater, float Blend, TEnumAsByte<EBuoyancyBlend> BlendType);
+	float STATIC_CalculateMagnitude(float InSubmersedVolume, float InFluidDensity, float InGravity);
+	float STATIC_CalcBlendedProbeCurveBuoyancy(class UCurveFloat* PrimaryBuoyancyCurve, class UCurveFloat* SecondaryBuoyancyCurve, class UCurveFloat* TertiaryBuoyancyCurve, float UnaryDistUnderwater, float Blend, TEnumAsByte<EBuoyancyBlend> BlendType);
 };
 
 
@@ -61,13 +59,13 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Maths.CircleMaths"));
+		static auto ptr = UObject::FindClass("Class Maths.CircleMaths");
 		return ptr;
 	}
 
 
-	static int ConvertAngleToCircleSectorIndex(float AngleInDegrees, int NumberOfSectors, float IgnoredFraction);
-	static float Area(float InRadius);
+	int STATIC_ConvertAngleToCircleSectorIndex(float AngleInDegrees, int NumberOfSectors, float IgnoredFraction);
+	float STATIC_Area(float InRadius);
 };
 
 
@@ -79,16 +77,16 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Maths.CurveMaths"));
+		static auto ptr = UObject::FindClass("Class Maths.CurveMaths");
 		return ptr;
 	}
 
 
-	static float GetDistanceSquaredToCurve(const struct FVector& WorldSpacePos, class USplineComponent* Spline);
-	static float GetClosestTimeOnCurve(const struct FVector& WorldSpacePos, class USplineComponent* Spline);
-	static struct FVector GetClosestPositionOnCurve(const struct FVector& WorldSpacePos, class USplineComponent* Spline);
-	static float GetClosestPointOnCurve(const struct FVector& WorldSpacePos, class USplineComponent* Spline);
-	static struct FVector GetCentre(class USplineComponent* Spline);
+	float STATIC_GetDistanceSquaredToCurve(const struct FVector& WorldSpacePos, class USplineComponent* Spline);
+	float STATIC_GetClosestTimeOnCurve(const struct FVector& WorldSpacePos, class USplineComponent* Spline);
+	struct FVector STATIC_GetClosestPositionOnCurve(const struct FVector& WorldSpacePos, class USplineComponent* Spline);
+	float STATIC_GetClosestPointOnCurve(const struct FVector& WorldSpacePos, class USplineComponent* Spline);
+	struct FVector STATIC_GetCentre(class USplineComponent* Spline);
 };
 
 
@@ -100,17 +98,17 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Maths.Density"));
+		static auto ptr = UObject::FindClass("Class Maths.Density");
 		return ptr;
 	}
 
 
-	static float Water();
-	static float SeaWater();
-	static float Min();
-	static float Max();
-	static bool IsValid(float InValue);
-	static float Air();
+	float STATIC_Water();
+	float STATIC_SeaWater();
+	float STATIC_Min();
+	float STATIC_Max();
+	bool STATIC_IsValid(float InValue);
+	float STATIC_Air();
 };
 
 
@@ -122,18 +120,18 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Maths.DragCoefficients"));
+		static auto ptr = UObject::FindClass("Class Maths.DragCoefficients");
 		return ptr;
 	}
 
 
-	static float Sphere();
-	static float PlanePerpendicularToFlow();
-	static float PlaneParallelToFlow();
-	static float Min();
-	static float Max();
-	static bool IsValid(float Value);
-	static float Cube();
+	float STATIC_Sphere();
+	float STATIC_PlanePerpendicularToFlow();
+	float STATIC_PlaneParallelToFlow();
+	float STATIC_Min();
+	float STATIC_Max();
+	bool STATIC_IsValid(float Value);
+	float STATIC_Cube();
 };
 
 
@@ -145,12 +143,12 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Maths.DragMaths"));
+		static auto ptr = UObject::FindClass("Class Maths.DragMaths");
 		return ptr;
 	}
 
 
-	static float CalculateMagnitude(float InSurfaceArea, float InSpeedReltaiveToFluid, float InDragCoefficient, float InFluidDensity);
+	float STATIC_CalculateMagnitude(float InSurfaceArea, float InSpeedReltaiveToFluid, float InDragCoefficient, float InFluidDensity);
 };
 
 
@@ -162,19 +160,19 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Maths.FloatMaths"));
+		static auto ptr = UObject::FindClass("Class Maths.FloatMaths");
 		return ptr;
 	}
 
 
-	static float WrapToRange(float Input, float LowerLimit, float UpperLimit);
-	static float WrapToPositiveRange(float Input, float UpperLimit);
-	static float WrapAroundPivot(float Input, float Pivot, float Range);
-	static float MoveTowards(float From, float To, float Speed, float Time);
-	static float Map(float ValueToMapFrom, float FromRangeStart, float FromRangeEnd, float ToRangeStart, float ToRangeEnd, bool Clamp);
-	static bool IncrementCounter(float Delta, float CounterMax, float* Counter);
-	static float FindMidpointInWrappedRange(float Value1, float Value2, float LowerLimit, float UpperLimit);
-	static float Bound(float ValueToBound, float Bound1, float Bound2);
+	float STATIC_WrapToRange(float Input, float LowerLimit, float UpperLimit);
+	float STATIC_WrapToPositiveRange(float Input, float UpperLimit);
+	float STATIC_WrapAroundPivot(float Input, float Pivot, float Range);
+	float STATIC_MoveTowards(float From, float To, float Speed, float Time);
+	float STATIC_Map(float ValueToMapFrom, float FromRangeStart, float FromRangeEnd, float ToRangeStart, float ToRangeEnd, bool Clamp);
+	bool STATIC_IncrementCounter(float Delta, float CounterMax, float* Counter);
+	float STATIC_FindMidpointInWrappedRange(float Value1, float Value2, float LowerLimit, float UpperLimit);
+	float STATIC_Bound(float ValueToBound, float Bound1, float Bound2);
 };
 
 
@@ -186,12 +184,12 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Maths.Gravity"));
+		static auto ptr = UObject::FindClass("Class Maths.Gravity");
 		return ptr;
 	}
 
 
-	static float Earth();
+	float STATIC_Earth();
 };
 
 
@@ -203,12 +201,12 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Maths.PoissonDiscSampling"));
+		static auto ptr = UObject::FindClass("Class Maths.PoissonDiscSampling");
 		return ptr;
 	}
 
 
-	static TArray<struct FVector> GeneratePoissonDiscDistributionAcrossPlane(const struct FVector& InCenter, const struct FQuat& InOrientation, float InWidth, float InHeight, float InMinDistance, int InRNGSeed);
+	TArray<struct FVector> STATIC_GeneratePoissonDiscDistributionAcrossPlane(const struct FVector& InCenter, const struct FQuat& InOrientation, float InWidth, float InHeight, float InMinDistance, int InRNGSeed);
 };
 
 
@@ -220,15 +218,15 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Maths.ProjectileMaths"));
+		static auto ptr = UObject::FindClass("Class Maths.ProjectileMaths");
 		return ptr;
 	}
 
 
-	static float PredictProjectileFlightTime(float Speed, float Gravity, float Pitch, float Height);
-	static float FindProjectileSpeedModifierToHitTarget(const struct FVector& From, const struct FVector& Target, float Pitch, float ProjectileSpeed, float Gravity);
-	static bool FindAimDirectionToHitTarget(const struct FVector& From, const struct FVector& Target, float ProjectileSpeed, float Gravity, bool PreferHigherAngles, struct FRotator* OutAimDirection);
-	static bool CalculateLaunchVelocity(const struct FVector& From, const struct FVector& Target, const struct FVector& TargetVelocity, float ProjectileSpeed, float Gravity, bool PreferHigherAngles, struct FVector* OutLaunchVelocty, float* OutFlightTime);
+	float STATIC_PredictProjectileFlightTime(float Speed, float Gravity, float Pitch, float Height);
+	float STATIC_FindProjectileSpeedModifierToHitTarget(const struct FVector& From, const struct FVector& Target, float Pitch, float ProjectileSpeed, float Gravity);
+	bool STATIC_FindAimDirectionToHitTarget(const struct FVector& From, const struct FVector& Target, float ProjectileSpeed, float Gravity, bool PreferHigherAngles, struct FRotator* OutAimDirection);
+	bool STATIC_CalculateLaunchVelocity(const struct FVector& From, const struct FVector& Target, const struct FVector& TargetVelocity, float ProjectileSpeed, float Gravity, bool PreferHigherAngles, struct FVector* OutLaunchVelocty, float* OutFlightTime);
 };
 
 
@@ -240,13 +238,13 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Maths.RotationMaths"));
+		static auto ptr = UObject::FindClass("Class Maths.RotationMaths");
 		return ptr;
 	}
 
 
-	static struct FTransform TransformAroundArbitraryPivot(const struct FTransform& TargetTransform, const struct FTransform& BaseTransform, const struct FTransform& TransformToApply, bool LockFinalOrientation);
-	static struct FQuat RotatorToQuat(const struct FRotator& Rotation);
+	struct FTransform STATIC_TransformAroundArbitraryPivot(const struct FTransform& TargetTransform, const struct FTransform& BaseTransform, const struct FTransform& TransformToApply, bool LockFinalOrientation);
+	struct FQuat STATIC_RotatorToQuat(const struct FRotator& Rotation);
 };
 
 
@@ -258,16 +256,16 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Maths.ShapeMathsBlueprintLibrary"));
+		static auto ptr = UObject::FindClass("Class Maths.ShapeMathsBlueprintLibrary");
 		return ptr;
 	}
 
 
-	static bool IsPointOnOrWithinABox(class UBoxComponent* BoxComponent, const struct FVector& WorldSpaceReferencePoint);
-	static struct FVector FindClosestPointWithinASphere(class USphereComponent* SphereComponent, const struct FVector& WorldSpaceReferencePoint);
-	static struct FVector FindClosestPointWithinACylinder(class UCapsuleComponent* CylinderComponent, const struct FVector& WorldSpaceReferencePoint);
-	static struct FVector FindClosestPointWithinACapsule(class UCapsuleComponent* CapsuleComponent, const struct FVector& WorldSpaceReferencePoint);
-	static struct FVector FindClosestPointWithinABox(class UBoxComponent* BoxComponent, const struct FVector& WorldSpaceReferencePoint);
+	bool STATIC_IsPointOnOrWithinABox(class UBoxComponent* BoxComponent, const struct FVector& WorldSpaceReferencePoint);
+	struct FVector STATIC_FindClosestPointWithinASphere(class USphereComponent* SphereComponent, const struct FVector& WorldSpaceReferencePoint);
+	struct FVector STATIC_FindClosestPointWithinACylinder(class UCapsuleComponent* CylinderComponent, const struct FVector& WorldSpaceReferencePoint);
+	struct FVector STATIC_FindClosestPointWithinACapsule(class UCapsuleComponent* CapsuleComponent, const struct FVector& WorldSpaceReferencePoint);
+	struct FVector STATIC_FindClosestPointWithinABox(class UBoxComponent* BoxComponent, const struct FVector& WorldSpaceReferencePoint);
 };
 
 
@@ -279,13 +277,13 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Maths.SphereMaths"));
+		static auto ptr = UObject::FindClass("Class Maths.SphereMaths");
 		return ptr;
 	}
 
 
-	static float VolumeFromRadius(float InRadius);
-	static float SurfaceAreaFromRadius(float InRadius);
+	float STATIC_VolumeFromRadius(float InRadius);
+	float STATIC_SurfaceAreaFromRadius(float InRadius);
 };
 
 
@@ -297,14 +295,14 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Maths.SphericalCapMaths"));
+		static auto ptr = UObject::FindClass("Class Maths.SphericalCapMaths");
 		return ptr;
 	}
 
 
-	static float Volume(float InRadius, float InHeight);
-	static float CalculateGeometricCentroidOffsetRelativeToBoundingSphereCentroid(float InRadius, float InHeight);
-	static float BaseRadius(float InRadius, float InHeight);
+	float STATIC_Volume(float InRadius, float InHeight);
+	float STATIC_CalculateGeometricCentroidOffsetRelativeToBoundingSphereCentroid(float InRadius, float InHeight);
+	float STATIC_BaseRadius(float InRadius, float InHeight);
 };
 
 
@@ -316,7 +314,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Maths.StatisticsMaths"));
+		static auto ptr = UObject::FindClass("Class Maths.StatisticsMaths");
 		return ptr;
 	}
 
@@ -331,14 +329,14 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Maths.TimedBufferFunctionLibrary"));
+		static auto ptr = UObject::FindClass("Class Maths.TimedBufferFunctionLibrary");
 		return ptr;
 	}
 
 
-	static void UpdateInterval(float DeltaTime, float Value, struct FTimedBuffer* TimedBuffer);
-	static bool GetValueRange(float MinWindowLength, struct FTimedBuffer* TimedBuffer, float* ValueRange);
-	static struct FTimedBuffer CreateTimedBuffer(float WindowLength);
+	void STATIC_UpdateInterval(float DeltaTime, float Value, struct FTimedBuffer* TimedBuffer);
+	bool STATIC_GetValueRange(float MinWindowLength, struct FTimedBuffer* TimedBuffer, float* ValueRange);
+	struct FTimedBuffer STATIC_CreateTimedBuffer(float WindowLength);
 };
 
 
@@ -350,12 +348,12 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Maths.TimeMaths"));
+		static auto ptr = UObject::FindClass("Class Maths.TimeMaths");
 		return ptr;
 	}
 
 
-	static struct FTimespan GetDifference(const struct FDateTime& A, const struct FDateTime& B);
+	struct FTimespan STATIC_GetDifference(const struct FDateTime& A, const struct FDateTime& B);
 };
 
 
@@ -367,17 +365,17 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Maths.VectorMaths"));
+		static auto ptr = UObject::FindClass("Class Maths.VectorMaths");
 		return ptr;
 	}
 
 
-	static bool LineIntersectsSphere(const struct FVector& LineStart, const struct FVector& LineDir, const struct FVector& SphereCentre, float SphereRadius, struct FVector* ClosestIntersectionPoint);
-	static bool LineIntersectsCircleWithExitPoint(const struct FVector2D& LineOrigin, const struct FVector2D& LineDir, const struct FVector2D& CircleOrigin, float CircleRadius, struct FVector2D* OutClosestIntersectionPoint, struct FVector2D* OutSecondaryIntersectionPoint, float* OutClosestIntersectionDistance, float* OutSecondaryIntersectionDistance);
-	static bool LineIntersectsCircle(const struct FVector2D& LineOrigin, const struct FVector2D& LineDir, const struct FVector2D& CircleOrigin, float CircleRadius, struct FVector2D* OutClosestIntersectionPoint, float* OutIntersectionDistance);
-	static TEnumAsByte<EPlaneLineIntersectionType> IntersectLineSegmentWithPlane(const struct FVector& LineStart, const struct FVector& LineEnd, const struct FVector& PlanePos, const struct FVector& PlaneNormal, float PlaneThickness, struct FVector* IntersectionPos, float* NormalisedIntersectionTOnLineSegment);
-	static float Distance(const struct FVector& A, const struct FVector& B);
-	static float Cross_Vector2DVector2D(const struct FVector2D& A, const struct FVector2D& B);
+	bool STATIC_LineIntersectsSphere(const struct FVector& LineStart, const struct FVector& LineDir, const struct FVector& SphereCentre, float SphereRadius, struct FVector* ClosestIntersectionPoint);
+	bool STATIC_LineIntersectsCircleWithExitPoint(const struct FVector2D& LineOrigin, const struct FVector2D& LineDir, const struct FVector2D& CircleOrigin, float CircleRadius, struct FVector2D* OutClosestIntersectionPoint, struct FVector2D* OutSecondaryIntersectionPoint, float* OutClosestIntersectionDistance, float* OutSecondaryIntersectionDistance);
+	bool STATIC_LineIntersectsCircle(const struct FVector2D& LineOrigin, const struct FVector2D& LineDir, const struct FVector2D& CircleOrigin, float CircleRadius, struct FVector2D* OutClosestIntersectionPoint, float* OutIntersectionDistance);
+	TEnumAsByte<EPlaneLineIntersectionType> STATIC_IntersectLineSegmentWithPlane(const struct FVector& LineStart, const struct FVector& LineEnd, const struct FVector& PlanePos, const struct FVector& PlaneNormal, float PlaneThickness, struct FVector* IntersectionPos, float* NormalisedIntersectionTOnLineSegment);
+	float STATIC_Distance(const struct FVector& A, const struct FVector& B);
+	float STATIC_Cross_Vector2DVector2D(const struct FVector2D& A, const struct FVector2D& B);
 };
 
 

@@ -1,18 +1,72 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
 
-#include "SoT_Basic.hpp"
-#include "SoT_WwiseAudio_enums.hpp"
-#include "SoT_Engine_classes.hpp"
-#include "SoT_CoreUObject_classes.hpp"
-
 namespace SDK
 {
+//---------------------------------------------------------------------------
+//Enums
+//---------------------------------------------------------------------------
+
+// Enum WwiseAudio.EWwiseAsyncIOPriorityDisplay
+enum class EWwiseAsyncIOPriorityDisplay : uint8_t
+{
+	Low                            = 0,
+	BelowNormal                    = 1,
+	Normal                         = 2,
+	High                           = 3,
+	EWwiseAsyncIOPriorityDisplay_MAX = 4
+};
+
+
+// Enum WwiseAudio.EWwiseLanguageOrder
+enum class EWwiseLanguageOrder : uint8_t
+{
+	English                        = 0,
+	French                         = 1,
+	Italian                        = 2,
+	German                         = 3,
+	Spanish                        = 4,
+	Mexican                        = 5,
+	Brazil                         = 6,
+	Russian                        = 7,
+	Japanese                       = 8,
+	EWwiseLanguageOrder_MAX        = 9
+};
+
+
+// Enum WwiseAudio.EWwise7Point1Order
+enum class EWwise7Point1Order : uint8_t
+{
+	Front_Left                     = 0,
+	Front_Right                    = 1,
+	Center                         = 2,
+	Left_Surround                  = 3,
+	Right_Surround                 = 4,
+	Left_Side                      = 5,
+	Right_Side                     = 6,
+	LFE                            = 7,
+	Null_Channel                   = 8,
+	EWwise7Point1Order_MAX         = 9
+};
+
+
+// Enum WwiseAudio.EWwiseEventDurationType
+enum class EWwiseEventDurationType : uint8_t
+{
+	OneShot                        = 0,
+	Mixed                          = 1,
+	Infinite                       = 2,
+	Unknown                        = 3,
+	EWwiseEventDurationType_MAX    = 4
+};
+
+
+
 //---------------------------------------------------------------------------
 //Script Structs
 //---------------------------------------------------------------------------
@@ -167,14 +221,14 @@ struct FWwiseAudioAcousticSurfaceParams
 // 0x0010
 struct FWwiseExternalSource
 {
-	class FString                                      path;                                                     // 0x0000(0x0010) (Edit, BlueprintVisible, ZeroConstructor)
+	struct FString                                     path;                                                     // 0x0000(0x0010) (Edit, BlueprintVisible, ZeroConstructor)
 };
 
 // ScriptStruct WwiseAudio.WwiseSubtitle
 // 0x0010
 struct FWwiseSubtitle
 {
-	class FString                                      Subtitle;                                                 // 0x0000(0x0010) (Edit, BlueprintVisible, ZeroConstructor)
+	struct FString                                     Subtitle;                                                 // 0x0000(0x0010) (Edit, BlueprintVisible, ZeroConstructor)
 };
 
 }

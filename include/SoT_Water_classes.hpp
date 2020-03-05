@@ -1,12 +1,10 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
-
-#include "SoT_Water_structs.hpp"
 
 namespace SDK
 {
@@ -23,7 +21,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.AthenaFFTWater"));
+		static auto ptr = UObject::FindClass("Class Water.AthenaFFTWater");
 		return ptr;
 	}
 
@@ -38,7 +36,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.WaterEmissionVolumeInterface"));
+		static auto ptr = UObject::FindClass("Class Water.WaterEmissionVolumeInterface");
 		return ptr;
 	}
 
@@ -54,7 +52,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.AthenaWaterEmissionVolume"));
+		static auto ptr = UObject::FindClass("Class Water.AthenaWaterEmissionVolume");
 		return ptr;
 	}
 
@@ -69,7 +67,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.FFTWaterInterface"));
+		static auto ptr = UObject::FindClass("Class Water.FFTWaterInterface");
 		return ptr;
 	}
 
@@ -92,7 +90,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.WaterProperties"));
+		static auto ptr = UObject::FindClass("Class Water.WaterProperties");
 		return ptr;
 	}
 
@@ -107,7 +105,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.WaterInterface"));
+		static auto ptr = UObject::FindClass("Class Water.WaterInterface");
 		return ptr;
 	}
 
@@ -138,7 +136,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.FFTWaterService"));
+		static auto ptr = UObject::FindClass("Class Water.FFTWaterService");
 		return ptr;
 	}
 
@@ -157,7 +155,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.WaterPlaneInterface"));
+		static auto ptr = UObject::FindClass("Class Water.WaterPlaneInterface");
 		return ptr;
 	}
 
@@ -173,7 +171,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.WaterInteractionComponent"));
+		static auto ptr = UObject::FindClass("Class Water.WaterInteractionComponent");
 		return ptr;
 	}
 
@@ -197,7 +195,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.WaterPlaneRetrievalProviderInterface"));
+		static auto ptr = UObject::FindClass("Class Water.WaterPlaneRetrievalProviderInterface");
 		return ptr;
 	}
 
@@ -213,7 +211,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.FFTWaterQueryTestActor"));
+		static auto ptr = UObject::FindClass("Class Water.FFTWaterQueryTestActor");
 		return ptr;
 	}
 
@@ -229,7 +227,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.FFTWaterPerformanceCountService"));
+		static auto ptr = UObject::FindClass("Class Water.FFTWaterPerformanceCountService");
 		return ptr;
 	}
 
@@ -249,7 +247,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.FFTWaterServiceFixedWaterHeight"));
+		static auto ptr = UObject::FindClass("Class Water.FFTWaterServiceFixedWaterHeight");
 		return ptr;
 	}
 
@@ -265,7 +263,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.FlatWaterPlaneComponent"));
+		static auto ptr = UObject::FindClass("Class Water.FlatWaterPlaneComponent");
 		return ptr;
 	}
 
@@ -284,7 +282,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.WaterExclusionSurfaceInterface"));
+		static auto ptr = UObject::FindClass("Class Water.WaterExclusionSurfaceInterface");
 		return ptr;
 	}
 
@@ -300,7 +298,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.MockWaterExclusionSurfaceComponent"));
+		static auto ptr = UObject::FindClass("Class Water.MockWaterExclusionSurfaceComponent");
 		return ptr;
 	}
 
@@ -316,7 +314,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.MockWaterInterface"));
+		static auto ptr = UObject::FindClass("Class Water.MockWaterInterface");
 		return ptr;
 	}
 
@@ -332,7 +330,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.MockWaterServiceWithValidWaterPlane"));
+		static auto ptr = UObject::FindClass("Class Water.MockWaterServiceWithValidWaterPlane");
 		return ptr;
 	}
 
@@ -347,7 +345,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.WaterSubmersionTests"));
+		static auto ptr = UObject::FindClass("Class Water.WaterSubmersionTests");
 		return ptr;
 	}
 
@@ -366,7 +364,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.MockWaterPlaneComponent"));
+		static auto ptr = UObject::FindClass("Class Water.MockWaterPlaneComponent");
 		return ptr;
 	}
 
@@ -382,7 +380,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.MockWaterPlaneRetrievalProviderComponent"));
+		static auto ptr = UObject::FindClass("Class Water.MockWaterPlaneRetrievalProviderComponent");
 		return ptr;
 	}
 
@@ -397,7 +395,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.WaterVolumeInterface"));
+		static auto ptr = UObject::FindClass("Class Water.WaterVolumeInterface");
 		return ptr;
 	}
 
@@ -413,7 +411,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.MockWaterVolumeComponent"));
+		static auto ptr = UObject::FindClass("Class Water.MockWaterVolumeComponent");
 		return ptr;
 	}
 
@@ -428,7 +426,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.NoSwimWaterId"));
+		static auto ptr = UObject::FindClass("Class Water.NoSwimWaterId");
 		return ptr;
 	}
 
@@ -443,7 +441,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.SeaWaterId"));
+		static auto ptr = UObject::FindClass("Class Water.SeaWaterId");
 		return ptr;
 	}
 
@@ -458,7 +456,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.ShipWaterId"));
+		static auto ptr = UObject::FindClass("Class Water.ShipWaterId");
 		return ptr;
 	}
 
@@ -475,7 +473,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.TestBaseWaterActor"));
+		static auto ptr = UObject::FindClass("Class Water.TestBaseWaterActor");
 		return ptr;
 	}
 
@@ -490,7 +488,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.UndergroundSeaWaterId"));
+		static auto ptr = UObject::FindClass("Class Water.UndergroundSeaWaterId");
 		return ptr;
 	}
 
@@ -505,15 +503,15 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.WaterBuoyancyFunctionLibrary"));
+		static auto ptr = UObject::FindClass("Class Water.WaterBuoyancyFunctionLibrary");
 		return ptr;
 	}
 
 
-	static float TickBuoyancy(class AActor* InOwner, float InDeltaTime, float InChoppinessScalar, float FakeZOffsetGeneratorScalar, struct FWaterBuoyancy* InWaterBuoyancy);
-	static void SetBuoyancySamplesZOffsetSymmetricalAroundXAxis(float ZOffset, struct FWaterBuoyancy* InWaterBuoyancy);
-	static void SetBuoyancyProbeCurveBlendDebugOverride(float UnaryBlendOverride, struct FWaterBuoyancy* InWaterBuoyancy);
-	static void SetBuoyancyProbeCurveBlend(float Blend, TEnumAsByte<EBuoyancyBlend> BlendType, struct FWaterBuoyancy* InWaterBuoyancy);
+	float STATIC_TickBuoyancy(class AActor* InOwner, float InDeltaTime, float InChoppinessScalar, float FakeZOffsetGeneratorScalar, struct FWaterBuoyancy* InWaterBuoyancy);
+	void STATIC_SetBuoyancySamplesZOffsetSymmetricalAroundXAxis(float ZOffset, struct FWaterBuoyancy* InWaterBuoyancy);
+	void STATIC_SetBuoyancyProbeCurveBlendDebugOverride(float UnaryBlendOverride, struct FWaterBuoyancy* InWaterBuoyancy);
+	void STATIC_SetBuoyancyProbeCurveBlend(float Blend, TEnumAsByte<EBuoyancyBlend> BlendType, struct FWaterBuoyancy* InWaterBuoyancy);
 };
 
 
@@ -525,15 +523,15 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.WaterBuoyancySampleMovementFunctionLibrary"));
+		static auto ptr = UObject::FindClass("Class Water.WaterBuoyancySampleMovementFunctionLibrary");
 		return ptr;
 	}
 
 
-	static void TickLocalSampleMovement(class AActor* InActor, float DeltaTime, struct FWaterBuoyancy* InWaterBuoyancy, struct FBuoyancySampleMovement* InSampleMovement);
-	static void StartMovingVolumeSamplesLocallyByRandomConfigurationIndex(class AActor* InActor, struct FWaterBuoyancy* InWaterBuoyancy, struct FBuoyancySampleMovement* InSampleMovement);
-	static void StartMovingVolumeSamplesLocallyByConfigurationIndex(class AActor* InActor, int ConfigurationIndex, struct FWaterBuoyancy* InWaterBuoyancy, struct FBuoyancySampleMovement* InSampleMovement);
-	static void StartMovingVolumeSamplesLocally(class AActor* InActor, class UCurveVector* InCenterOfMassOffsetCurve, float BuoyancyScalarAtNewPosition, class UCurveFloat* BuoyancyScalarCurve, class UCurveFloat* ProbeMovementCurve, float MoveTime, struct FWaterBuoyancy* InWaterBuoyancy, struct FBuoyancySampleMovement* InSampleMovement, TArray<struct FBuoyancySampleMovementConfigurationEntry>* NewSampleData);
+	void STATIC_TickLocalSampleMovement(class AActor* InActor, float DeltaTime, struct FWaterBuoyancy* InWaterBuoyancy, struct FBuoyancySampleMovement* InSampleMovement);
+	void STATIC_StartMovingVolumeSamplesLocallyByRandomConfigurationIndex(class AActor* InActor, struct FWaterBuoyancy* InWaterBuoyancy, struct FBuoyancySampleMovement* InSampleMovement);
+	void STATIC_StartMovingVolumeSamplesLocallyByConfigurationIndex(class AActor* InActor, int ConfigurationIndex, struct FWaterBuoyancy* InWaterBuoyancy, struct FBuoyancySampleMovement* InSampleMovement);
+	void STATIC_StartMovingVolumeSamplesLocally(class AActor* InActor, class UCurveVector* InCenterOfMassOffsetCurve, float BuoyancyScalarAtNewPosition, class UCurveFloat* BuoyancyScalarCurve, class UCurveFloat* ProbeMovementCurve, float MoveTime, struct FWaterBuoyancy* InWaterBuoyancy, struct FBuoyancySampleMovement* InSampleMovement, TArray<struct FBuoyancySampleMovementConfigurationEntry>* NewSampleData);
 };
 
 
@@ -546,7 +544,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.WaterEmissionVolumeService"));
+		static auto ptr = UObject::FindClass("Class Water.WaterEmissionVolumeService");
 		return ptr;
 	}
 
@@ -561,7 +559,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.WaterPlaneExclusionComponent"));
+		static auto ptr = UObject::FindClass("Class Water.WaterPlaneExclusionComponent");
 		return ptr;
 	}
 
@@ -579,15 +577,15 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.WaterSplashProbeFunctionLibrary"));
+		static auto ptr = UObject::FindClass("Class Water.WaterSplashProbeFunctionLibrary");
 		return ptr;
 	}
 
 
-	static void TickProbes(class AActor* InOwner, float InDeltaTime, TArray<struct FWaterSplashProbe>* InSplashProbes);
-	static void TickProbe(class AActor* InOwner, float InDeltaTime, struct FWaterSplashProbe* InSplashProbe);
-	static void SetSamplingTime(float SamplingTime, TArray<struct FWaterSplashProbe>* InSplashProbes);
-	static struct FVector GetRelativeWaterHeightChangeSpd(int ProbeIndex, TArray<struct FWaterSplashProbe>* InSplashProbes);
+	void STATIC_TickProbes(class AActor* InOwner, float InDeltaTime, TArray<struct FWaterSplashProbe>* InSplashProbes);
+	void STATIC_TickProbe(class AActor* InOwner, float InDeltaTime, struct FWaterSplashProbe* InSplashProbe);
+	void STATIC_SetSamplingTime(float SamplingTime, TArray<struct FWaterSplashProbe>* InSplashProbes);
+	struct FVector STATIC_GetRelativeWaterHeightChangeSpd(int ProbeIndex, TArray<struct FWaterSplashProbe>* InSplashProbes);
 };
 
 
@@ -610,7 +608,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Water.WaterSpoutVFXComponent"));
+		static auto ptr = UObject::FindClass("Class Water.WaterSpoutVFXComponent");
 		return ptr;
 	}
 

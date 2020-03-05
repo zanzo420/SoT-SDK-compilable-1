@@ -1,12 +1,10 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
-
-#include "SoT_MerchantContracts_structs.hpp"
 
 namespace SDK
 {
@@ -22,12 +20,12 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class MerchantContracts.MerchantContractsBlueprintLibrary"));
+		static auto ptr = UObject::FindClass("Class MerchantContracts.MerchantContractsBlueprintLibrary");
 		return ptr;
 	}
 
 
-	static struct FText GetDateFromTimeLimit(const TScriptInterface<class UGameServiceProviderInterface>& ServiceProviderInterface, float TimeLimit);
+	struct FText STATIC_GetDateFromTimeLimit(const TScriptInterface<class UGameServiceProviderInterface>& ServiceProviderInterface, float TimeLimit);
 };
 
 
@@ -39,7 +37,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class MerchantContracts.MerchantContractsServiceInterface"));
+		static auto ptr = UObject::FindClass("Class MerchantContracts.MerchantContractsServiceInterface");
 		return ptr;
 	}
 
@@ -57,7 +55,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class MerchantContracts.MerchantContractsService"));
+		static auto ptr = UObject::FindClass("Class MerchantContracts.MerchantContractsService");
 		return ptr;
 	}
 
@@ -72,7 +70,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class MerchantContracts.PlayerMerchantContractsInterface"));
+		static auto ptr = UObject::FindClass("Class MerchantContracts.PlayerMerchantContractsInterface");
 		return ptr;
 	}
 
@@ -89,7 +87,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class MerchantContracts.PlayerMerchantContractsComponent"));
+		static auto ptr = UObject::FindClass("Class MerchantContracts.PlayerMerchantContractsComponent");
 		return ptr;
 	}
 

@@ -1,12 +1,10 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
-
-#include "SoT_PrioritisedPrompts_structs.hpp"
 
 namespace SDK
 {
@@ -27,7 +25,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class PrioritisedPrompts.BasePromptCoordinator"));
+		static auto ptr = UObject::FindClass("Class PrioritisedPrompts.BasePromptCoordinator");
 		return ptr;
 	}
 
@@ -43,14 +41,32 @@ public:
 	void RegisterCharacterEvents_Implementable(const struct FObjectMessagingDispatcherHandle& CharacterDispatcher);
 	void OnControllerEndPlay(TEnumAsByte<EEndPlayReason> EndPlayReason);
 	void MarkAsComplete_Implementable();
-	static struct FPromptEvaluation MakeShowPrompt(const struct FPrioritisedPromptWithHandle& Prompt);
-	static struct FPromptEvaluation MakeHideCurrentPrompts();
-	static struct FPromptEvaluation MakeCompleteCoordinator();
+	struct FPromptEvaluation STATIC_MakeShowPrompt(const struct FPrioritisedPromptWithHandle& Prompt);
+	struct FPromptEvaluation STATIC_MakeHideCurrentPrompts();
+	struct FPromptEvaluation STATIC_MakeCompleteCoordinator();
 	void Initialize(class AAthenaPlayerController* PlayerController, class UPrioritisedPromptsManager* PrioritisedPromptsManager);
 	bool GetCompleted();
-	void FirePromptCompleted(class UClass* AccessKey);
 	struct FPromptEvaluation EvaluatePromptDisplayState();
 	void DismissAllPrompts();
+};
+
+
+// Class PrioritisedPrompts.GetPromptsLocalService
+// 0x0018 (0x0040 - 0x0028)
+class UGetPromptsLocalService : public UBlueprintAsyncActionBase
+{
+public:
+	struct FScriptMulticastDelegate                    Loaded;                                                   // 0x0028(0x0010) (ZeroConstructor, InstancedReference, BlueprintAssignable)
+	class UObject*                                     WorldContextObject;                                       // 0x0038(0x0008) (ZeroConstructor, IsPlainOldData)
+
+	static UClass* StaticClass()
+	{
+		static auto ptr = UObject::FindClass("Class PrioritisedPrompts.GetPromptsLocalService");
+		return ptr;
+	}
+
+
+	class UGetPromptsLocalService* STATIC_GetPromptsLocalService(class UObject* WorldContextObject);
 };
 
 
@@ -65,7 +81,57 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class PrioritisedPrompts.PrioritisedPromptsManager"));
+		static auto ptr = UObject::FindClass("Class PrioritisedPrompts.PrioritisedPromptsManager");
+		return ptr;
+	}
+
+};
+
+
+// Class PrioritisedPrompts.PromptCounterAccessKey
+// 0x0010 (0x0038 - 0x0028)
+class UPromptCounterAccessKey : public UObject
+{
+public:
+	struct FString                                     Key;                                                      // 0x0028(0x0010) (Edit, ZeroConstructor, DisableEditOnInstance)
+
+	static UClass* StaticClass()
+	{
+		static auto ptr = UObject::FindClass("Class PrioritisedPrompts.PromptCounterAccessKey");
+		return ptr;
+	}
+
+};
+
+
+// Class PrioritisedPrompts.PromptsLocalServiceInterface
+// 0x0000 (0x0028 - 0x0028)
+class UPromptsLocalServiceInterface : public UInterface
+{
+public:
+
+	static UClass* StaticClass()
+	{
+		static auto ptr = UObject::FindClass("Class PrioritisedPrompts.PromptsLocalServiceInterface");
+		return ptr;
+	}
+
+
+	void IncrementCountForKey(class UClass* AccessKey);
+	int GetCountForKey(class UClass* AccessKey);
+};
+
+
+// Class PrioritisedPrompts.PromptsLocalService
+// 0x0070 (0x0098 - 0x0028)
+class UPromptsLocalService : public UObject
+{
+public:
+	unsigned char                                      UnknownData00[0x70];                                      // 0x0028(0x0070) MISSED OFFSET
+
+	static UClass* StaticClass()
+	{
+		static auto ptr = UObject::FindClass("Class PrioritisedPrompts.PromptsLocalService");
 		return ptr;
 	}
 

@@ -1,12 +1,10 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
-
-#include "SoT_GameService_structs.hpp"
 
 namespace SDK
 {
@@ -23,7 +21,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class GameService.ServiceProviderGameState"));
+		static auto ptr = UObject::FindClass("Class GameService.ServiceProviderGameState");
 		return ptr;
 	}
 
@@ -38,7 +36,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class GameService.GameServiceLifecycleInterface"));
+		static auto ptr = UObject::FindClass("Class GameService.GameServiceLifecycleInterface");
 		return ptr;
 	}
 
@@ -53,15 +51,15 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class GameService.GameServiceMapFunctions"));
+		static auto ptr = UObject::FindClass("Class GameService.GameServiceMapFunctions");
 		return ptr;
 	}
 
 
-	static void UnregisterService(class UObject* Service, struct FGameServiceMap* ServiceMap);
-	static void RegisterService(class UObject* Service, class UClass* Class, struct FGameServiceMap* ServiceMap);
-	static class UObject* GetService(class UClass* Class, struct FGameServiceMap* ServiceMap);
-	static int GetNumServices(struct FGameServiceMap* ServiceMap);
+	void STATIC_UnregisterService(class UObject* Service, struct FGameServiceMap* ServiceMap);
+	void STATIC_RegisterService(class UObject* Service, class UClass* Class, struct FGameServiceMap* ServiceMap);
+	class UObject* STATIC_GetService(class UClass* Class, struct FGameServiceMap* ServiceMap);
+	int STATIC_GetNumServices(struct FGameServiceMap* ServiceMap);
 };
 
 
@@ -73,7 +71,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class GameService.GameServiceProviderInterface"));
+		static auto ptr = UObject::FindClass("Class GameService.GameServiceProviderInterface");
 		return ptr;
 	}
 
@@ -92,7 +90,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class GameService.GameServiceTickInterface"));
+		static auto ptr = UObject::FindClass("Class GameService.GameServiceTickInterface");
 		return ptr;
 	}
 

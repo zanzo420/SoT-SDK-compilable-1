@@ -1,18 +1,27 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
 
-#include "SoT_Basic.hpp"
-#include "SoT_ShipDamage_enums.hpp"
-#include "SoT_CoreUObject_classes.hpp"
-#include "SoT_Athena_classes.hpp"
-
 namespace SDK
 {
+//---------------------------------------------------------------------------
+//Enums
+//---------------------------------------------------------------------------
+
+// Enum ShipDamage.EHullDamageDeck
+enum class EHullDamageDeck : uint8_t
+{
+	Bottom                         = 0,
+	Mid                            = 1,
+	EHullDamageDeck_MAX            = 2
+};
+
+
+
 //---------------------------------------------------------------------------
 //Script Structs
 //---------------------------------------------------------------------------

@@ -1,12 +1,10 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
-
-#include "SoT_WwiseAudio_structs.hpp"
 
 namespace SDK
 {
@@ -15,7 +13,7 @@ namespace SDK
 //---------------------------------------------------------------------------
 
 // Class WwiseAudio.WwiseAudioSettings
-// 0x02A0 (0x02C8 - 0x0028)
+// 0x02A8 (0x02D0 - 0x0028)
 class UWwiseAudioSettings : public UObject
 {
 public:
@@ -28,27 +26,29 @@ public:
 	struct FDirectoryPath                              WwiseStreamedFilesDirectory;                              // 0x00F8(0x0010) (Edit, Config)
 	TArray<struct FWwiseIOPriorityMappingConfig>       AsyncIOPriorityMappings;                                  // 0x0108(0x0010) (Edit, ZeroConstructor, Config)
 	struct FDirectoryPath                              TritonAcousticMapsDirectory;                              // 0x0118(0x0010) (Edit, Config)
-	class FString                                      DefaultLanguage;                                          // 0x0128(0x0010) (Edit, ZeroConstructor, Config)
-	class FString                                      SinkSharesetName;                                         // 0x0138(0x0010) (Edit, ZeroConstructor, Config)
+	struct FString                                     DefaultLanguage;                                          // 0x0128(0x0010) (Edit, ZeroConstructor, Config)
+	struct FString                                     SinkSharesetName;                                         // 0x0138(0x0010) (Edit, ZeroConstructor, Config)
 	struct FStringAssetReference                       PauseEventStart;                                          // 0x0148(0x0010) (Edit, ZeroConstructor, Config)
 	struct FStringAssetReference                       PauseEventRelease;                                        // 0x0158(0x0010) (Edit, ZeroConstructor, Config)
 	struct FStringAssetReference                       StopAllEvent;                                             // 0x0168(0x0010) (Edit, ZeroConstructor, Config)
 	struct FWwiseNetworkRelationship                   NetworkRelationship;                                      // 0x0178(0x0018) (Edit, Config)
 	struct FWwiseAudioGameStateSettings                AudioStateSettings;                                       // 0x0190(0x0080) (Edit, Config)
-	class UWwiseEvent*                                 PauseEventStartInstance;                                  // 0x0210(0x0008) (ZeroConstructor, Transient, IsPlainOldData)
-	class UWwiseEvent*                                 PauseEventReleaseInstance;                                // 0x0218(0x0008) (ZeroConstructor, Transient, IsPlainOldData)
-	class UWwiseEvent*                                 StopAllEventInstance;                                     // 0x0220(0x0008) (ZeroConstructor, Transient, IsPlainOldData)
-	unsigned char                                      UnknownData01[0x40];                                      // 0x0228(0x0040) MISSED OFFSET
-	TArray<class UWwiseEvent*>                         EventsToPlayOnFrontendStartInstance;                      // 0x0268(0x0010) (ZeroConstructor, Transient)
-	TArray<class UWwiseEvent*>                         EventsToPlayOnFrontendEndInstance;                        // 0x0278(0x0010) (ZeroConstructor, Transient)
-	TArray<class UWwiseEvent*>                         EventsToPlayOnLoadingStartInstance;                       // 0x0288(0x0010) (ZeroConstructor, Transient)
-	TArray<class UWwiseEvent*>                         EventsToPlayOnLoadingEndInstance;                         // 0x0298(0x0010) (ZeroConstructor, Transient)
-	TArray<class UWwiseEvent*>                         EventsToPlayOnFrontEndOrLoadingStartInstance;             // 0x02A8(0x0010) (ZeroConstructor, Transient)
-	TArray<class UWwiseEvent*>                         EventsToPlayOnFrontEndOrLoadingEndInstance;               // 0x02B8(0x0010) (ZeroConstructor, Transient)
+	uint32_t                                           WaapiInterpreterPort;                                     // 0x0210(0x0004) (Edit, ZeroConstructor, Config, IsPlainOldData)
+	unsigned char                                      UnknownData01[0x4];                                       // 0x0214(0x0004) MISSED OFFSET
+	class UWwiseEvent*                                 PauseEventStartInstance;                                  // 0x0218(0x0008) (ZeroConstructor, Transient, IsPlainOldData)
+	class UWwiseEvent*                                 PauseEventReleaseInstance;                                // 0x0220(0x0008) (ZeroConstructor, Transient, IsPlainOldData)
+	class UWwiseEvent*                                 StopAllEventInstance;                                     // 0x0228(0x0008) (ZeroConstructor, Transient, IsPlainOldData)
+	unsigned char                                      UnknownData02[0x40];                                      // 0x0230(0x0040) MISSED OFFSET
+	TArray<class UWwiseEvent*>                         EventsToPlayOnFrontendStartInstance;                      // 0x0270(0x0010) (ZeroConstructor, Transient)
+	TArray<class UWwiseEvent*>                         EventsToPlayOnFrontendEndInstance;                        // 0x0280(0x0010) (ZeroConstructor, Transient)
+	TArray<class UWwiseEvent*>                         EventsToPlayOnLoadingStartInstance;                       // 0x0290(0x0010) (ZeroConstructor, Transient)
+	TArray<class UWwiseEvent*>                         EventsToPlayOnLoadingEndInstance;                         // 0x02A0(0x0010) (ZeroConstructor, Transient)
+	TArray<class UWwiseEvent*>                         EventsToPlayOnFrontEndOrLoadingStartInstance;             // 0x02B0(0x0010) (ZeroConstructor, Transient)
+	TArray<class UWwiseEvent*>                         EventsToPlayOnFrontEndOrLoadingEndInstance;               // 0x02C0(0x0010) (ZeroConstructor, Transient)
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class WwiseAudio.WwiseAudioSettings"));
+		static auto ptr = UObject::FindClass("Class WwiseAudio.WwiseAudioSettings");
 		return ptr;
 	}
 
@@ -60,13 +60,13 @@ public:
 class UWwiseBank : public UObject
 {
 public:
-	class FString                                      path;                                                     // 0x0028(0x0010) (Edit, ZeroConstructor, EditConst)
+	struct FString                                     path;                                                     // 0x0028(0x0010) (Edit, ZeroConstructor, EditConst)
 	uint32_t                                           WwiseId;                                                  // 0x0038(0x0004) (Edit, ZeroConstructor, EditConst, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x2C];                                      // 0x003C(0x002C) MISSED OFFSET
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class WwiseAudio.WwiseBank"));
+		static auto ptr = UObject::FindClass("Class WwiseAudio.WwiseBank");
 		return ptr;
 	}
 
@@ -81,7 +81,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class WwiseAudio.WwiseSubSystemInterface"));
+		static auto ptr = UObject::FindClass("Class WwiseAudio.WwiseSubSystemInterface");
 		return ptr;
 	}
 
@@ -97,7 +97,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class WwiseAudio.WwiseDebugManager"));
+		static auto ptr = UObject::FindClass("Class WwiseAudio.WwiseDebugManager");
 		return ptr;
 	}
 
@@ -112,7 +112,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class WwiseAudio.WwiseEmitterInterface"));
+		static auto ptr = UObject::FindClass("Class WwiseAudio.WwiseEmitterInterface");
 		return ptr;
 	}
 
@@ -128,7 +128,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class WwiseAudio.WwiseEmitterManager"));
+		static auto ptr = UObject::FindClass("Class WwiseAudio.WwiseEmitterManager");
 		return ptr;
 	}
 
@@ -153,7 +153,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class WwiseAudio.WwiseEvent"));
+		static auto ptr = UObject::FindClass("Class WwiseAudio.WwiseEvent");
 		return ptr;
 	}
 
@@ -174,7 +174,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class WwiseAudio.WwiseInputManagerInterface"));
+		static auto ptr = UObject::FindClass("Class WwiseAudio.WwiseInputManagerInterface");
 		return ptr;
 	}
 
@@ -190,7 +190,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class WwiseAudio.WwiseInputManager"));
+		static auto ptr = UObject::FindClass("Class WwiseAudio.WwiseInputManager");
 		return ptr;
 	}
 
@@ -206,7 +206,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class WwiseAudio.WwiseMediaManager"));
+		static auto ptr = UObject::FindClass("Class WwiseAudio.WwiseMediaManager");
 		return ptr;
 	}
 
@@ -222,7 +222,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class WwiseAudio.WwisePersistentContentStore"));
+		static auto ptr = UObject::FindClass("Class WwiseAudio.WwisePersistentContentStore");
 		return ptr;
 	}
 
@@ -238,7 +238,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class WwiseAudio.WwisePoolManager"));
+		static auto ptr = UObject::FindClass("Class WwiseAudio.WwisePoolManager");
 		return ptr;
 	}
 
@@ -254,7 +254,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class WwiseAudio.WwiseSoundFrameManager"));
+		static auto ptr = UObject::FindClass("Class WwiseAudio.WwiseSoundFrameManager");
 		return ptr;
 	}
 

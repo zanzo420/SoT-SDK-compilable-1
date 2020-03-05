@@ -1,12 +1,10 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
-
-#include "SoT_MovieScene_structs.hpp"
 
 namespace SDK
 {
@@ -31,7 +29,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class MovieScene.MovieScene"));
+		static auto ptr = UObject::FindClass("Class MovieScene.MovieScene");
 		return ptr;
 	}
 
@@ -52,7 +50,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class MovieScene.MovieSceneSection"));
+		static auto ptr = UObject::FindClass("Class MovieScene.MovieSceneSection");
 		return ptr;
 	}
 
@@ -67,7 +65,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class MovieScene.MovieSceneSequence"));
+		static auto ptr = UObject::FindClass("Class MovieScene.MovieSceneSequence");
 		return ptr;
 	}
 
@@ -82,7 +80,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class MovieScene.MovieSceneTrack"));
+		static auto ptr = UObject::FindClass("Class MovieScene.MovieSceneTrack");
 		return ptr;
 	}
 

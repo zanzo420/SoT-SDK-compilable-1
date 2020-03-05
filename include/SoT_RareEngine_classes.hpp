@@ -1,12 +1,10 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
-
-#include "SoT_RareEngine_structs.hpp"
 
 namespace SDK
 {
@@ -23,7 +21,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class RareEngine.RareGameEngine"));
+		static auto ptr = UObject::FindClass("Class RareEngine.RareGameEngine");
 		return ptr;
 	}
 
@@ -39,7 +37,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class RareEngine.AudioHardwareDeviceService"));
+		static auto ptr = UObject::FindClass("Class RareEngine.AudioHardwareDeviceService");
 		return ptr;
 	}
 
@@ -54,16 +52,16 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class RareEngine.HitchDiagnosisBlueprintFunctionLibrary"));
+		static auto ptr = UObject::FindClass("Class RareEngine.HitchDiagnosisBlueprintFunctionLibrary");
 		return ptr;
 	}
 
 
-	static void SetHitchThreshold(int InThreshold);
-	static class FString GetMaxHitchNameThisFrame();
-	static int GetMaxHitchLengthThisFrameMs();
-	static void DumpThisFramesHitchesToLog();
-	static bool DidHitchOccurThisFrame();
+	void STATIC_SetHitchThreshold(int InThreshold);
+	struct FString STATIC_GetMaxHitchNameThisFrame();
+	int STATIC_GetMaxHitchLengthThisFrameMs();
+	void STATIC_DumpThisFramesHitchesToLog();
+	bool STATIC_DidHitchOccurThisFrame();
 };
 
 
@@ -76,7 +74,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class RareEngine.MemoryUsageVisualiserSettings"));
+		static auto ptr = UObject::FindClass("Class RareEngine.MemoryUsageVisualiserSettings");
 		return ptr;
 	}
 
@@ -91,7 +89,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class RareEngine.RareHUD"));
+		static auto ptr = UObject::FindClass("Class RareEngine.RareHUD");
 		return ptr;
 	}
 
@@ -109,13 +107,13 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class RareEngine.StallDetector"));
+		static auto ptr = UObject::FindClass("Class RareEngine.StallDetector");
 		return ptr;
 	}
 
 
 	void Deactivate();
-	static class UStallDetector* CreateStallDetector(float Delay, bool CreateActive);
+	class UStallDetector* STATIC_CreateStallDetector(float Delay, bool CreateActive);
 	void Activate();
 };
 
@@ -128,13 +126,13 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class RareEngine.StaticMeshActorBlueprintLibrary"));
+		static auto ptr = UObject::FindClass("Class RareEngine.StaticMeshActorBlueprintLibrary");
 		return ptr;
 	}
 
 
-	static void FindAllStaticMeshComponents(class UObject* WorldContextObject, TArray<class UStaticMesh*> MeshFilter, class ULevel* RestrictToLevel, TArray<struct FStaticMeshComponentList>* OutComponentLists);
-	static void FindAllStaticMeshActors(class UObject* WorldContextObject, TArray<class UStaticMesh*> MeshFilter, class ULevel* RestrictToLevel, TArray<struct FStaticMeshActorList>* OutActorLists);
+	void STATIC_FindAllStaticMeshComponents(class UObject* WorldContextObject, TArray<class UStaticMesh*> MeshFilter, class ULevel* RestrictToLevel, TArray<struct FStaticMeshComponentList>* OutComponentLists);
+	void STATIC_FindAllStaticMeshActors(class UObject* WorldContextObject, TArray<class UStaticMesh*> MeshFilter, class ULevel* RestrictToLevel, TArray<struct FStaticMeshActorList>* OutActorLists);
 };
 
 

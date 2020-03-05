@@ -1,12 +1,10 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
-
-#include "SoT_Pets_structs.hpp"
 
 namespace SDK
 {
@@ -22,7 +20,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.AIPetsOnDemandSpawner"));
+		static auto ptr = UObject::FindClass("Class Pets.AIPetsOnDemandSpawner");
 		return ptr;
 	}
 
@@ -37,7 +35,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.BTDecorator_IsForcingHangout"));
+		static auto ptr = UObject::FindClass("Class Pets.BTDecorator_IsForcingHangout");
 		return ptr;
 	}
 
@@ -52,7 +50,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.BTDecorator_IsOccupiedHangoutSpotStillAvailable"));
+		static auto ptr = UObject::FindClass("Class Pets.BTDecorator_IsOccupiedHangoutSpotStillAvailable");
 		return ptr;
 	}
 
@@ -68,7 +66,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.BTDecorator_IsOccupyingHangoutSpotWithGivenId"));
+		static auto ptr = UObject::FindClass("Class Pets.BTDecorator_IsOccupyingHangoutSpotWithGivenId");
 		return ptr;
 	}
 
@@ -83,7 +81,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.BTDecorator_IsPerchedInHangout"));
+		static auto ptr = UObject::FindClass("Class Pets.BTDecorator_IsPerchedInHangout");
 		return ptr;
 	}
 
@@ -98,7 +96,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.BTDecorator_PetFoodSourceAvailable"));
+		static auto ptr = UObject::FindClass("Class Pets.BTDecorator_PetFoodSourceAvailable");
 		return ptr;
 	}
 
@@ -114,7 +112,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.BTDecorator_PetRoamingAnimationStateActive"));
+		static auto ptr = UObject::FindClass("Class Pets.BTDecorator_PetRoamingAnimationStateActive");
 		return ptr;
 	}
 
@@ -131,7 +129,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.BTTask_AttachToHangout"));
+		static auto ptr = UObject::FindClass("Class Pets.BTTask_AttachToHangout");
 		return ptr;
 	}
 
@@ -146,7 +144,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.BTTask_ChangeHangoutAnimation"));
+		static auto ptr = UObject::FindClass("Class Pets.BTTask_ChangeHangoutAnimation");
 		return ptr;
 	}
 
@@ -163,7 +161,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.BTTask_DetachFromHangout"));
+		static auto ptr = UObject::FindClass("Class Pets.BTTask_DetachFromHangout");
 		return ptr;
 	}
 
@@ -179,7 +177,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.BTTask_EatFood"));
+		static auto ptr = UObject::FindClass("Class Pets.BTTask_EatFood");
 		return ptr;
 	}
 
@@ -194,7 +192,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.BTTask_GetTotalHangoutTime"));
+		static auto ptr = UObject::FindClass("Class Pets.BTTask_GetTotalHangoutTime");
 		return ptr;
 	}
 
@@ -209,7 +207,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.BTTask_NotifyForcedHangoutComplete"));
+		static auto ptr = UObject::FindClass("Class Pets.BTTask_NotifyForcedHangoutComplete");
 		return ptr;
 	}
 
@@ -226,7 +224,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.BTTask_PetWaitForAnimationRoamingState"));
+		static auto ptr = UObject::FindClass("Class Pets.BTTask_PetWaitForAnimationRoamingState");
 		return ptr;
 	}
 
@@ -242,7 +240,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.BTTask_ReactToOwner"));
+		static auto ptr = UObject::FindClass("Class Pets.BTTask_ReactToOwner");
 		return ptr;
 	}
 
@@ -263,7 +261,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.BTTask_ReactToThreat"));
+		static auto ptr = UObject::FindClass("Class Pets.BTTask_ReactToThreat");
 		return ptr;
 	}
 
@@ -278,7 +276,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.BTTask_SelectFoodSource"));
+		static auto ptr = UObject::FindClass("Class Pets.BTTask_SelectFoodSource");
 		return ptr;
 	}
 
@@ -297,7 +295,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.BTTask_SelectPetHangoutSpot"));
+		static auto ptr = UObject::FindClass("Class Pets.BTTask_SelectPetHangoutSpot");
 		return ptr;
 	}
 
@@ -317,7 +315,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.BTTask_SelectWanderFlyStrategy"));
+		static auto ptr = UObject::FindClass("Class Pets.BTTask_SelectWanderFlyStrategy");
 		return ptr;
 	}
 
@@ -332,7 +330,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.PetHangoutInterface"));
+		static auto ptr = UObject::FindClass("Class Pets.PetHangoutInterface");
 		return ptr;
 	}
 
@@ -347,7 +345,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.PetMemoryInterface"));
+		static auto ptr = UObject::FindClass("Class Pets.PetMemoryInterface");
 		return ptr;
 	}
 
@@ -362,7 +360,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.PetLifetimeInterface"));
+		static auto ptr = UObject::FindClass("Class Pets.PetLifetimeInterface");
 		return ptr;
 	}
 
@@ -377,7 +375,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.PlayerPetInterface"));
+		static auto ptr = UObject::FindClass("Class Pets.PlayerPetInterface");
 		return ptr;
 	}
 
@@ -392,7 +390,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.PetReactInterface"));
+		static auto ptr = UObject::FindClass("Class Pets.PetReactInterface");
 		return ptr;
 	}
 
@@ -409,7 +407,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.BTTask_SetDebugPetStateDescriptor"));
+		static auto ptr = UObject::FindClass("Class Pets.BTTask_SetDebugPetStateDescriptor");
 		return ptr;
 	}
 
@@ -424,7 +422,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.BTTask_StopOccupyingHangoutSpot"));
+		static auto ptr = UObject::FindClass("Class Pets.BTTask_StopOccupyingHangoutSpot");
 		return ptr;
 	}
 
@@ -441,7 +439,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.PetDangerComponent"));
+		static auto ptr = UObject::FindClass("Class Pets.PetDangerComponent");
 		return ptr;
 	}
 
@@ -456,7 +454,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.EnvQueryContext_AverageThreatPositionFromBlackboard"));
+		static auto ptr = UObject::FindClass("Class Pets.EnvQueryContext_AverageThreatPositionFromBlackboard");
 		return ptr;
 	}
 
@@ -471,7 +469,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.EnvQueryContext_CurrentHangoutSpot"));
+		static auto ptr = UObject::FindClass("Class Pets.EnvQueryContext_CurrentHangoutSpot");
 		return ptr;
 	}
 
@@ -486,7 +484,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.EnvQueryContext_FirstThreatPositionFromBlackboard"));
+		static auto ptr = UObject::FindClass("Class Pets.EnvQueryContext_FirstThreatPositionFromBlackboard");
 		return ptr;
 	}
 
@@ -501,7 +499,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.EnvQueryContext_PerceivedFoodSources"));
+		static auto ptr = UObject::FindClass("Class Pets.EnvQueryContext_PerceivedFoodSources");
 		return ptr;
 	}
 
@@ -516,7 +514,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.EnvQueryContext_SafePositionFromBlackboard"));
+		static auto ptr = UObject::FindClass("Class Pets.EnvQueryContext_SafePositionFromBlackboard");
 		return ptr;
 	}
 
@@ -533,7 +531,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.PetDesc"));
+		static auto ptr = UObject::FindClass("Class Pets.PetDesc");
 		return ptr;
 	}
 
@@ -549,7 +547,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.PetHangoutSpotsDataAsset"));
+		static auto ptr = UObject::FindClass("Class Pets.PetHangoutSpotsDataAsset");
 		return ptr;
 	}
 
@@ -569,7 +567,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.PetHangoutSpotSelectorComponent"));
+		static auto ptr = UObject::FindClass("Class Pets.PetHangoutSpotSelectorComponent");
 		return ptr;
 	}
 
@@ -584,7 +582,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.HangoutSpotSelectionInterface"));
+		static auto ptr = UObject::FindClass("Class Pets.HangoutSpotSelectionInterface");
 		return ptr;
 	}
 
@@ -599,7 +597,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.PetIdleMovementInterface"));
+		static auto ptr = UObject::FindClass("Class Pets.PetIdleMovementInterface");
 		return ptr;
 	}
 
@@ -630,7 +628,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.PetAIController"));
+		static auto ptr = UObject::FindClass("Class Pets.PetAIController");
 		return ptr;
 	}
 
@@ -652,7 +650,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.PetDangerDataAsset"));
+		static auto ptr = UObject::FindClass("Class Pets.PetDangerDataAsset");
 		return ptr;
 	}
 
@@ -668,7 +666,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.PetFeedingDataAsset"));
+		static auto ptr = UObject::FindClass("Class Pets.PetFeedingDataAsset");
 		return ptr;
 	}
 
@@ -698,7 +696,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.PetHangoutSpotComponent"));
+		static auto ptr = UObject::FindClass("Class Pets.PetHangoutSpotComponent");
 		return ptr;
 	}
 
@@ -708,22 +706,22 @@ public:
 
 
 // Class Pets.PetItemInfo
-// 0x0060 (0x05B0 - 0x0550)
+// 0x0060 (0x0598 - 0x0538)
 class APetItemInfo : public ANonStorableItemInfo
 {
 public:
-	unsigned char                                      UnknownData00[0x18];                                      // 0x0550(0x0018) MISSED OFFSET
-	struct FPetCustomisation                           PetCustomisation;                                         // 0x0568(0x0018) (Net)
-	class AActor*                                      PetOwner;                                                 // 0x0580(0x0008) (Net, ZeroConstructor, Transient, IsPlainOldData)
-	class AActor*                                      SpawnedForShip;                                           // 0x0588(0x0008) (ZeroConstructor, Transient, IsPlainOldData)
-	float                                              DropTraceDistance;                                        // 0x0590(0x0004) (Edit, ZeroConstructor, DisableEditOnInstance, IsPlainOldData)
-	float                                              PointSearchRadius;                                        // 0x0594(0x0004) (Edit, ZeroConstructor, DisableEditOnInstance, IsPlainOldData)
-	TEnumAsByte<ECollisionChannel>                     DropChannel;                                              // 0x0598(0x0001) (Edit, ZeroConstructor, DisableEditOnInstance, IsPlainOldData)
-	unsigned char                                      UnknownData01[0x17];                                      // 0x0599(0x0017) MISSED OFFSET
+	unsigned char                                      UnknownData00[0x18];                                      // 0x0538(0x0018) MISSED OFFSET
+	struct FPetCustomisation                           PetCustomisation;                                         // 0x0550(0x0018) (Net)
+	class AActor*                                      PetOwner;                                                 // 0x0568(0x0008) (Net, ZeroConstructor, Transient, IsPlainOldData)
+	class AActor*                                      SpawnedForShip;                                           // 0x0570(0x0008) (ZeroConstructor, Transient, IsPlainOldData)
+	float                                              DropTraceDistance;                                        // 0x0578(0x0004) (Edit, ZeroConstructor, DisableEditOnInstance, IsPlainOldData)
+	float                                              PointSearchRadius;                                        // 0x057C(0x0004) (Edit, ZeroConstructor, DisableEditOnInstance, IsPlainOldData)
+	TEnumAsByte<ECollisionChannel>                     DropChannel;                                              // 0x0580(0x0001) (Edit, ZeroConstructor, DisableEditOnInstance, IsPlainOldData)
+	unsigned char                                      UnknownData01[0x17];                                      // 0x0581(0x0017) MISSED OFFSET
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.PetItemInfo"));
+		static auto ptr = UObject::FindClass("Class Pets.PetItemInfo");
 		return ptr;
 	}
 
@@ -739,7 +737,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.PetListingDataAsset"));
+		static auto ptr = UObject::FindClass("Class Pets.PetListingDataAsset");
 		return ptr;
 	}
 
@@ -754,7 +752,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.PetMovementModifierSettingsInterface"));
+		static auto ptr = UObject::FindClass("Class Pets.PetMovementModifierSettingsInterface");
 		return ptr;
 	}
 
@@ -769,7 +767,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.PetOwnerInterface"));
+		static auto ptr = UObject::FindClass("Class Pets.PetOwnerInterface");
 		return ptr;
 	}
 
@@ -786,7 +784,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.PetOwnerComponent"));
+		static auto ptr = UObject::FindClass("Class Pets.PetOwnerComponent");
 		return ptr;
 	}
 
@@ -803,7 +801,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.PetPartCustomisationInterface"));
+		static auto ptr = UObject::FindClass("Class Pets.PetPartCustomisationInterface");
 		return ptr;
 	}
 
@@ -827,7 +825,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.PetPerchComponent"));
+		static auto ptr = UObject::FindClass("Class Pets.PetPerchComponent");
 		return ptr;
 	}
 
@@ -847,7 +845,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.PetSpawnParamsDataAsset"));
+		static auto ptr = UObject::FindClass("Class Pets.PetSpawnParamsDataAsset");
 		return ptr;
 	}
 
@@ -862,7 +860,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.PetsServiceInterface"));
+		static auto ptr = UObject::FindClass("Class Pets.PetsServiceInterface");
 		return ptr;
 	}
 
@@ -878,7 +876,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.PetsServiceParamsDataAsset"));
+		static auto ptr = UObject::FindClass("Class Pets.PetsServiceParamsDataAsset");
 		return ptr;
 	}
 
@@ -906,7 +904,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.PetsService"));
+		static auto ptr = UObject::FindClass("Class Pets.PetsService");
 		return ptr;
 	}
 
@@ -931,7 +929,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.PetsSettings"));
+		static auto ptr = UObject::FindClass("Class Pets.PetsSettings");
 		return ptr;
 	}
 
@@ -946,7 +944,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.ReactAIStrategyId"));
+		static auto ptr = UObject::FindClass("Class Pets.ReactAIStrategyId");
 		return ptr;
 	}
 
@@ -962,7 +960,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.ReactStateMappingsDataAsset"));
+		static auto ptr = UObject::FindClass("Class Pets.ReactStateMappingsDataAsset");
 		return ptr;
 	}
 
@@ -1001,7 +999,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.WieldablePet"));
+		static auto ptr = UObject::FindClass("Class Pets.WieldablePet");
 		return ptr;
 	}
 
@@ -1020,7 +1018,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.WieldablePetAnimNotifyWwiseEmitterComponent"));
+		static auto ptr = UObject::FindClass("Class Pets.WieldablePetAnimNotifyWwiseEmitterComponent");
 		return ptr;
 	}
 
@@ -1037,7 +1035,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.WieldablePetComponent"));
+		static auto ptr = UObject::FindClass("Class Pets.WieldablePetComponent");
 		return ptr;
 	}
 
@@ -1058,7 +1056,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.WieldablePetComponentDataAsset"));
+		static auto ptr = UObject::FindClass("Class Pets.WieldablePetComponentDataAsset");
 		return ptr;
 	}
 
@@ -1079,7 +1077,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.WieldablePetHungerComponent"));
+		static auto ptr = UObject::FindClass("Class Pets.WieldablePetHungerComponent");
 		return ptr;
 	}
 
@@ -1102,7 +1100,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Pets.WieldablePetHungerDataAsset"));
+		static auto ptr = UObject::FindClass("Class Pets.WieldablePetHungerDataAsset");
 		return ptr;
 	}
 

@@ -1,18 +1,27 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
 
-#include "SoT_Basic.hpp"
-#include "SoT_JsonUtilities_enums.hpp"
-#include "SoT_CoreUObject_classes.hpp"
-#include "SoT_Engine_classes.hpp"
-
 namespace SDK
 {
+//---------------------------------------------------------------------------
+//Enums
+//---------------------------------------------------------------------------
+
+// Enum JsonUtilities.ETestEnum
+enum class EJsonUtilities_ETestEnum : uint8_t
+{
+	Value0                         = 0,
+	Value1                         = 1,
+	ETestEnum_MAX                  = 2
+};
+
+
+
 //---------------------------------------------------------------------------
 //Script Structs
 //---------------------------------------------------------------------------
@@ -68,7 +77,7 @@ struct FTestSerializationObject
 	bool                                               TestBool;                                                 // 0x0000(0x0001) (ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x3];                                       // 0x0001(0x0003) MISSED OFFSET
 	int                                                TestInt;                                                  // 0x0004(0x0004) (ZeroConstructor, IsPlainOldData)
-	class FString                                      TestString;                                               // 0x0008(0x0010) (ZeroConstructor)
+	struct FString                                     TestString;                                               // 0x0008(0x0010) (ZeroConstructor)
 	struct FGuid                                       TestGuid;                                                 // 0x0018(0x0010) (ZeroConstructor, IsPlainOldData)
 };
 
@@ -97,28 +106,28 @@ struct FTestMessageInt64
 // 0x0050
 struct FTestUStructMapSerializationObject
 {
-	TMap<class FString, struct FTestSerializationObject> StructMap;                                                // 0x0000(0x0050) (ZeroConstructor)
+	TMap<struct FString, struct FTestSerializationObject> StructMap;                                                // 0x0000(0x0050) (ZeroConstructor)
 };
 
 // ScriptStruct JsonUtilities.TestInt32MapSerializationObject
 // 0x0050
 struct FTestInt32MapSerializationObject
 {
-	TMap<class FString, int>                           Int32Map;                                                 // 0x0000(0x0050) (ZeroConstructor)
+	TMap<struct FString, int>                          Int32Map;                                                 // 0x0000(0x0050) (ZeroConstructor)
 };
 
 // ScriptStruct JsonUtilities.TestInvalidStringMapSerializationObject
 // 0x0050
 struct FTestInvalidStringMapSerializationObject
 {
-	TMap<int, class FString>                           StringMap;                                                // 0x0000(0x0050) (ZeroConstructor)
+	TMap<int, struct FString>                          StringMap;                                                // 0x0000(0x0050) (ZeroConstructor)
 };
 
 // ScriptStruct JsonUtilities.TestStringMapSerializationObject
 // 0x0050
 struct FTestStringMapSerializationObject
 {
-	TMap<class FString, class FString>                 StringMap;                                                // 0x0000(0x0050) (ZeroConstructor)
+	TMap<struct FString, struct FString>               StringMap;                                                // 0x0000(0x0050) (ZeroConstructor)
 };
 
 }

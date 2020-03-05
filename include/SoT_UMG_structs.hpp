@@ -1,23 +1,116 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
 
-#include "SoT_Basic.hpp"
-#include "SoT_UMG_enums.hpp"
-#include "SoT_CoreUObject_classes.hpp"
-#include "SoT_Engine_classes.hpp"
-#include "SoT_SlateCore_classes.hpp"
-#include "SoT_MovieSceneTracks_classes.hpp"
-#include "SoT_MovieScene_classes.hpp"
-#include "SoT_Slate_classes.hpp"
-#include "SoT_InputCore_classes.hpp"
-
 namespace SDK
 {
+//---------------------------------------------------------------------------
+//Enums
+//---------------------------------------------------------------------------
+
+// Enum UMG.ESlateVisibility
+enum class ESlateVisibility : uint8_t
+{
+	Visible                        = 0,
+	Collapsed                      = 1,
+	Hidden                         = 2,
+	HitTestInvisible               = 3,
+	SelfHitTestInvisible           = 4,
+	ESlateVisibility_MAX           = 5
+};
+
+
+// Enum UMG.EDragPivot
+enum class EDragPivot : uint8_t
+{
+	MouseDown                      = 0,
+	TopLeft                        = 1,
+	TopCenter                      = 2,
+	TopRight                       = 3,
+	CenterLeft                     = 4,
+	CenterCenter                   = 5,
+	CenterRight                    = 6,
+	BottomLeft                     = 7,
+	BottomCenter                   = 8,
+	BottomRight                    = 9,
+	EDragPivot_MAX                 = 10
+};
+
+
+// Enum UMG.ESlateSizeRule
+enum class ESlateSizeRule : uint8_t
+{
+	Automatic                      = 0,
+	Fill                           = 1,
+	ESlateSizeRule_MAX             = 2
+};
+
+
+// Enum UMG.EWidgetDesignFlags
+enum class EWidgetDesignFlags : uint8_t
+{
+	None                           = 0,
+	Designing                      = 1,
+	ShowOutline                    = 2,
+	EWidgetDesignFlags_MAX         = 3
+};
+
+
+// Enum UMG.EDesignPreviewSizeMode
+enum class EDesignPreviewSizeMode : uint8_t
+{
+	FillScreen                     = 0,
+	Custom                         = 1,
+	CustomOnScreen                 = 2,
+	Desired                        = 3,
+	DesiredOnScreen                = 4,
+	EDesignPreviewSizeMode_MAX     = 5
+};
+
+
+// Enum UMG.EUMGSequencePlayMode
+enum class EUMGSequencePlayMode : uint8_t
+{
+	Forward                        = 0,
+	Reverse                        = 1,
+	PingPong                       = 2,
+	EUMGSequencePlayMode_MAX       = 3
+};
+
+
+// Enum UMG.EBindingKind
+enum class EBindingKind : uint8_t
+{
+	Function                       = 0,
+	Property                       = 1,
+	EBindingKind_MAX               = 2
+};
+
+
+// Enum UMG.EWidgetBlendMode
+enum class EWidgetBlendMode : uint8_t
+{
+	Opaque                         = 0,
+	Masked                         = 1,
+	Transparent                    = 2,
+	EWidgetBlendMode_MAX           = 3
+};
+
+
+// Enum UMG.EWidgetSpace
+enum class EWidgetSpace : uint8_t
+{
+	World                          = 0,
+	Screen                         = 1,
+	EWidgetSpace_MAX               = 2
+};
+
+
+
 //---------------------------------------------------------------------------
 //Script Structs
 //---------------------------------------------------------------------------
@@ -103,7 +196,7 @@ struct FWidgetAnimationBinding
 // 0x0038
 struct FDelegateRuntimeBinding
 {
-	class FString                                      ObjectName;                                               // 0x0000(0x0010) (ZeroConstructor)
+	struct FString                                     ObjectName;                                               // 0x0000(0x0010) (ZeroConstructor)
 	struct FName                                       PropertyName;                                             // 0x0010(0x0008) (ZeroConstructor, IsPlainOldData)
 	struct FName                                       FunctionName;                                             // 0x0018(0x0008) (ZeroConstructor, IsPlainOldData)
 	struct FDynamicPropertyPath                        SourcePath;                                               // 0x0020(0x0010)

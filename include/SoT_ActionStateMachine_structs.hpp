@@ -1,18 +1,50 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
 
-#include "SoT_Basic.hpp"
-#include "SoT_ActionStateMachine_enums.hpp"
-#include "SoT_Engine_classes.hpp"
-#include "SoT_CoreUObject_classes.hpp"
-
 namespace SDK
 {
+//---------------------------------------------------------------------------
+//Enums
+//---------------------------------------------------------------------------
+
+// Enum ActionStateMachine.EActionStateMachineTrackId
+enum class EActionStateMachineTrackId : uint8_t
+{
+	Locomotion                     = 0,
+	Overlay                        = 1,
+	ItemUse                        = 2,
+	ForcedMovement                 = 3,
+	Migration                      = 4,
+	Count                          = 5,
+	Invalid                        = 6,
+	EActionStateMachineTrackId_MAX = 7
+};
+
+
+// Enum ActionStateMachine.EActionPredictionType
+enum class EActionPredictionType : uint8_t
+{
+	Predicted                      = 0,
+	NotPredicted                   = 1,
+	EActionPredictionType_MAX      = 2
+};
+
+
+// Enum ActionStateMachine.EActionStatePriority
+enum class EActionStatePriority : uint8_t
+{
+	Overrides                      = 0,
+	Overriden                      = 1,
+	EActionStatePriority_MAX       = 2
+};
+
+
+
 //---------------------------------------------------------------------------
 //Script Structs
 //---------------------------------------------------------------------------
@@ -112,7 +144,7 @@ struct FInnerTestStruct
 {
 	bool                                               BoolProp;                                                 // 0x0000(0x0001) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x7];                                       // 0x0001(0x0007) MISSED OFFSET
-	class FString                                      StringProp;                                               // 0x0008(0x0010) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor)
+	struct FString                                     StringProp;                                               // 0x0008(0x0010) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor)
 };
 
 // ScriptStruct ActionStateMachine.TestActionStateConstructionInfoWithInner

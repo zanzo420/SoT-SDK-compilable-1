@@ -1,12 +1,10 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
-
-#include "SoT_EmotingFramework_structs.hpp"
 
 namespace SDK
 {
@@ -23,7 +21,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class EmotingFramework.EmoteCoin"));
+		static auto ptr = UObject::FindClass("Class EmotingFramework.EmoteCoin");
 		return ptr;
 	}
 
@@ -39,7 +37,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class EmotingFramework.EmoteIdListingAsset"));
+		static auto ptr = UObject::FindClass("Class EmotingFramework.EmoteIdListingAsset");
 		return ptr;
 	}
 
@@ -57,7 +55,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class EmotingFramework.EmoteSettings"));
+		static auto ptr = UObject::FindClass("Class EmotingFramework.EmoteSettings");
 		return ptr;
 	}
 

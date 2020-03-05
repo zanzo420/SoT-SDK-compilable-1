@@ -1,12 +1,10 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
-
-#include "SoT_DeliverableFramework_structs.hpp"
 
 namespace SDK
 {
@@ -22,7 +20,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class DeliverableFramework.DeliverableRequirementBase"));
+		static auto ptr = UObject::FindClass("Class DeliverableFramework.DeliverableRequirementBase");
 		return ptr;
 	}
 
@@ -37,7 +35,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class DeliverableFramework.DeliverableInterface"));
+		static auto ptr = UObject::FindClass("Class DeliverableFramework.DeliverableInterface");
 		return ptr;
 	}
 
@@ -54,7 +52,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class DeliverableFramework.DeliverableComponent"));
+		static auto ptr = UObject::FindClass("Class DeliverableFramework.DeliverableComponent");
 		return ptr;
 	}
 
@@ -70,7 +68,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class DeliverableFramework.DeliverableRequirementsDataAsset"));
+		static auto ptr = UObject::FindClass("Class DeliverableFramework.DeliverableRequirementsDataAsset");
 		return ptr;
 	}
 

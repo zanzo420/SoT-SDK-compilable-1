@@ -1,12 +1,10 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
-
-#include "SoT_AthenaRigging_structs.hpp"
 
 namespace SDK
 {
@@ -26,7 +24,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaRigging.InstancedRopeComponent"));
+		static auto ptr = UObject::FindClass("Class AthenaRigging.InstancedRopeComponent");
 		return ptr;
 	}
 
@@ -46,7 +44,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaRigging.MaterialExpressionRopeParameter"));
+		static auto ptr = UObject::FindClass("Class AthenaRigging.MaterialExpressionRopeParameter");
 		return ptr;
 	}
 
@@ -71,7 +69,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaRigging.RiggingSystem"));
+		static auto ptr = UObject::FindClass("Class AthenaRigging.RiggingSystem");
 		return ptr;
 	}
 
@@ -90,7 +88,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaRigging.RiggingSystemComponent"));
+		static auto ptr = UObject::FindClass("Class AthenaRigging.RiggingSystemComponent");
 		return ptr;
 	}
 
@@ -108,7 +106,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaRigging.RopeCatenaryRenderComponent"));
+		static auto ptr = UObject::FindClass("Class AthenaRigging.RopeCatenaryRenderComponent");
 		return ptr;
 	}
 
@@ -123,7 +121,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaRigging.RopeInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaRigging.RopeInterface");
 		return ptr;
 	}
 

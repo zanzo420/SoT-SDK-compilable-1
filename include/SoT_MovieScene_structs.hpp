@@ -1,17 +1,30 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
 
-#include "SoT_Basic.hpp"
-#include "SoT_MovieScene_enums.hpp"
-#include "SoT_CoreUObject_classes.hpp"
-
 namespace SDK
 {
+//---------------------------------------------------------------------------
+//Enums
+//---------------------------------------------------------------------------
+
+// Enum MovieScene.EMovieSceneKeyInterpolation
+enum class EMovieSceneKeyInterpolation : uint8_t
+{
+	MSKI_Auto                      = 0,
+	MSKI_User                      = 1,
+	MSKI_Break                     = 2,
+	MSKI_Linear                    = 3,
+	MSKI_Constant                  = 4,
+	MSKI_MAX                       = 5
+};
+
+
+
 //---------------------------------------------------------------------------
 //Script Structs
 //---------------------------------------------------------------------------
@@ -21,7 +34,7 @@ namespace SDK
 struct FMovieSceneSpawnable
 {
 	struct FGuid                                       Guid;                                                     // 0x0000(0x0010) (ZeroConstructor, IsPlainOldData)
-	class FString                                      Name;                                                     // 0x0010(0x0010) (ZeroConstructor)
+	struct FString                                     Name;                                                     // 0x0010(0x0010) (ZeroConstructor)
 	class UClass*                                      GeneratedClass;                                           // 0x0020(0x0008) (ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x8];                                       // 0x0028(0x0008) MISSED OFFSET
 };
@@ -31,7 +44,7 @@ struct FMovieSceneSpawnable
 struct FMovieScenePossessable
 {
 	struct FGuid                                       Guid;                                                     // 0x0000(0x0010) (ZeroConstructor, IsPlainOldData)
-	class FString                                      Name;                                                     // 0x0010(0x0010) (ZeroConstructor)
+	struct FString                                     Name;                                                     // 0x0010(0x0010) (ZeroConstructor)
 	class UClass*                                      PossessedObjectClass;                                     // 0x0020(0x0008) (ZeroConstructor, IsPlainOldData)
 };
 
@@ -40,7 +53,7 @@ struct FMovieScenePossessable
 struct FMovieSceneBinding
 {
 	struct FGuid                                       ObjectGuid;                                               // 0x0000(0x0010) (ZeroConstructor, IsPlainOldData)
-	class FString                                      BindingName;                                              // 0x0010(0x0010) (ZeroConstructor)
+	struct FString                                     BindingName;                                              // 0x0010(0x0010) (ZeroConstructor)
 	TArray<class UMovieSceneTrack*>                    Tracks;                                                   // 0x0020(0x0010) (ZeroConstructor)
 };
 
@@ -55,7 +68,7 @@ struct FMovieSceneExpansionState
 // 0x0050
 struct FMovieSceneEditorData
 {
-	TMap<class FString, struct FMovieSceneExpansionState> ExpansionStates;                                          // 0x0000(0x0050) (ZeroConstructor)
+	TMap<struct FString, struct FMovieSceneExpansionState> ExpansionStates;                                          // 0x0000(0x0050) (ZeroConstructor)
 };
 
 }

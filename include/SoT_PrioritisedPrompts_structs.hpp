@@ -1,20 +1,46 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
 
-#include "SoT_Basic.hpp"
-#include "SoT_PrioritisedPrompts_enums.hpp"
-#include "SoT_Engine_classes.hpp"
-#include "SoT_CoreUObject_classes.hpp"
-#include "SoT_ObjectMessaging_classes.hpp"
-#include "SoT_Athena_classes.hpp"
-
 namespace SDK
 {
+//---------------------------------------------------------------------------
+//Enums
+//---------------------------------------------------------------------------
+
+// Enum PrioritisedPrompts.EPromptPriority
+enum class EPromptPriority : uint8_t
+{
+	Low                            = 0,
+	High                           = 1,
+	EPromptPriority_MAX            = 2
+};
+
+
+// Enum PrioritisedPrompts.EPromptEvaluatedType
+enum class EPromptEvaluatedType : uint8_t
+{
+	ShowPrompt                     = 0,
+	ShowNoPrompt                   = 1,
+	CompleteCoordinator            = 2,
+	EPromptEvaluatedType_MAX       = 3
+};
+
+
+// Enum PrioritisedPrompts.EPromptStartStop
+enum class EPromptStartStop : uint8_t
+{
+	Start                          = 0,
+	Stop                           = 1,
+	EPromptStartStop_MAX           = 2
+};
+
+
+
 //---------------------------------------------------------------------------
 //Script Structs
 //---------------------------------------------------------------------------
@@ -31,7 +57,7 @@ struct FPrioritisedPromptHandle
 struct FPrioritisedPrompt
 {
 	struct FText                                       Message;                                                  // 0x0000(0x0038) (Edit, BlueprintVisible)
-	class FString                                      Key;                                                      // 0x0038(0x0010) (Edit, BlueprintVisible, ZeroConstructor)
+	struct FString                                     Key;                                                      // 0x0038(0x0010) (Edit, BlueprintVisible, ZeroConstructor)
 	class UPopUpMessageDesc*                           PopUpMessageDesc;                                         // 0x0048(0x0008) (Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData)
 	TEnumAsByte<EPromptPriority>                       BasePriority;                                             // 0x0050(0x0001) (Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x7];                                       // 0x0051(0x0007) MISSED OFFSET
@@ -63,12 +89,19 @@ struct FPermanentPromptNetworkEvent : public FNetworkEventStruct
 	unsigned char                                      UnknownData00[0x7];                                       // 0x0079(0x0007) MISSED OFFSET
 };
 
-// ScriptStruct PrioritisedPrompts.PromptTelemetryEvent
-// 0x0020
-struct FPromptTelemetryEvent
+// ScriptStruct PrioritisedPrompts.PromptsCounterIncrementEvent
+// 0x0008
+struct FPromptsCounterIncrementEvent
 {
-	class FString                                      Message;                                                  // 0x0000(0x0010) (ZeroConstructor)
-	class FString                                      Key;                                                      // 0x0010(0x0010) (ZeroConstructor)
+	class UClass*                                      AccessKey;                                                // 0x0000(0x0008) (Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData)
+};
+
+// ScriptStruct PrioritisedPrompts.PlayerPromptTelemetryEvent
+// 0x0020
+struct FPlayerPromptTelemetryEvent
+{
+	struct FString                                     Message;                                                  // 0x0000(0x0010) (ZeroConstructor)
+	struct FString                                     Key;                                                      // 0x0010(0x0010) (ZeroConstructor)
 };
 
 }

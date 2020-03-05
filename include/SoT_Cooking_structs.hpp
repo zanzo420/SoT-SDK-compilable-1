@@ -1,20 +1,43 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
 
-#include "SoT_Basic.hpp"
-#include "SoT_Cooking_enums.hpp"
-#include "SoT_StatusEffects_classes.hpp"
-#include "SoT_Engine_classes.hpp"
-#include "SoT_CoreUObject_classes.hpp"
-#include "SoT_Athena_classes.hpp"
-
 namespace SDK
 {
+//---------------------------------------------------------------------------
+//Enums
+//---------------------------------------------------------------------------
+
+// Enum Cooking.ECookingState
+enum class ECookingState : uint8_t
+{
+	Raw                            = 0,
+	Undercooked                    = 1,
+	Cooked                         = 2,
+	Burned                         = 3,
+	Fresh                          = 4,
+	ECookingState_MAX              = 5
+};
+
+
+// Enum Cooking.ECookingSmokeFeedbackLevel
+enum class ECookingSmokeFeedbackLevel : uint8_t
+{
+	NotCooking                     = 0,
+	Raw                            = 1,
+	CookedWarning                  = 2,
+	Cooked                         = 3,
+	BurnedWarning                  = 4,
+	Burned                         = 5,
+	ECookingSmokeFeedbackLevel_MAX = 6
+};
+
+
+
 //---------------------------------------------------------------------------
 //Script Structs
 //---------------------------------------------------------------------------
@@ -89,7 +112,7 @@ struct FOnItemStoppedCooking
 // 0x0030
 struct FCookEndTelemetryEvent
 {
-	class FString                                      ItemName;                                                 // 0x0000(0x0010) (ZeroConstructor)
+	struct FString                                     ItemName;                                                 // 0x0000(0x0010) (ZeroConstructor)
 	TEnumAsByte<ECookingState>                         CookState;                                                // 0x0010(0x0001) (ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x3];                                       // 0x0011(0x0003) MISSED OFFSET
 	struct FVector                                     Location;                                                 // 0x0014(0x000C) (ZeroConstructor, IsPlainOldData)
@@ -100,7 +123,7 @@ struct FCookEndTelemetryEvent
 // 0x0030
 struct FCookStartTelemetryEvent
 {
-	class FString                                      ItemName;                                                 // 0x0000(0x0010) (ZeroConstructor)
+	struct FString                                     ItemName;                                                 // 0x0000(0x0010) (ZeroConstructor)
 	TEnumAsByte<ECookingState>                         CookState;                                                // 0x0010(0x0001) (ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x3];                                       // 0x0011(0x0003) MISSED OFFSET
 	struct FVector                                     Location;                                                 // 0x0014(0x000C) (ZeroConstructor, IsPlainOldData)

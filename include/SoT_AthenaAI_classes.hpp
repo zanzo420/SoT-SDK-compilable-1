@@ -1,18 +1,38 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
 
-#include "SoT_AthenaAI_structs.hpp"
+#include "AthenaCommons.hpp"
 
 namespace SDK
 {
 //---------------------------------------------------------------------------
 //Classes
 //---------------------------------------------------------------------------
+
+// Class AthenaAI.AthenaAIFormComponent
+// 0x0058 (0x0120 - 0x00C8)
+//class UAthenaAIFormComponent : public UActorComponent
+//{
+//public:
+//	class UAthenaAIFormDataAsset*                      FormData;                                                 // 0x00C8(0x0008) (Net, ZeroConstructor, IsPlainOldData)
+//	class UCharacterHitReactionDamagerTypeToAnimTypeLayer* HitReactionsLayer;                                        // 0x00D0(0x0008) (ZeroConstructor, Transient, IsPlainOldData)
+//	unsigned char                                      UnknownData00[0x48];                                      // 0x00D8(0x0048) MISSED OFFSET
+//
+//	static UClass* StaticClass()
+//	{
+//		static auto ptr = UObject::FindClass("Class AthenaAI.AthenaAIFormComponent");
+//		return ptr;
+//	}
+//
+//
+//	void OnRep_FormData();
+//};
+
 
 // Class AthenaAI.AIStrategyId
 // 0x0000 (0x0028 - 0x0028)
@@ -22,7 +42,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIStrategyId"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIStrategyId");
 		return ptr;
 	}
 
@@ -38,7 +58,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIPartsDesc"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIPartsDesc");
 		return ptr;
 	}
 
@@ -78,7 +98,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AISpawner"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AISpawner");
 		return ptr;
 	}
 
@@ -102,7 +122,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIPerCrewSpawner"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIPerCrewSpawner");
 		return ptr;
 	}
 
@@ -130,7 +150,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AthenaAIFormDataAsset"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AthenaAIFormDataAsset");
 		return ptr;
 	}
 
@@ -145,7 +165,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIPlayerTracker"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIPlayerTracker");
 		return ptr;
 	}
 
@@ -161,7 +181,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AISpawnerPlayerTracker"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AISpawnerPlayerTracker");
 		return ptr;
 	}
 
@@ -176,7 +196,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIInteractableType"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIInteractableType");
 		return ptr;
 	}
 
@@ -191,7 +211,25 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AthenaAIAbilityType"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AthenaAIAbilityType");
+		return ptr;
+	}
+
+};
+
+
+// Class AthenaAI.AthenaAIAbilityStageParams
+// 0x0008 (0x0030 - 0x0028)
+class UAthenaAIAbilityStageParams : public UObject
+{
+public:
+	float                                              AbilityCooldownMultiplier;                                // 0x0028(0x0004) (Edit, ZeroConstructor, IsPlainOldData)
+	bool                                               OverrideParams;                                           // 0x002C(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
+	unsigned char                                      UnknownData00[0x3];                                       // 0x002D(0x0003) MISSED OFFSET
+
+	static UClass* StaticClass()
+	{
+		static auto ptr = UObject::FindClass("Class AthenaAI.AthenaAIAbilityStageParams");
 		return ptr;
 	}
 
@@ -199,7 +237,7 @@ public:
 
 
 // Class AthenaAI.AthenaAIAbility
-// 0x0038 (0x0060 - 0x0028)
+// 0x0040 (0x0068 - 0x0028)
 class UAthenaAIAbility : public UObject
 {
 public:
@@ -207,11 +245,11 @@ public:
 	class APawn*                                       Pawn;                                                     // 0x0030(0x0008) (ZeroConstructor, IsPlainOldData)
 	class AAthenaAIController*                         Controller;                                               // 0x0038(0x0008) (ZeroConstructor, IsPlainOldData)
 	TScriptInterface<class UAIPawnInterface>           AIPawnInterface;                                          // 0x0040(0x0010) (ZeroConstructor, IsPlainOldData)
-	unsigned char                                      UnknownData00[0x10];                                      // 0x0050(0x0010) MISSED OFFSET
+	unsigned char                                      UnknownData00[0x18];                                      // 0x0050(0x0018) MISSED OFFSET
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AthenaAIAbility"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AthenaAIAbility");
 		return ptr;
 	}
 
@@ -219,24 +257,27 @@ public:
 
 
 // Class AthenaAI.AthenaAIAbilityParams
-// 0x0058 (0x0080 - 0x0028)
+// 0x0060 (0x0088 - 0x0028)
 class UAthenaAIAbilityParams : public UObject
 {
 public:
-	bool                                               UseTimeBetweenAbility;                                    // 0x0028(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
-	unsigned char                                      UnknownData00[0x7];                                       // 0x0029(0x0007) MISSED OFFSET
+	TEnumAsByte<EAIAbilityDamageIntervalCounterMode>   DamageIntervalCountingMode;                               // 0x0028(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
+	bool                                               UseTimeBetweenAbility;                                    // 0x0029(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
+	unsigned char                                      UnknownData00[0x6];                                       // 0x002A(0x0006) MISSED OFFSET
 	struct FAthenaAIAbilityPlayerBasedRanges           ActivationTimerCooldown;                                  // 0x0030(0x0010) (Edit)
 	struct FAthenaAIAbilityPlayerBasedRanges           TimeBetweenAbility;                                       // 0x0040(0x0010) (Edit)
 	bool                                               UseDamageBetweenAbility;                                  // 0x0050(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData01[0x7];                                       // 0x0051(0x0007) MISSED OFFSET
 	struct FAthenaAIAbilityPlayerBasedRanges           DamageBetweenAbility;                                     // 0x0058(0x0010) (Edit)
 	float                                              AbilityRadius;                                            // 0x0068(0x0004) (Edit, ZeroConstructor, IsPlainOldData)
-	unsigned char                                      UnknownData02[0x4];                                       // 0x006C(0x0004) MISSED OFFSET
-	TArray<struct FAIAbilityFollowUp>                  FollowUpAbilities;                                        // 0x0070(0x0010) (Edit, ZeroConstructor)
+	bool                                               UseMinMaxAttackRange;                                     // 0x006C(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
+	unsigned char                                      UnknownData02[0x3];                                       // 0x006D(0x0003) MISSED OFFSET
+	struct FMinMaxAbilityRange                         MinMaxAttackRange;                                        // 0x0070(0x0008) (Edit)
+	TArray<struct FAIAbilityFollowUp>                  FollowUpAbilities;                                        // 0x0078(0x0010) (Edit, ZeroConstructor)
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AthenaAIAbilityParams"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AthenaAIAbilityParams");
 		return ptr;
 	}
 
@@ -256,7 +297,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIInteractableComponent"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIInteractableComponent");
 		return ptr;
 	}
 
@@ -271,7 +312,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTDecorator_BaseConditional"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTDecorator_BaseConditional");
 		return ptr;
 	}
 
@@ -289,7 +330,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTDecorator_TargetOnShip"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTDecorator_TargetOnShip");
 		return ptr;
 	}
 
@@ -317,7 +358,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTService_QueryShipsForTarget"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTService_QueryShipsForTarget");
 		return ptr;
 	}
 
@@ -339,7 +380,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_SwimAttackTargetActor"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_SwimAttackTargetActor");
 		return ptr;
 	}
 
@@ -347,7 +388,7 @@ public:
 
 
 // Class AthenaAI.BTTask_SwimAttackTargetShip
-// 0x0198 (0x0220 - 0x0088)
+// 0x01A8 (0x0230 - 0x0088)
 class UBTTask_SwimAttackTargetShip : public UBTTask_BlackboardBase
 {
 public:
@@ -370,15 +411,15 @@ public:
 	unsigned char                                      UnknownData02[0x4];                                       // 0x0164(0x0004) MISSED OFFSET
 	class UClass*                                      DamageCauserType;                                         // 0x0168(0x0008) (Edit, ZeroConstructor, IsPlainOldData)
 	struct FAIDataProviderFloatValue                   PlayerBiteRadius;                                         // 0x0170(0x0030) (Edit)
-	struct FKnockBackInfo                              KnockbackParams;                                          // 0x01A0(0x0034) (Edit)
-	unsigned char                                      UnknownData03[0x4];                                       // 0x01D4(0x0004) MISSED OFFSET
-	struct FAIDataProviderFloatValue                   PlayerBiteDamage;                                         // 0x01D8(0x0030) (Edit)
-	unsigned char                                      UnknownData04[0x10];                                      // 0x0208(0x0010) MISSED OFFSET
-	class AShip*                                       TargetShip;                                               // 0x0218(0x0008) (ZeroConstructor, Transient, IsPlainOldData)
+	struct FKnockBackInfo                              KnockbackParams;                                          // 0x01A0(0x0044) (Edit)
+	unsigned char                                      UnknownData03[0x4];                                       // 0x01E4(0x0004) MISSED OFFSET
+	struct FAIDataProviderFloatValue                   PlayerBiteDamage;                                         // 0x01E8(0x0030) (Edit)
+	unsigned char                                      UnknownData04[0x10];                                      // 0x0218(0x0010) MISSED OFFSET
+	class AShip*                                       TargetShip;                                               // 0x0228(0x0008) (ZeroConstructor, Transient, IsPlainOldData)
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_SwimAttackTargetShip"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_SwimAttackTargetShip");
 		return ptr;
 	}
 
@@ -393,7 +434,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIAnimationStateId"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIAnimationStateId");
 		return ptr;
 	}
 
@@ -408,7 +449,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIItemParameterInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIItemParameterInterface");
 		return ptr;
 	}
 
@@ -435,7 +476,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AthenaAIControllerSharedParamValuesDataAsset"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AthenaAIControllerSharedParamValuesDataAsset");
 		return ptr;
 	}
 
@@ -475,7 +516,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AthenaAIControllerParamsDataAsset"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AthenaAIControllerParamsDataAsset");
 		return ptr;
 	}
 
@@ -483,7 +524,7 @@ public:
 
 
 // Class AthenaAI.AthenaAICharacterControllerSharedParamValuesDataAsset
-// 0x00C0 (0x0148 - 0x0088)
+// 0x00D0 (0x0158 - 0x0088)
 class UAthenaAICharacterControllerSharedParamValuesDataAsset : public UAthenaAIControllerSharedParamValuesDataAsset
 {
 public:
@@ -501,18 +542,19 @@ public:
 	TArray<struct FAthenaAIItemParamValue>             NamedItemParams;                                          // 0x00E8(0x0010) (Edit, ZeroConstructor)
 	TArray<struct FAthenaAICharacterControllerSpawnItemDescForItemCategory> SpawnItemDescForItemCategories;                           // 0x00F8(0x0010) (Edit, ZeroConstructor)
 	TArray<class UAthenaAIAbilityParams*>              AIAbilityParams;                                          // 0x0108(0x0010) (Edit, ExportObject, ZeroConstructor)
-	struct FStringAssetReference                       AnimationDataOverrideAsset;                               // 0x0118(0x0010) (Edit, ZeroConstructor)
-	struct FStringAssetReference                       CustomAnimationAsset;                                     // 0x0128(0x0010) (Edit, ZeroConstructor)
-	bool                                               OverrideNoInitialItem;                                    // 0x0138(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
-	bool                                               NoInitialItem;                                            // 0x0139(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
-	bool                                               OverrideBeginFleeing;                                     // 0x013A(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
-	bool                                               BeginFleeing;                                             // 0x013B(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
-	unsigned char                                      UnknownData01[0x4];                                       // 0x013C(0x0004) MISSED OFFSET
-	class UEnvQuery*                                   FleeingEQS;                                               // 0x0140(0x0008) (Edit, ZeroConstructor, IsPlainOldData)
+	TArray<struct FAthenaAIEngageEnemyData>            NonItemEngageOptions;                                     // 0x0118(0x0010) (Edit, ZeroConstructor)
+	struct FStringAssetReference                       AnimationDataOverrideAsset;                               // 0x0128(0x0010) (Edit, ZeroConstructor)
+	struct FStringAssetReference                       CustomAnimationAsset;                                     // 0x0138(0x0010) (Edit, ZeroConstructor)
+	bool                                               OverrideNoInitialItem;                                    // 0x0148(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
+	bool                                               NoInitialItem;                                            // 0x0149(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
+	bool                                               OverrideBeginFleeing;                                     // 0x014A(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
+	bool                                               BeginFleeing;                                             // 0x014B(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
+	unsigned char                                      UnknownData01[0x4];                                       // 0x014C(0x0004) MISSED OFFSET
+	class UEnvQuery*                                   FleeingEQS;                                               // 0x0150(0x0008) (Edit, ZeroConstructor, IsPlainOldData)
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AthenaAICharacterControllerSharedParamValuesDataAsset"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AthenaAICharacterControllerSharedParamValuesDataAsset");
 		return ptr;
 	}
 
@@ -520,7 +562,7 @@ public:
 
 
 // Class AthenaAI.AthenaAICharacterControllerParamsDataAsset
-// 0x00C0 (0x01A0 - 0x00E0)
+// 0x00E8 (0x01C8 - 0x00E0)
 class UAthenaAICharacterControllerParamsDataAsset : public UAthenaAIControllerParamsDataAsset
 {
 public:
@@ -537,19 +579,23 @@ public:
 	TArray<struct FAthenaAICharacterControllerItemCategoryNamedParams> IndividualWieldedItemOverrideNamedControllerParams;       // 0x0130(0x0010) (Edit, ZeroConstructor)
 	TArray<struct FAthenaAIItemParamValue>             IndividualNamedItemParams;                                // 0x0140(0x0010) (Edit, ZeroConstructor)
 	TArray<struct FAthenaAICharacterControllerSpawnItemDescForItemCategory> IndividualSpawnItemDescForItemCategories;                 // 0x0150(0x0010) (Edit, ZeroConstructor)
-	TArray<class UAthenaAIAbilityParams*>              IndividualAIAbilityParams;                                // 0x0160(0x0010) (Edit, ExportObject, ZeroConstructor)
-	struct FStringAssetReference                       IndividualAnimationDataOverrideAsset;                     // 0x0170(0x0010) (Edit, ZeroConstructor)
-	struct FStringAssetReference                       IndividualCustomAnimationAsset;                           // 0x0180(0x0010) (Edit, ZeroConstructor)
-	bool                                               IndividualOverrideNoInitialItem;                          // 0x0190(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
-	bool                                               IndividualNoInitialItem;                                  // 0x0191(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
-	bool                                               IndividualOverrideBeginFleeing;                           // 0x0192(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
-	bool                                               IndividualBeginFleeing;                                   // 0x0193(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
-	unsigned char                                      UnknownData01[0x4];                                       // 0x0194(0x0004) MISSED OFFSET
-	class UEnvQuery*                                   IndividualFleeingEQS;                                     // 0x0198(0x0008) (Edit, ZeroConstructor, IsPlainOldData)
+	bool                                               UseDamageBasedAbilityStages;                              // 0x0160(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
+	unsigned char                                      UnknownData01[0x7];                                       // 0x0161(0x0007) MISSED OFFSET
+	TArray<struct FAthenaAIAbilityDamageStage>         IndividualDamageBasedAIAbilityStages;                     // 0x0168(0x0010) (Edit, ZeroConstructor)
+	TArray<class UAthenaAIAbilityParams*>              IndividualAIAbilityParams;                                // 0x0178(0x0010) (Edit, ExportObject, ZeroConstructor)
+	TArray<struct FAthenaAIEngageEnemyData>            IndividualNonItemEngageOptions;                           // 0x0188(0x0010) (Edit, ZeroConstructor)
+	struct FStringAssetReference                       IndividualAnimationDataOverrideAsset;                     // 0x0198(0x0010) (Edit, ZeroConstructor)
+	struct FStringAssetReference                       IndividualCustomAnimationAsset;                           // 0x01A8(0x0010) (Edit, ZeroConstructor)
+	bool                                               IndividualOverrideNoInitialItem;                          // 0x01B8(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
+	bool                                               IndividualNoInitialItem;                                  // 0x01B9(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
+	bool                                               IndividualOverrideBeginFleeing;                           // 0x01BA(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
+	bool                                               IndividualBeginFleeing;                                   // 0x01BB(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
+	unsigned char                                      UnknownData02[0x4];                                       // 0x01BC(0x0004) MISSED OFFSET
+	class UEnvQuery*                                   IndividualFleeingEQS;                                     // 0x01C0(0x0008) (Edit, ZeroConstructor, IsPlainOldData)
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AthenaAICharacterControllerParamsDataAsset"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AthenaAICharacterControllerParamsDataAsset");
 		return ptr;
 	}
 
@@ -567,7 +613,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AthenaAIAmmoDataAsset"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AthenaAIAmmoDataAsset");
 		return ptr;
 	}
 
@@ -585,7 +631,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIAmmoRankProgression"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIAmmoRankProgression");
 		return ptr;
 	}
 
@@ -601,7 +647,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIAmmoProgressionTypeList"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIAmmoProgressionTypeList");
 		return ptr;
 	}
 
@@ -618,7 +664,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIAmmoTypeList"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIAmmoTypeList");
 		return ptr;
 	}
 
@@ -633,7 +679,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIAnimationStateInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIAnimationStateInterface");
 		return ptr;
 	}
 
@@ -648,7 +694,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIClassId"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIClassId");
 		return ptr;
 	}
 
@@ -669,7 +715,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIPartsCategory"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIPartsCategory");
 		return ptr;
 	}
 
@@ -684,7 +730,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIPartsServiceInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIPartsServiceInterface");
 		return ptr;
 	}
 
@@ -699,7 +745,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIEncounterServiceInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIEncounterServiceInterface");
 		return ptr;
 	}
 
@@ -721,7 +767,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIClassIdTypeList"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIClassIdTypeList");
 		return ptr;
 	}
 
@@ -737,7 +783,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIColorVariantPool"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIColorVariantPool");
 		return ptr;
 	}
 
@@ -757,7 +803,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIDebugVisualisationComponent"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIDebugVisualisationComponent");
 		return ptr;
 	}
 
@@ -772,7 +818,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIDialogueStateProviderInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIDialogueStateProviderInterface");
 		return ptr;
 	}
 
@@ -792,7 +838,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIEncounterGenerationRecipe"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIEncounterGenerationRecipe");
 		return ptr;
 	}
 
@@ -809,7 +855,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIEncounterGenerationRecipeRankOrderList"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIEncounterGenerationRecipeRankOrderList");
 		return ptr;
 	}
 
@@ -825,7 +871,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIEncounterGenerationRecipeTypeList"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIEncounterGenerationRecipeTypeList");
 		return ptr;
 	}
 
@@ -840,7 +886,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIEncounterGenerationServiceInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIEncounterGenerationServiceInterface");
 		return ptr;
 	}
 
@@ -859,7 +905,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIEncounterGenerationService"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIEncounterGenerationService");
 		return ptr;
 	}
 
@@ -877,7 +923,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIFormRankProgression"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIFormRankProgression");
 		return ptr;
 	}
 
@@ -893,7 +939,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIFormProgressionTypeList"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIFormProgressionTypeList");
 		return ptr;
 	}
 
@@ -910,7 +956,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIFormTypeList"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIFormTypeList");
 		return ptr;
 	}
 
@@ -926,7 +972,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AILoadoutProgressionTypeList"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AILoadoutProgressionTypeList");
 		return ptr;
 	}
 
@@ -942,7 +988,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AILoadoutTypeList"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AILoadoutTypeList");
 		return ptr;
 	}
 
@@ -958,7 +1004,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AISkillsetProgressionTypeList"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AISkillsetProgressionTypeList");
 		return ptr;
 	}
 
@@ -974,7 +1020,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AISkillsetTypeList"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AISkillsetTypeList");
 		return ptr;
 	}
 
@@ -990,7 +1036,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIPartsCategoryTypeList"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIPartsCategoryTypeList");
 		return ptr;
 	}
 
@@ -1022,7 +1068,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIEncounterService"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIEncounterService");
 		return ptr;
 	}
 
@@ -1046,7 +1092,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AISkillsetRankProgression"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AISkillsetRankProgression");
 		return ptr;
 	}
 
@@ -1065,7 +1111,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIEncounterSettings"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIEncounterSettings");
 		return ptr;
 	}
 
@@ -1089,7 +1135,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIEncounterSettingsFixed"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIEncounterSettingsFixed");
 		return ptr;
 	}
 
@@ -1111,7 +1157,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIEncounterSettingsRankProgression"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIEncounterSettingsRankProgression");
 		return ptr;
 	}
 
@@ -1126,7 +1172,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIIdentifierOwnerInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIIdentifierOwnerInterface");
 		return ptr;
 	}
 
@@ -1141,7 +1187,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIInteractableInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIInteractableInterface");
 		return ptr;
 	}
 
@@ -1156,7 +1202,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIInteractableOperatorInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIInteractableOperatorInterface");
 		return ptr;
 	}
 
@@ -1172,7 +1218,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIItemDropComponentList"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIItemDropComponentList");
 		return ptr;
 	}
 
@@ -1188,7 +1234,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIItemDropComponentRankProgressionList"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIItemDropComponentRankProgressionList");
 		return ptr;
 	}
 
@@ -1206,7 +1252,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIItemSpawnRankProgression"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIItemSpawnRankProgression");
 		return ptr;
 	}
 
@@ -1221,7 +1267,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AILoadoutInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AILoadoutInterface");
 		return ptr;
 	}
 
@@ -1239,7 +1285,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AILoadoutRankProgression"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AILoadoutRankProgression");
 		return ptr;
 	}
 
@@ -1254,7 +1300,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AILoadoutWithNonStorableInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AILoadoutWithNonStorableInterface");
 		return ptr;
 	}
 
@@ -1269,14 +1315,14 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIManagerBlueprintFunctionLibrary"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIManagerBlueprintFunctionLibrary");
 		return ptr;
 	}
 
 
-	static class AItemInfo* SpawnItemFromAI(class APawn* Pawn, class UClass* ItemDesc);
-	static int GetFrameCounter();
-	static void AddNameplateToAI(class AActor* Actor, const class FString& DisplayName);
+	class AItemInfo* STATIC_SpawnItemFromAI(class APawn* Pawn, class UClass* ItemDesc);
+	int STATIC_GetFrameCounter();
+	void STATIC_AddNameplateToAI(class AActor* Actor, const struct FString& DisplayName);
 };
 
 
@@ -1288,7 +1334,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIManagerServiceInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIManagerServiceInterface");
 		return ptr;
 	}
 
@@ -1308,7 +1354,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AthenaAITypeListDataAsset"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AthenaAITypeListDataAsset");
 		return ptr;
 	}
 
@@ -1325,7 +1371,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AISpawnWaveSequence"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AISpawnWaveSequence");
 		return ptr;
 	}
 
@@ -1343,7 +1389,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AISpawnWaveSequenceRankProgression"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AISpawnWaveSequenceRankProgression");
 		return ptr;
 	}
 
@@ -1362,7 +1408,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIWeightedProbabilityRangeOfRangesAsset"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIWeightedProbabilityRangeOfRangesAsset");
 		return ptr;
 	}
 
@@ -1380,7 +1426,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIWeightedProbabilityRangeOfRangesRankProgression"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIWeightedProbabilityRangeOfRangesRankProgression");
 		return ptr;
 	}
 
@@ -1395,7 +1441,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIPlayerTrackerObservedInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIPlayerTrackerObservedInterface");
 		return ptr;
 	}
 
@@ -1410,7 +1456,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIPlayerTrackerObserverInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIPlayerTrackerObserverInterface");
 		return ptr;
 	}
 
@@ -1425,7 +1471,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AISpawnRequestResultLoggerInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AISpawnRequestResultLoggerInterface");
 		return ptr;
 	}
 
@@ -1467,7 +1513,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AthenaAISettings"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AthenaAISettings");
 		return ptr;
 	}
 
@@ -1482,7 +1528,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AISpawnContextId"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AISpawnContextId");
 		return ptr;
 	}
 
@@ -1511,7 +1557,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIManagerService"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIManagerService");
 		return ptr;
 	}
 
@@ -1531,7 +1577,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.DebugAIManagerServiceInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.DebugAIManagerServiceInterface");
 		return ptr;
 	}
 
@@ -1544,19 +1590,21 @@ public:
 	void SetCharacterWorldDensityCheckTimer(float InCharacterWorldDensityCheckTimer);
 	void SetCharacterRegionDensityCheckTimer(float InCharacterRegionDensityCheckTimer);
 	void SetCharacterNetRelevancy(float InCloseByCharactersRadius);
+	bool BlockAIAbility(class UClass* InExclusive, bool InBlockState);
 };
 
 
 // Class AthenaAI.DebugAIManagerService
-// 0x00F0 (0x0B60 - 0x0A70)
+// 0x0100 (0x0B70 - 0x0A70)
 class ADebugAIManagerService : public AAIManagerService
 {
 public:
 	unsigned char                                      UnknownData00[0xF0];                                      // 0x0A70(0x00F0) MISSED OFFSET
+	TArray<class UClass*>                              BlockedAIAbilities;                                       // 0x0B60(0x0010) (ZeroConstructor)
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.DebugAIManagerService"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.DebugAIManagerService");
 		return ptr;
 	}
 
@@ -1569,6 +1617,7 @@ public:
 	void SetCharacterWorldDensityCheckTimer(float InCharacterWorldDensityCheckTimer);
 	void SetCharacterRegionDensityCheckTimer(float InCharacterRegionDensityCheckTimer);
 	void SetCharacterNetRelevancy(float InCloseByCharactersRadius);
+	bool BlockAIAbility(class UClass* InExclusive, bool InBlockState);
 };
 
 
@@ -1581,14 +1630,14 @@ public:
 	float                                              VisibleUntilWorldDistance;                                // 0x02C4(0x0004) (Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData)
 	float                                              VisibleAfterDeathDuration;                                // 0x02C8(0x0004) (Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x4];                                       // 0x02CC(0x0004) MISSED OFFSET
-	class FString                                      DisplayName;                                              // 0x02D0(0x0010) (Net, ZeroConstructor)
-	class FString                                      DebugDisplayText;                                         // 0x02E0(0x0010) (Net, ZeroConstructor)
+	struct FString                                     DisplayName;                                              // 0x02D0(0x0010) (Net, ZeroConstructor)
+	struct FString                                     DebugDisplayText;                                         // 0x02E0(0x0010) (Net, ZeroConstructor)
 	bool                                               VisibilityDisabled;                                       // 0x02F0(0x0001) (Net, ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData01[0x9F];                                      // 0x02F1(0x009F) MISSED OFFSET
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AINameplateComponent"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AINameplateComponent");
 		return ptr;
 	}
 
@@ -1607,7 +1656,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AINoiseFireInstigator"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AINoiseFireInstigator");
 		return ptr;
 	}
 
@@ -1625,7 +1674,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIPartsService"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIPartsService");
 		return ptr;
 	}
 
@@ -1640,7 +1689,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIPartCustomizationInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIPartCustomizationInterface");
 		return ptr;
 	}
 
@@ -1652,11 +1701,11 @@ public:
 class UAIPartIdListingAsset : public UDataAsset
 {
 public:
-	TArray<struct FName>                               AIPartIds;                                                // 0x0028(0x0010) (Edit, ZeroConstructor, DisableEditOnInstance)
+	TArray<struct FAIPartIdNumVariantInfo>             AIPartIdsVariantInfo;                                     // 0x0028(0x0010) (Edit, ZeroConstructor, DisableEditOnInstance)
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIPartIdListingAsset"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIPartIdListingAsset");
 		return ptr;
 	}
 
@@ -1671,7 +1720,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIPartsRetrievalInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIPartsRetrievalInterface");
 		return ptr;
 	}
 
@@ -1690,7 +1739,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIPartsRetrievalComponent"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIPartsRetrievalComponent");
 		return ptr;
 	}
 
@@ -1708,7 +1757,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIPawnInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIPawnInterface");
 		return ptr;
 	}
 
@@ -1724,7 +1773,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIProximityPlayerTracker"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIProximityPlayerTracker");
 		return ptr;
 	}
 
@@ -1740,7 +1789,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.FilterFirstPlayerEnterPlayerTrackerDecorator"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.FilterFirstPlayerEnterPlayerTrackerDecorator");
 		return ptr;
 	}
 
@@ -1755,7 +1804,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIProjectileInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIProjectileInterface");
 		return ptr;
 	}
 
@@ -1770,7 +1819,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIRegionInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIRegionInterface");
 		return ptr;
 	}
 
@@ -1791,7 +1840,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIRegionComponent"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIRegionComponent");
 		return ptr;
 	}
 
@@ -1806,7 +1855,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AISpawnContextContainerInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AISpawnContextContainerInterface");
 		return ptr;
 	}
 
@@ -1822,7 +1871,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AISpawnContextContainerComponent"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AISpawnContextContainerComponent");
 		return ptr;
 	}
 
@@ -1838,7 +1887,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AISpawnContextList"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AISpawnContextList");
 		return ptr;
 	}
 
@@ -1853,7 +1902,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AISpawnContextProviderInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AISpawnContextProviderInterface");
 		return ptr;
 	}
 
@@ -1868,7 +1917,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BountySpawnerAudioZonesInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BountySpawnerAudioZonesInterface");
 		return ptr;
 	}
 
@@ -1897,7 +1946,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIBountySpawner"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIBountySpawner");
 		return ptr;
 	}
 
@@ -1915,7 +1964,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIFixedWavesSpawner"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIFixedWavesSpawner");
 		return ptr;
 	}
 
@@ -1932,7 +1981,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIIncrementalWaveSpawner"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIIncrementalWaveSpawner");
 		return ptr;
 	}
 
@@ -1963,7 +2012,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIInteractableSpawner"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIInteractableSpawner");
 		return ptr;
 	}
 
@@ -1978,7 +2027,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIOnDemandSpawner"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIOnDemandSpawner");
 		return ptr;
 	}
 
@@ -2005,7 +2054,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIPerPlayerSpawner"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIPerPlayerSpawner");
 		return ptr;
 	}
 
@@ -2034,7 +2083,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.NamedAIDataAsset"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.NamedAIDataAsset");
 		return ptr;
 	}
 
@@ -2058,7 +2107,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIBoobyTrapSpawner"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIBoobyTrapSpawner");
 		return ptr;
 	}
 
@@ -2076,7 +2125,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIProgressiveWavesSpawner"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIProgressiveWavesSpawner");
 		return ptr;
 	}
 
@@ -2091,7 +2140,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AISpawnerSpawnInteractableAssignmentInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AISpawnerSpawnInteractableAssignmentInterface");
 		return ptr;
 	}
 
@@ -2111,7 +2160,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIWaveSpawner"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIWaveSpawner");
 		return ptr;
 	}
 
@@ -2127,7 +2176,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AISpawnerList"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AISpawnerList");
 		return ptr;
 	}
 
@@ -2142,7 +2191,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AISpawnPointSeedComponent"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AISpawnPointSeedComponent");
 		return ptr;
 	}
 
@@ -2157,7 +2206,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AISpawnRegionInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AISpawnRegionInterface");
 		return ptr;
 	}
 
@@ -2172,7 +2221,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AITargetInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AITargetInterface");
 		return ptr;
 	}
 
@@ -2187,7 +2236,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AITargetServiceInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AITargetServiceInterface");
 		return ptr;
 	}
 
@@ -2203,7 +2252,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AITargetService"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AITargetService");
 		return ptr;
 	}
 
@@ -2218,12 +2267,47 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AITargetWeaponInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AITargetWeaponInterface");
 		return ptr;
 	}
 
 
 	bool FindAimConfigToHitTarget(const struct FVector& Target, bool CheckYaw, struct FRotator* OutAimConfig);
+};
+
+
+// Class AthenaAI.AIWithFormInterface
+// 0x0000 (0x0028 - 0x0028)
+class UAIWithFormInterface : public UInterface
+{
+public:
+
+	static UClass* StaticClass()
+	{
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIWithFormInterface");
+		return ptr;
+	}
+
+};
+
+
+// Class AthenaAI.AppliedStatusToMultipleAIWithFormsStatCondition
+// 0x0028 (0x0050 - 0x0028)
+class UAppliedStatusToMultipleAIWithFormsStatCondition : public UStatCondition
+{
+public:
+	TArray<class UClass*>                              Status;                                                   // 0x0028(0x0010) (Edit, ZeroConstructor, DisableEditOnInstance)
+	int                                                AICountMinimum;                                           // 0x0038(0x0004) (Edit, ZeroConstructor, DisableEditOnInstance, IsPlainOldData)
+	bool                                               AllowAllForms;                                            // 0x003C(0x0001) (Edit, ZeroConstructor, DisableEditOnInstance, IsPlainOldData)
+	unsigned char                                      UnknownData00[0x3];                                       // 0x003D(0x0003) MISSED OFFSET
+	TArray<TAssetPtr<class UClass>>                    AllowedAIForms;                                           // 0x0040(0x0010) (Edit, ZeroConstructor, DisableEditOnInstance)
+
+	static UClass* StaticClass()
+	{
+		static auto ptr = UObject::FindClass("Class AthenaAI.AppliedStatusToMultipleAIWithFormsStatCondition");
+		return ptr;
+	}
+
 };
 
 
@@ -2235,7 +2319,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AquaticAITargetInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AquaticAITargetInterface");
 		return ptr;
 	}
 
@@ -2250,7 +2334,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AthenaAIAbilityHandlerInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AthenaAIAbilityHandlerInterface");
 		return ptr;
 	}
 
@@ -2258,17 +2342,21 @@ public:
 
 
 // Class AthenaAI.AthenaAIAbilityHandlerComponent
-// 0x0040 (0x0108 - 0x00C8)
+// 0x00B8 (0x0180 - 0x00C8)
 class UAthenaAIAbilityHandlerComponent : public UActorComponent
 {
 public:
-	unsigned char                                      UnknownData00[0x8];                                       // 0x00C8(0x0008) MISSED OFFSET
-	TArray<class UAthenaAIAbility*>                    AIAbilities;                                              // 0x00D0(0x0010) (ZeroConstructor)
-	unsigned char                                      UnknownData01[0x28];                                      // 0x00E0(0x0028) MISSED OFFSET
+	unsigned char                                      UnknownData00[0x58];                                      // 0x00C8(0x0058) MISSED OFFSET
+	TArray<struct FAthenaAIAbilityDamageStage>         AbilityStages;                                            // 0x0120(0x0010) (ZeroConstructor)
+	TArray<class UAthenaAIAbility*>                    AIAbilities;                                              // 0x0130(0x0010) (ZeroConstructor)
+	TArray<class UClass*>                              ReadyAbilitiesPool;                                       // 0x0140(0x0010) (ZeroConstructor)
+	unsigned char                                      UnknownData01[0x20];                                      // 0x0150(0x0020) MISSED OFFSET
+	class UClass*                                      DebugAlwaysOnAbility;                                     // 0x0170(0x0008) (ZeroConstructor, IsPlainOldData)
+	unsigned char                                      UnknownData02[0x8];                                       // 0x0178(0x0008) MISSED OFFSET
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AthenaAIAbilityHandlerComponent"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AthenaAIAbilityHandlerComponent");
 		return ptr;
 	}
 
@@ -2290,7 +2378,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AthenaAICharacterPathFollowingComponent"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AthenaAICharacterPathFollowingComponent");
 		return ptr;
 	}
 
@@ -2308,7 +2396,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AthenaAIControllerBase"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AthenaAIControllerBase");
 		return ptr;
 	}
 
@@ -2340,7 +2428,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AthenaAIController"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AthenaAIController");
 		return ptr;
 	}
 
@@ -2360,7 +2448,7 @@ public:
 
 
 // Class AthenaAI.AthenaAICharacterController
-// 0x01F8 (0x0A78 - 0x0880)
+// 0x0208 (0x0A88 - 0x0880)
 class AAthenaAICharacterController : public AAthenaAIController
 {
 public:
@@ -2373,12 +2461,13 @@ public:
 	unsigned char                                      UnknownData01[0x90];                                      // 0x08B0(0x0090) MISSED OFFSET
 	TArray<struct FAthenaAICharacterControllerSpawnItemDescForItemCategory> SpawnItemDescForItemCategories;                           // 0x0940(0x0010) (ZeroConstructor)
 	TArray<class UAthenaAIAbilityParams*>              AIAbilityParams;                                          // 0x0950(0x0010) (ZeroConstructor)
-	class UCurveFloat*                                 DistanceInMToCannonShotHitChanceCurve;                    // 0x0960(0x0008) (ZeroConstructor, IsPlainOldData)
-	unsigned char                                      UnknownData02[0x110];                                     // 0x0968(0x0110) MISSED OFFSET
+	TArray<struct FAthenaAIEngageEnemyData>            NonItemEngageOptions;                                     // 0x0960(0x0010) (ZeroConstructor)
+	class UCurveFloat*                                 DistanceInMToCannonShotHitChanceCurve;                    // 0x0970(0x0008) (ZeroConstructor, IsPlainOldData)
+	unsigned char                                      UnknownData02[0x110];                                     // 0x0978(0x0110) MISSED OFFSET
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AthenaAICharacterController"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AthenaAICharacterController");
 		return ptr;
 	}
 
@@ -2415,7 +2504,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.FaunaAIContollerParamsDataAsset"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.FaunaAIContollerParamsDataAsset");
 		return ptr;
 	}
 
@@ -2435,7 +2524,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AthenaAIControllerParamsDataProvider"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AthenaAIControllerParamsDataProvider");
 		return ptr;
 	}
 
@@ -2450,7 +2539,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AthenaAIControllerParamsTargetInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AthenaAIControllerParamsTargetInterface");
 		return ptr;
 	}
 
@@ -2465,7 +2554,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AthenaAIFormComponentContainerInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AthenaAIFormComponentContainerInterface");
 		return ptr;
 	}
 
@@ -2480,7 +2569,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AthenaAIPerceptionComponent"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AthenaAIPerceptionComponent");
 		return ptr;
 	}
 
@@ -2500,7 +2589,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AthenaAISightTargetInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AthenaAISightTargetInterface");
 		return ptr;
 	}
 
@@ -2517,7 +2606,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AthenaAIWeightedRangesDataProvider"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AthenaAIWeightedRangesDataProvider");
 		return ptr;
 	}
 
@@ -2537,7 +2626,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BlackboardAIDataProvider"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BlackboardAIDataProvider");
 		return ptr;
 	}
 
@@ -2556,7 +2645,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTDecorator_ActionState"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTDecorator_ActionState");
 		return ptr;
 	}
 
@@ -2573,7 +2662,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTDecorator_ActorInWater"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTDecorator_ActorInWater");
 		return ptr;
 	}
 
@@ -2589,7 +2678,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTDecorator_CurrentAIStrategy"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTDecorator_CurrentAIStrategy");
 		return ptr;
 	}
 
@@ -2605,7 +2694,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTDecorator_ItemReadyToUse"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTDecorator_ItemReadyToUse");
 		return ptr;
 	}
 
@@ -2613,7 +2702,7 @@ public:
 
 
 // Class AthenaAI.BTDecorator_LineOfSightToTarget
-// 0x0078 (0x00E0 - 0x0068)
+// 0x0088 (0x00F0 - 0x0068)
 class UBTDecorator_LineOfSightToTarget : public UBTDecorator_BaseConditional
 {
 public:
@@ -2623,11 +2712,12 @@ public:
 	bool                                               UseTargetPosition;                                        // 0x0098(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData01[0x7];                                       // 0x0099(0x0007) MISSED OFFSET
 	struct FBlackboardKeySelector                      TargetPositionKey;                                        // 0x00A0(0x0028) (Edit)
-	unsigned char                                      UnknownData02[0x18];                                      // 0x00C8(0x0018) MISSED OFFSET
+	struct FVector                                     OffsetToApplyToTargetPosition;                            // 0x00C8(0x000C) (Edit, ZeroConstructor, IsPlainOldData)
+	unsigned char                                      UnknownData02[0x1C];                                      // 0x00D4(0x001C) MISSED OFFSET
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTDecorator_LineOfSightToTarget"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTDecorator_LineOfSightToTarget");
 		return ptr;
 	}
 
@@ -2642,13 +2732,13 @@ public:
 	class UClass*                                      Class;                                                    // 0x0090(0x0008) (Edit, ZeroConstructor, IsPlainOldData)
 	bool                                               Invert;                                                   // 0x0098(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x7];                                       // 0x0099(0x0007) MISSED OFFSET
-	class FString                                      CachedDescription;                                        // 0x00A0(0x0010) (ZeroConstructor)
+	struct FString                                     CachedDescription;                                        // 0x00A0(0x0010) (ZeroConstructor)
 	TEnumAsByte<EBTBlackboardRestart>                  NotifyObserver;                                           // 0x00B0(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData01[0x7];                                       // 0x00B1(0x0007) MISSED OFFSET
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTDecorator_CompareBlackboardClassValue"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTDecorator_CompareBlackboardClassValue");
 		return ptr;
 	}
 
@@ -2666,7 +2756,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTDecorator_CompareBlackboardValues"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTDecorator_CompareBlackboardValues");
 		return ptr;
 	}
 
@@ -2684,7 +2774,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTDecorator_CompareFloatValueBase"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTDecorator_CompareFloatValueBase");
 		return ptr;
 	}
 
@@ -2700,7 +2790,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTDecorator_CompareBlackboardActorSpeed"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTDecorator_CompareBlackboardActorSpeed");
 		return ptr;
 	}
 
@@ -2716,7 +2806,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTDecorator_CompareBlackboardFloatValue"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTDecorator_CompareBlackboardFloatValue");
 		return ptr;
 	}
 
@@ -2731,7 +2821,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTDecorator_CompareCurrentHealth"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTDecorator_CompareCurrentHealth");
 		return ptr;
 	}
 
@@ -2749,7 +2839,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTDecorator_TargetInRange"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTDecorator_TargetInRange");
 		return ptr;
 	}
 
@@ -2765,7 +2855,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTDecorator_TargetInRangeOfPoint"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTDecorator_TargetInRangeOfPoint");
 		return ptr;
 	}
 
@@ -2784,7 +2874,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTDecorator_TestRange"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTDecorator_TestRange");
 		return ptr;
 	}
 
@@ -2800,7 +2890,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTDecorator_TestRangeOfSeenActors"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTDecorator_TestRangeOfSeenActors");
 		return ptr;
 	}
 
@@ -2819,7 +2909,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTDecorator_ConeCheck3D"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTDecorator_ConeCheck3D");
 		return ptr;
 	}
 
@@ -2834,7 +2924,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTDecorator_DockedToInteractable"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTDecorator_DockedToInteractable");
 		return ptr;
 	}
 
@@ -2850,7 +2940,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTDecorator_FeatureToggle"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTDecorator_FeatureToggle");
 		return ptr;
 	}
 
@@ -2866,7 +2956,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTDecorator_MultipleRandomDiceRolls"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTDecorator_MultipleRandomDiceRolls");
 		return ptr;
 	}
 
@@ -2882,7 +2972,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTDecorator_RandomDiceRoll"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTDecorator_RandomDiceRoll");
 		return ptr;
 	}
 
@@ -2900,7 +2990,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTDecorator_RandomLoop"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTDecorator_RandomLoop");
 		return ptr;
 	}
 
@@ -2915,7 +3005,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTDecorator_RollAgainstPatrolChance"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTDecorator_RollAgainstPatrolChance");
 		return ptr;
 	}
 
@@ -2931,7 +3021,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTDecorator_TestAIInteractableType"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTDecorator_TestAIInteractableType");
 		return ptr;
 	}
 
@@ -2949,7 +3039,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTService_AimAIInteractable"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTService_AimAIInteractable");
 		return ptr;
 	}
 
@@ -2965,7 +3055,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTService_DetermineAIAbility"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTService_DetermineAIAbility");
 		return ptr;
 	}
 
@@ -2981,7 +3071,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTService_DisableCollisions"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTService_DisableCollisions");
 		return ptr;
 	}
 
@@ -2996,7 +3086,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTService_DisableDamageResponses"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTService_DisableDamageResponses");
 		return ptr;
 	}
 
@@ -3013,7 +3103,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTService_EnableFaceFocusActor"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTService_EnableFaceFocusActor");
 		return ptr;
 	}
 
@@ -3030,7 +3120,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTService_IncrementFloatValueWithTimeSpentInBranch"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTService_IncrementFloatValueWithTimeSpentInBranch");
 		return ptr;
 	}
 
@@ -3045,7 +3135,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTService_QueryPerceptionForTarget"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTService_QueryPerceptionForTarget");
 		return ptr;
 	}
 
@@ -3069,7 +3159,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTService_RunEQSQuery"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTService_RunEQSQuery");
 		return ptr;
 	}
 
@@ -3084,7 +3174,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTService_DoesEQSQuerySucceed"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTService_DoesEQSQuerySucceed");
 		return ptr;
 	}
 
@@ -3106,7 +3196,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTService_RunEQSQueryOnActorMovement"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTService_RunEQSQueryOnActorMovement");
 		return ptr;
 	}
 
@@ -3121,7 +3211,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTService_SetAIAnimationState"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTService_SetAIAnimationState");
 		return ptr;
 	}
 
@@ -3137,7 +3227,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTService_SetAIStrategy"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTService_SetAIStrategy");
 		return ptr;
 	}
 
@@ -3153,7 +3243,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTService_SetBoolBlackboardValueToTrueOnCeaseRelevant"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTService_SetBoolBlackboardValueToTrueOnCeaseRelevant");
 		return ptr;
 	}
 
@@ -3169,7 +3259,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTService_SetBoolBlackboardValueTrueWhileRelevant"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTService_SetBoolBlackboardValueTrueWhileRelevant");
 		return ptr;
 	}
 
@@ -3186,7 +3276,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTService_SetNameBlackboardValueWhileRelevant"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTService_SetNameBlackboardValueWhileRelevant");
 		return ptr;
 	}
 
@@ -3204,7 +3294,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTService_TriggerNotifications"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTService_TriggerNotifications");
 		return ptr;
 	}
 
@@ -3212,14 +3302,31 @@ public:
 
 
 // Class AthenaAI.BTService_UpdateFocusOnBBChange
-// 0x0000 (0x00A0 - 0x00A0)
+// 0x0008 (0x00A8 - 0x00A0)
 class UBTService_UpdateFocusOnBBChange : public UBTService_DefaultFocus
+{
+public:
+	bool                                               DisableUpdateMoveFocusForCurrentPathOnExit;               // 0x00A0(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
+	unsigned char                                      UnknownData00[0x7];                                       // 0x00A1(0x0007) MISSED OFFSET
+
+	static UClass* StaticClass()
+	{
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTService_UpdateFocusOnBBChange");
+		return ptr;
+	}
+
+};
+
+
+// Class AthenaAI.BTService_UpdateFocusOnBBChangeWithOffsetFromWieldedProjectile
+// 0x0000 (0x00A8 - 0x00A8)
+class UBTService_UpdateFocusOnBBChangeWithOffsetFromWieldedProjectile : public UBTService_UpdateFocusOnBBChange
 {
 public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTService_UpdateFocusOnBBChange"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTService_UpdateFocusOnBBChangeWithOffsetFromWieldedProjectile");
 		return ptr;
 	}
 
@@ -3236,7 +3343,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTService_UpdateTargetForInteractable"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTService_UpdateTargetForInteractable");
 		return ptr;
 	}
 
@@ -3251,7 +3358,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTService_UpdateViewPitchForWieldedProjectileToHitTarget"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTService_UpdateViewPitchForWieldedProjectileToHitTarget");
 		return ptr;
 	}
 
@@ -3274,7 +3381,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_AthenaMoveTo"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_AthenaMoveTo");
 		return ptr;
 	}
 
@@ -3292,7 +3399,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_MoveToFailOnDistanceChange"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_MoveToFailOnDistanceChange");
 		return ptr;
 	}
 
@@ -3308,7 +3415,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_MoveToFailOnDistanceToSeenActors"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_MoveToFailOnDistanceToSeenActors");
 		return ptr;
 	}
 
@@ -3324,7 +3431,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_MoveToFailOnDistanceToTargetChanged"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_MoveToFailOnDistanceToTargetChanged");
 		return ptr;
 	}
 
@@ -3343,7 +3450,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_MoveToMovingLocation"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_MoveToMovingLocation");
 		return ptr;
 	}
 
@@ -3360,7 +3467,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_AthenaWait"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_AthenaWait");
 		return ptr;
 	}
 
@@ -3376,7 +3483,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_AthenaWaitWithFloor"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_AthenaWaitWithFloor");
 		return ptr;
 	}
 
@@ -3391,7 +3498,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_ClearBlackboardValue"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_ClearBlackboardValue");
 		return ptr;
 	}
 
@@ -3406,7 +3513,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_ClearPerceptualData"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_ClearPerceptualData");
 		return ptr;
 	}
 
@@ -3424,7 +3531,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_CopyAIInteractionPointAndFocusToBlackboard"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_CopyAIInteractionPointAndFocusToBlackboard");
 		return ptr;
 	}
 
@@ -3441,7 +3548,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_CopyBlackboardActor"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_CopyBlackboardActor");
 		return ptr;
 	}
 
@@ -3458,7 +3565,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_CopyBlackboardVector"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_CopyBlackboardVector");
 		return ptr;
 	}
 
@@ -3474,7 +3581,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_DetermineFollowUpAIAbility"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_DetermineFollowUpAIAbility");
 		return ptr;
 	}
 
@@ -3490,7 +3597,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_ExecuteAIAbility"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_ExecuteAIAbility");
 		return ptr;
 	}
 
@@ -3507,7 +3614,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_IgnoreActorTemporarily"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_IgnoreActorTemporarily");
 		return ptr;
 	}
 
@@ -3523,7 +3630,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_InteractWith"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_InteractWith");
 		return ptr;
 	}
 
@@ -3541,7 +3648,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_MoveToTarget"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_MoveToTarget");
 		return ptr;
 	}
 
@@ -3559,7 +3666,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_NetworkTriggerAnim"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_NetworkTriggerAnim");
 		return ptr;
 	}
 
@@ -3576,7 +3683,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_NOP"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_NOP");
 		return ptr;
 	}
 
@@ -3594,7 +3701,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_PlayMontage"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_PlayMontage");
 		return ptr;
 	}
 
@@ -3609,7 +3716,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_RequestDespawn"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_RequestDespawn");
 		return ptr;
 	}
 
@@ -3625,7 +3732,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_SetAIStrategy"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_SetAIStrategy");
 		return ptr;
 	}
 
@@ -3641,7 +3748,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_SetAIStrategyFromWeightedArray"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_SetAIStrategyFromWeightedArray");
 		return ptr;
 	}
 
@@ -3657,7 +3764,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_SetBlackboardActor"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_SetBlackboardActor");
 		return ptr;
 	}
 
@@ -3674,7 +3781,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_SetBlackboardBoolValue"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_SetBlackboardBoolValue");
 		return ptr;
 	}
 
@@ -3690,7 +3797,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_SetBlackboardEQSValue"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_SetBlackboardEQSValue");
 		return ptr;
 	}
 
@@ -3706,7 +3813,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_SetBlackboardFloatValue"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_SetBlackboardFloatValue");
 		return ptr;
 	}
 
@@ -3723,7 +3830,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_SetBlackboardFloatValueFromMinMax"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_SetBlackboardFloatValueFromMinMax");
 		return ptr;
 	}
 
@@ -3739,7 +3846,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_SetBlackboardFloatValueFromWeightedArray"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_SetBlackboardFloatValueFromWeightedArray");
 		return ptr;
 	}
 
@@ -3757,7 +3864,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_SetupAITargetWeaponForNextShot"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_SetupAITargetWeaponForNextShot");
 		return ptr;
 	}
 
@@ -3772,7 +3879,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_StopMovementImmediately"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_StopMovementImmediately");
 		return ptr;
 	}
 
@@ -3787,7 +3894,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_StorePawnLocationInBlackboard"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_StorePawnLocationInBlackboard");
 		return ptr;
 	}
 
@@ -3802,7 +3909,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_TeleportTo"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_TeleportTo");
 		return ptr;
 	}
 
@@ -3818,7 +3925,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_TriggerNotification"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_TriggerNotification");
 		return ptr;
 	}
 
@@ -3834,7 +3941,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.CustomSkeletonAnimationDataList"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.CustomSkeletonAnimationDataList");
 		return ptr;
 	}
 
@@ -3856,7 +3963,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.DebugAISpawnerCreator"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.DebugAISpawnerCreator");
 		return ptr;
 	}
 
@@ -3871,7 +3978,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.DelayedMeshCharacterInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.DelayedMeshCharacterInterface");
 		return ptr;
 	}
 
@@ -3887,7 +3994,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.EnvQueryContext_PositionFromBlackboard"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.EnvQueryContext_PositionFromBlackboard");
 		return ptr;
 	}
 
@@ -3902,7 +4009,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.EnvQueryContext_ContextLocationFromBlackboard"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.EnvQueryContext_ContextLocationFromBlackboard");
 		return ptr;
 	}
 
@@ -3917,7 +4024,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.EnvQueryContext_HomePositionFromBlackboard"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.EnvQueryContext_HomePositionFromBlackboard");
 		return ptr;
 	}
 
@@ -3932,7 +4039,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.EnvQueryContext_KnockbackPosFromBlackboard"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.EnvQueryContext_KnockbackPosFromBlackboard");
 		return ptr;
 	}
 
@@ -3947,7 +4054,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.EnvQueryContext_ThrowableTargetPositionFromBlackboard"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.EnvQueryContext_ThrowableTargetPositionFromBlackboard");
 		return ptr;
 	}
 
@@ -3963,7 +4070,24 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.EnvQueryContext_SeenActors"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.EnvQueryContext_SeenActors");
+		return ptr;
+	}
+
+};
+
+
+// Class AthenaAI.EnvQueryContext_SeenActorsProjectedToGround
+// 0x0030 (0x0058 - 0x0028)
+class UEnvQueryContext_SeenActorsProjectedToGround : public UEnvQueryContext
+{
+public:
+	TArray<class AActor*>                              SeenActors;                                               // 0x0028(0x0010) (ZeroConstructor)
+	unsigned char                                      UnknownData00[0x20];                                      // 0x0038(0x0020) MISSED OFFSET
+
+	static UClass* StaticClass()
+	{
+		static auto ptr = UObject::FindClass("Class AthenaAI.EnvQueryContext_SeenActorsProjectedToGround");
 		return ptr;
 	}
 
@@ -3978,7 +4102,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.EnvQueryContext_SpawnedForActorFromBlackboard"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.EnvQueryContext_SpawnedForActorFromBlackboard");
 		return ptr;
 	}
 
@@ -3993,7 +4117,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.EnvQueryContext_TargetActorFromBlackboard"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.EnvQueryContext_TargetActorFromBlackboard");
 		return ptr;
 	}
 
@@ -4008,7 +4132,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.EnvQueryContext_TargetActorFromBlackboardPredictedLocation"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.EnvQueryContext_TargetActorFromBlackboardPredictedLocation");
 		return ptr;
 	}
 
@@ -4023,7 +4147,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.EnvQueryContext_TargetActorFromParams"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.EnvQueryContext_TargetActorFromParams");
 		return ptr;
 	}
 
@@ -4031,18 +4155,18 @@ public:
 
 
 // Class AthenaAI.EnvQueryGenerator_AIRegionLocations
-// 0x0010 (0x0058 - 0x0048)
+// 0x0010 (0x0060 - 0x0050)
 class UEnvQueryGenerator_AIRegionLocations : public UEnvQueryGenerator
 {
 public:
-	bool                                               UseOverrideSpawnType;                                     // 0x0048(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
-	unsigned char                                      UnknownData00[0x3];                                       // 0x0049(0x0003) MISSED OFFSET
-	struct FName                                       OverrideSpawnType;                                        // 0x004C(0x0008) (Edit, ZeroConstructor, IsPlainOldData)
-	unsigned char                                      UnknownData01[0x4];                                       // 0x0054(0x0004) MISSED OFFSET
+	bool                                               UseOverrideSpawnType;                                     // 0x0050(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
+	unsigned char                                      UnknownData00[0x3];                                       // 0x0051(0x0003) MISSED OFFSET
+	struct FName                                       OverrideSpawnType;                                        // 0x0054(0x0008) (Edit, ZeroConstructor, IsPlainOldData)
+	unsigned char                                      UnknownData01[0x4];                                       // 0x005C(0x0004) MISSED OFFSET
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.EnvQueryGenerator_AIRegionLocations"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.EnvQueryGenerator_AIRegionLocations");
 		return ptr;
 	}
 
@@ -4050,23 +4174,23 @@ public:
 
 
 // Class AthenaAI.EnvQueryGenerator_Line
-// 0x00A8 (0x0130 - 0x0088)
+// 0x00A8 (0x0138 - 0x0090)
 class UEnvQueryGenerator_Line : public UEnvQueryGenerator_ProjectedPoints
 {
 public:
-	class UClass*                                      FromContext;                                              // 0x0088(0x0008) (Edit, ZeroConstructor, IsPlainOldData)
-	class UClass*                                      ToContext;                                                // 0x0090(0x0008) (Edit, ZeroConstructor, IsPlainOldData)
-	struct FAIDataProviderFloatValue                   PointSpacing;                                             // 0x0098(0x0030) (Edit, DisableEditOnInstance)
-	struct FAIDataProviderIntValue                     NumExtraPairsOfParallelLines;                             // 0x00C8(0x0030) (Edit, DisableEditOnInstance)
-	struct FAIDataProviderFloatValue                   ParallelLineSpacing;                                      // 0x00F8(0x0030) (Edit, DisableEditOnInstance)
-	float                                              MaxValidLineLength;                                       // 0x0128(0x0004) (Edit, ZeroConstructor, IsPlainOldData)
-	bool                                               ForceIncludeEndPoint;                                     // 0x012C(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
-	bool                                               ProjectPointsToWaterSurface;                              // 0x012D(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
-	unsigned char                                      UnknownData00[0x2];                                       // 0x012E(0x0002) MISSED OFFSET
+	class UClass*                                      FromContext;                                              // 0x0090(0x0008) (Edit, ZeroConstructor, IsPlainOldData)
+	class UClass*                                      ToContext;                                                // 0x0098(0x0008) (Edit, ZeroConstructor, IsPlainOldData)
+	struct FAIDataProviderFloatValue                   PointSpacing;                                             // 0x00A0(0x0030) (Edit, DisableEditOnInstance)
+	struct FAIDataProviderIntValue                     NumExtraPairsOfParallelLines;                             // 0x00D0(0x0030) (Edit, DisableEditOnInstance)
+	struct FAIDataProviderFloatValue                   ParallelLineSpacing;                                      // 0x0100(0x0030) (Edit, DisableEditOnInstance)
+	float                                              MaxValidLineLength;                                       // 0x0130(0x0004) (Edit, ZeroConstructor, IsPlainOldData)
+	bool                                               ForceIncludeEndPoint;                                     // 0x0134(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
+	bool                                               ProjectPointsToWaterSurface;                              // 0x0135(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
+	unsigned char                                      UnknownData00[0x2];                                       // 0x0136(0x0002) MISSED OFFSET
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.EnvQueryGenerator_Line"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.EnvQueryGenerator_Line");
 		return ptr;
 	}
 
@@ -4074,15 +4198,15 @@ public:
 
 
 // Class AthenaAI.EnvQueryGenerator_PointsAtContext
-// 0x0008 (0x0090 - 0x0088)
+// 0x0008 (0x0098 - 0x0090)
 class UEnvQueryGenerator_PointsAtContext : public UEnvQueryGenerator_ProjectedPoints
 {
 public:
-	class UClass*                                      Context;                                                  // 0x0088(0x0008) (Edit, ZeroConstructor, IsPlainOldData)
+	class UClass*                                      Context;                                                  // 0x0090(0x0008) (Edit, ZeroConstructor, IsPlainOldData)
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.EnvQueryGenerator_PointsAtContext"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.EnvQueryGenerator_PointsAtContext");
 		return ptr;
 	}
 
@@ -4090,26 +4214,26 @@ public:
 
 
 // Class AthenaAI.EnvQueryGenerator_WaterDonut
-// 0x0150 (0x01D8 - 0x0088)
+// 0x0150 (0x01E0 - 0x0090)
 class UEnvQueryGenerator_WaterDonut : public UEnvQueryGenerator_ProjectedPoints
 {
 public:
-	struct FAIDataProviderFloatValue                   InnerRadius;                                              // 0x0088(0x0030) (Edit, DisableEditOnInstance)
-	struct FAIDataProviderFloatValue                   OuterRadius;                                              // 0x00B8(0x0030) (Edit, DisableEditOnInstance)
-	struct FAIDataProviderIntValue                     NumberOfRings;                                            // 0x00E8(0x0030) (Edit, DisableEditOnInstance)
-	struct FAIDataProviderIntValue                     PointsPerRing;                                            // 0x0118(0x0030) (Edit, DisableEditOnInstance)
-	struct FEnvDirection                               ArcDirection;                                             // 0x0148(0x0020) (Edit, DisableEditOnInstance)
-	struct FAIDataProviderFloatValue                   ArcAngle;                                                 // 0x0168(0x0030) (Edit, DisableEditOnInstance)
-	struct FAIDataProviderFloatValue                   ZOffsetFromCentre;                                        // 0x0198(0x0030) (Edit, DisableEditOnInstance)
-	class UClass*                                      Center;                                                   // 0x01C8(0x0008) (Edit, ZeroConstructor, IsPlainOldData)
-	unsigned char                                      bDefineArc : 1;                                           // 0x01D0(0x0001)
-	unsigned char                                      ProjectPointsToWaterSurface : 1;                          // 0x01D0(0x0001) (Edit)
-	unsigned char                                      ApplyZOffsetToProjectPoints : 1;                          // 0x01D0(0x0001) (Edit, DisableEditOnInstance)
-	unsigned char                                      UnknownData00[0x7];                                       // 0x01D1(0x0007) MISSED OFFSET
+	struct FAIDataProviderFloatValue                   InnerRadius;                                              // 0x0090(0x0030) (Edit, DisableEditOnInstance)
+	struct FAIDataProviderFloatValue                   OuterRadius;                                              // 0x00C0(0x0030) (Edit, DisableEditOnInstance)
+	struct FAIDataProviderIntValue                     NumberOfRings;                                            // 0x00F0(0x0030) (Edit, DisableEditOnInstance)
+	struct FAIDataProviderIntValue                     PointsPerRing;                                            // 0x0120(0x0030) (Edit, DisableEditOnInstance)
+	struct FEnvDirection                               ArcDirection;                                             // 0x0150(0x0020) (Edit, DisableEditOnInstance)
+	struct FAIDataProviderFloatValue                   ArcAngle;                                                 // 0x0170(0x0030) (Edit, DisableEditOnInstance)
+	struct FAIDataProviderFloatValue                   ZOffsetFromCentre;                                        // 0x01A0(0x0030) (Edit, DisableEditOnInstance)
+	class UClass*                                      Center;                                                   // 0x01D0(0x0008) (Edit, ZeroConstructor, IsPlainOldData)
+	unsigned char                                      bDefineArc : 1;                                           // 0x01D8(0x0001)
+	unsigned char                                      ProjectPointsToWaterSurface : 1;                          // 0x01D8(0x0001) (Edit)
+	unsigned char                                      ApplyZOffsetToProjectPoints : 1;                          // 0x01D8(0x0001) (Edit, DisableEditOnInstance)
+	unsigned char                                      UnknownData00[0x7];                                       // 0x01D9(0x0007) MISSED OFFSET
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.EnvQueryGenerator_WaterDonut"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.EnvQueryGenerator_WaterDonut");
 		return ptr;
 	}
 
@@ -4117,18 +4241,18 @@ public:
 
 
 // Class AthenaAI.EnvQueryGenerator_WaterMultiDeckerRing
-// 0x0078 (0x0100 - 0x0088)
+// 0x0078 (0x0108 - 0x0090)
 class UEnvQueryGenerator_WaterMultiDeckerRing : public UEnvQueryGenerator_ProjectedPoints
 {
 public:
-	struct FAIDataProviderFloatValue                   Radius;                                                   // 0x0088(0x0030) (Edit, DisableEditOnInstance)
-	TArray<struct FAIDataProviderFloatValue>           ZOffsetOfRingsFromContext;                                // 0x00B8(0x0010) (Edit, ZeroConstructor, DisableEditOnInstance)
-	struct FAIDataProviderIntValue                     PointsPerRing;                                            // 0x00C8(0x0030) (Edit, DisableEditOnInstance)
-	class UClass*                                      Center;                                                   // 0x00F8(0x0008) (Edit, ZeroConstructor, IsPlainOldData)
+	struct FAIDataProviderFloatValue                   Radius;                                                   // 0x0090(0x0030) (Edit, DisableEditOnInstance)
+	TArray<struct FAIDataProviderFloatValue>           ZOffsetOfRingsFromContext;                                // 0x00C0(0x0010) (Edit, ZeroConstructor, DisableEditOnInstance)
+	struct FAIDataProviderIntValue                     PointsPerRing;                                            // 0x00D0(0x0030) (Edit, DisableEditOnInstance)
+	class UClass*                                      Center;                                                   // 0x0100(0x0008) (Edit, ZeroConstructor, IsPlainOldData)
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.EnvQueryGenerator_WaterMultiDeckerRing"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.EnvQueryGenerator_WaterMultiDeckerRing");
 		return ptr;
 	}
 
@@ -4146,7 +4270,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.EnvQueryTest_HasLineOfSight"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.EnvQueryTest_HasLineOfSight");
 		return ptr;
 	}
 
@@ -4165,7 +4289,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.EnvQueryTest_IsAngleInRange2D"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.EnvQueryTest_IsAngleInRange2D");
 		return ptr;
 	}
 
@@ -4183,7 +4307,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.EnvQueryTest_WaterHeight"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.EnvQueryTest_WaterHeight");
 		return ptr;
 	}
 
@@ -4205,7 +4329,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.PeriodicAINoiseEventComponent"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.PeriodicAINoiseEventComponent");
 		return ptr;
 	}
 
@@ -4221,7 +4345,38 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.PlayerProximityObservedSpawnContextProvider"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.PlayerProximityObservedSpawnContextProvider");
+		return ptr;
+	}
+
+};
+
+
+// Class AthenaAI.PostBountyAIPawnSpawnedAction
+// 0x0000 (0x0028 - 0x0028)
+class UPostBountyAIPawnSpawnedAction : public UDataAsset
+{
+public:
+
+	static UClass* StaticClass()
+	{
+		static auto ptr = UObject::FindClass("Class AthenaAI.PostBountyAIPawnSpawnedAction");
+		return ptr;
+	}
+
+};
+
+
+// Class AthenaAI.ApplyNameplateToBountyWaveSpawnedAction
+// 0x0038 (0x0060 - 0x0028)
+class UApplyNameplateToBountyWaveSpawnedAction : public UPostBountyAIPawnSpawnedAction
+{
+public:
+	struct FText                                       AIName;                                                   // 0x0028(0x0038) (Edit, DisableEditOnInstance)
+
+	static UClass* StaticClass()
+	{
+		static auto ptr = UObject::FindClass("Class AthenaAI.ApplyNameplateToBountyWaveSpawnedAction");
 		return ptr;
 	}
 
@@ -4237,7 +4392,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.SimpleAIRegion"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.SimpleAIRegion");
 		return ptr;
 	}
 
@@ -4255,7 +4410,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.VulnerabilityDuringAIStrategyComponent"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.VulnerabilityDuringAIStrategyComponent");
 		return ptr;
 	}
 
@@ -4271,7 +4426,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.WaterbasedAISupplier"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.WaterbasedAISupplier");
 		return ptr;
 	}
 
@@ -4291,7 +4446,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIDiorama"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIDiorama");
 		return ptr;
 	}
 
@@ -4306,7 +4461,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIDioramaCategory"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIDioramaCategory");
 		return ptr;
 	}
 
@@ -4327,7 +4482,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIDioramaController"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIDioramaController");
 		return ptr;
 	}
 
@@ -4344,7 +4499,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIDioramaDesc"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIDioramaDesc");
 		return ptr;
 	}
 
@@ -4359,7 +4514,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIDioramaLocationSourceInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIDioramaLocationSourceInterface");
 		return ptr;
 	}
 
@@ -4389,7 +4544,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIDioramaLocationSourceComponent"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIDioramaLocationSourceComponent");
 		return ptr;
 	}
 
@@ -4404,7 +4559,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIDioramaServiceInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIDioramaServiceInterface");
 		return ptr;
 	}
 
@@ -4422,7 +4577,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIDioramaService"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIDioramaService");
 		return ptr;
 	}
 
@@ -4440,7 +4595,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.DebugDioramaCreator"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.DebugDioramaCreator");
 		return ptr;
 	}
 
@@ -4448,7 +4603,7 @@ public:
 
 
 // Class AthenaAI.AICreatureCharacterMovementComponent
-// 0x00A0 (0x05F0 - 0x0550)
+// 0x00C0 (0x0610 - 0x0550)
 class UAICreatureCharacterMovementComponent : public UCharacterMovementComponent
 {
 public:
@@ -4461,11 +4616,15 @@ public:
 	float                                              OrientationBlendSpeed;                                    // 0x0568(0x0004) (Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData)
 	float                                              OrientationMaxPitch;                                      // 0x056C(0x0004) (Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData)
 	float                                              UpdateOrientationFrequency;                               // 0x0570(0x0004) (Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData)
-	unsigned char                                      UnknownData02[0x7C];                                      // 0x0574(0x007C) MISSED OFFSET
+	float                                              MinStairAngle;                                            // 0x0574(0x0004) (Edit, ZeroConstructor, DisableEditOnInstance, IsPlainOldData)
+	float                                              MinStairVelocityDampen;                                   // 0x0578(0x0004) (Edit, ZeroConstructor, DisableEditOnInstance, IsPlainOldData)
+	unsigned char                                      UnknownData02[0x4];                                       // 0x057C(0x0004) MISSED OFFSET
+	TArray<class UClass*>                              SubscribedStairClimbStrategies;                           // 0x0580(0x0010) (Edit, ZeroConstructor, DisableEditOnInstance)
+	unsigned char                                      UnknownData03[0x80];                                      // 0x0590(0x0080) MISSED OFFSET
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AICreatureCharacterMovementComponent"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AICreatureCharacterMovementComponent");
 		return ptr;
 	}
 
@@ -4498,7 +4657,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AICreatureCharacter"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AICreatureCharacter");
 		return ptr;
 	}
 
@@ -4511,18 +4670,22 @@ public:
 
 
 // Class AthenaAI.AICreatureCharacterPathFollowingComponent
-// 0x0010 (0x02D8 - 0x02C8)
+// 0x0030 (0x02F8 - 0x02C8)
 class UAICreatureCharacterPathFollowingComponent : public UAthenaAICharacterPathFollowingComponent
 {
 public:
 	float                                              LandingAngle;                                             // 0x02C8(0x0004) (Edit, ZeroConstructor, DisableEditOnInstance, IsPlainOldData)
 	float                                              HopDistanceScale;                                         // 0x02CC(0x0004) (Edit, ZeroConstructor, DisableEditOnInstance, IsPlainOldData)
 	float                                              MaximumLandTime;                                          // 0x02D0(0x0004) (Edit, ZeroConstructor, DisableEditOnInstance, IsPlainOldData)
-	unsigned char                                      UnknownData00[0x4];                                       // 0x02D4(0x0004) MISSED OFFSET
+	float                                              MinStairAngle;                                            // 0x02D4(0x0004) (Edit, ZeroConstructor, DisableEditOnInstance, IsPlainOldData)
+	float                                              MinStairVelocityDampen;                                   // 0x02D8(0x0004) (Edit, ZeroConstructor, DisableEditOnInstance, IsPlainOldData)
+	unsigned char                                      UnknownData00[0x4];                                       // 0x02DC(0x0004) MISSED OFFSET
+	TArray<class UClass*>                              SubscribedStairClimbStrategies;                           // 0x02E0(0x0010) (Edit, ZeroConstructor, DisableEditOnInstance)
+	unsigned char                                      UnknownData01[0x8];                                       // 0x02F0(0x0008) MISSED OFFSET
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AICreatureCharacterPathFollowingComponent"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AICreatureCharacterPathFollowingComponent");
 		return ptr;
 	}
 
@@ -4537,7 +4700,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AICreatureMovementModifierInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AICreatureMovementModifierInterface");
 		return ptr;
 	}
 
@@ -4557,7 +4720,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AICreatureMovementModifierParamsDataAsset"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AICreatureMovementModifierParamsDataAsset");
 		return ptr;
 	}
 
@@ -4572,7 +4735,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BehaviourTreeInterruptionInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BehaviourTreeInterruptionInterface");
 		return ptr;
 	}
 
@@ -4587,7 +4750,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.ForcedIdleBehaviourInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.ForcedIdleBehaviourInterface");
 		return ptr;
 	}
 
@@ -4602,22 +4765,22 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AthenaAIDebugFunctionLibrary"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AthenaAIDebugFunctionLibrary");
 		return ptr;
 	}
 
 
-	static void SpawnAIWithSettings(TAssetPtr<class UClass> AIType, TAssetPtr<class UAthenaAIControllerParamsDataAsset> Skillset, TAssetPtr<class ULoadoutAsset> Loadout, TAssetPtr<class UAthenaAIFormDataAsset> Form, TAssetPtr<class UClass> AIItemSpawnComponent, class UClass* ClassId, const struct FVector& Pos, const struct FRotator& Rot, const struct FName& Region, class AActor* TriggerActor, const struct FName& NavMeshOverride, float Delay);
-	static void SpawnAI(TAssetPtr<class UClass> AIClass, class UAIEncounterSettings* EncounterSettings, const struct FVector& Pos, const struct FRotator& Rot, bool RequireNavMesh, float Delay, bool MakeAIPermanentlyNetRelevant, class AActor* InstancedNavMesh);
-	static void SetEnvQueryManagerMaxAllowedSeconds(float InMaxAllowedSeconds, class UObject* QueryOwner);
-	static void KillAllDebugAISpawners();
-	static int GetEnvQueryManagerNumRunningQueries(class UObject* QueryOwner);
-	static void EnableMaximumSightSettings(class AAthenaAIController* AIController, class UAthenaAIControllerParamsDataAsset* ControllerParams);
-	static void EnableBehaviorTreeLogging(class UObject* WorldContext);
-	static void DespawnAIPawn(class APawn* Pawn);
-	static void CreateAISpawnerAtPosition(class UObject* WorldContext, class UAISpawner* SpawnerAsset, const struct FVector& Pos);
-	static void CreateAISpawnerAtActor(class UObject* WorldContext, class UAISpawner* SpawnerAsset, class AActor* SpawnLocationActor);
-	static struct FVector CanProjectPointToNavigation(class UObject* WorldContext, const struct FVector& Point, class ANavigationData* NavData, class UClass* FilterClass, const struct FVector& QueryExtent);
+	void STATIC_SpawnAIWithSettings(TAssetPtr<class UClass> AIType, TAssetPtr<class UAthenaAIControllerParamsDataAsset> Skillset, TAssetPtr<class ULoadoutAsset> Loadout, TAssetPtr<class UAthenaAIFormDataAsset> Form, TAssetPtr<class UClass> AIItemSpawnComponent, class UClass* ClassId, TAssetPtr<class UAthenaAIAmmoDataAsset> Ammo, const struct FVector& Pos, const struct FRotator& Rot, const struct FName& Region, class AActor* TriggerActor, const struct FName& NavMeshOverride, float Delay);
+	void STATIC_SpawnAI(TAssetPtr<class UClass> AIClass, class UAIEncounterSettings* EncounterSettings, const struct FVector& Pos, const struct FRotator& Rot, bool RequireNavMesh, float Delay, bool MakeAIPermanentlyNetRelevant, class AActor* InstancedNavMesh);
+	void STATIC_SetEnvQueryManagerMaxAllowedSeconds(float InMaxAllowedSeconds, class UObject* QueryOwner);
+	void STATIC_KillAllDebugAISpawners();
+	int STATIC_GetEnvQueryManagerNumRunningQueries(class UObject* QueryOwner);
+	void STATIC_EnableMaximumSightSettings(class AAthenaAIController* AIController, class UAthenaAIControllerParamsDataAsset* ControllerParams);
+	void STATIC_EnableBehaviorTreeLogging(class UObject* WorldContext);
+	void STATIC_DespawnAIPawn(class APawn* Pawn);
+	void STATIC_CreateAISpawnerAtPosition(class UObject* WorldContext, class UAISpawner* SpawnerAsset, const struct FVector& Pos);
+	void STATIC_CreateAISpawnerAtActor(class UObject* WorldContext, class UAISpawner* SpawnerAsset, class AActor* SpawnLocationActor);
+	struct FVector STATIC_CanProjectPointToNavigation(class UObject* WorldContext, const struct FVector& Point, class ANavigationData* NavData, class UClass* FilterClass, const struct FVector& QueryExtent);
 };
 
 
@@ -4634,7 +4797,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AIFaunaSpawner"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AIFaunaSpawner");
 		return ptr;
 	}
 
@@ -4663,7 +4826,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AthenaFaunaAIController"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AthenaFaunaAIController");
 		return ptr;
 	}
 
@@ -4684,7 +4847,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.EnvQueryContext_LeaderFromBlackboard"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.EnvQueryContext_LeaderFromBlackboard");
 		return ptr;
 	}
 
@@ -4699,7 +4862,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.EnvQueryContext_Threat"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.EnvQueryContext_Threat");
 		return ptr;
 	}
 
@@ -4794,7 +4957,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.Fauna"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.Fauna");
 		return ptr;
 	}
 
@@ -4823,7 +4986,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.FaunaAIPlayerTracker"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.FaunaAIPlayerTracker");
 		return ptr;
 	}
 
@@ -4831,14 +4994,14 @@ public:
 
 
 // Class AthenaAI.FaunaMovementComponent
-// 0x0000 (0x05F0 - 0x05F0)
+// 0x0000 (0x0610 - 0x0610)
 class UFaunaMovementComponent : public UAICreatureCharacterMovementComponent
 {
 public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.FaunaMovementComponent"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.FaunaMovementComponent");
 		return ptr;
 	}
 
@@ -4861,7 +5024,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.AthenaSwimmingAIController"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.AthenaSwimmingAIController");
 		return ptr;
 	}
 
@@ -4878,7 +5041,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTDecorator_NearSurfaceOfWater"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTDecorator_NearSurfaceOfWater");
 		return ptr;
 	}
 
@@ -4913,7 +5076,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.SwimmingPathFollowingComponent"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.SwimmingPathFollowingComponent");
 		return ptr;
 	}
 
@@ -4940,7 +5103,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_SwimTo"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_SwimTo");
 		return ptr;
 	}
 
@@ -4959,7 +5122,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_SwimTurnOnTheSpot"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_SwimTurnOnTheSpot");
 		return ptr;
 	}
 
@@ -4975,7 +5138,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.TinySharkTelemetryComponent"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.TinySharkTelemetryComponent");
 		return ptr;
 	}
 
@@ -4983,7 +5146,7 @@ public:
 
 
 // Class AthenaAI.TinySharkExperience
-// 0x03B0 (0x07C0 - 0x0410)
+// 0x03B8 (0x07C8 - 0x0410)
 class ATinySharkExperience : public AActor
 {
 public:
@@ -4994,25 +5157,27 @@ public:
 	unsigned char                                      UnknownData01[0xA0];                                      // 0x0428(0x00A0) MISSED OFFSET
 	class UTinySharkSpawner*                           TinySharkSpawner;                                         // 0x04C8(0x0008) (ZeroConstructor, Transient, IsPlainOldData)
 	class ASharkPawn*                                  TinySharkPawn;                                            // 0x04D0(0x0008) (Net, ZeroConstructor, IsPlainOldData)
-	unsigned char                                      UnknownData02[0x8];                                       // 0x04D8(0x0008) MISSED OFFSET
-	struct FTinySharkParams                            Params;                                                   // 0x04E0(0x00B8) (Transient)
-	class UTinySharkTelemetryComponent*                TinySharkTelemetryComponent;                              // 0x0598(0x0008) (Edit, BlueprintVisible, ExportObject, ZeroConstructor, InstancedReference, IsPlainOldData)
-	class AShip*                                       TrackedShip;                                              // 0x05A0(0x0008) (ZeroConstructor, Transient, IsPlainOldData)
-	unsigned char                                      UnknownData03[0x98];                                      // 0x05A8(0x0098) MISSED OFFSET
-	struct FEncounterParams                            SightingEncounterParams;                                  // 0x0640(0x000C) (Edit, DisableEditOnInstance)
-	struct FEncounterParams                            CloseEncounterParams;                                     // 0x064C(0x000C) (Edit, DisableEditOnInstance)
-	unsigned char                                      UnknownData04[0x140];                                     // 0x0658(0x0140) MISSED OFFSET
-	TAssetPtr<class UAthenaAIControllerParamsDataAsset> CachedControllerParamsAsset;                              // 0x0798(0x0020)
-	unsigned char                                      UnknownData05[0x8];                                       // 0x07B8(0x0008) MISSED OFFSET
+	struct FName                                       HealthRTPC;                                               // 0x04D8(0x0008) (Edit, ZeroConstructor, IsPlainOldData)
+	unsigned char                                      UnknownData02[0x8];                                       // 0x04E0(0x0008) MISSED OFFSET
+	struct FTinySharkParams                            Params;                                                   // 0x04E8(0x00B8) (Transient)
+	class UTinySharkTelemetryComponent*                TinySharkTelemetryComponent;                              // 0x05A0(0x0008) (Edit, BlueprintVisible, ExportObject, ZeroConstructor, InstancedReference, IsPlainOldData)
+	class AShip*                                       TrackedShip;                                              // 0x05A8(0x0008) (ZeroConstructor, Transient, IsPlainOldData)
+	unsigned char                                      UnknownData03[0x98];                                      // 0x05B0(0x0098) MISSED OFFSET
+	struct FEncounterParams                            SightingEncounterParams;                                  // 0x0648(0x000C) (Edit, DisableEditOnInstance)
+	struct FEncounterParams                            CloseEncounterParams;                                     // 0x0654(0x000C) (Edit, DisableEditOnInstance)
+	unsigned char                                      UnknownData04[0x140];                                     // 0x0660(0x0140) MISSED OFFSET
+	TAssetPtr<class UAthenaAIControllerParamsDataAsset> CachedControllerParamsAsset;                              // 0x07A0(0x0020)
+	unsigned char                                      UnknownData05[0x8];                                       // 0x07C0(0x0008) MISSED OFFSET
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.TinySharkExperience"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.TinySharkExperience");
 		return ptr;
 	}
 
 
 	void TinySharkPawnDestroyed(class AActor* InDestroyedActor);
+	void OnRep_TinySharkPawn(class ASharkPawn* LastTinySharkPawn);
 	class AShip* GetTrackedShip();
 	TEnumAsByte<ETinySharkState> GetCurrentState();
 	TEnumAsByte<ETinySharkActiveState> GetActiveState();
@@ -5028,7 +5193,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.TinySharkParamsDataAsset"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.TinySharkParamsDataAsset");
 		return ptr;
 	}
 
@@ -5043,7 +5208,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.TinySharkServiceInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.TinySharkServiceInterface");
 		return ptr;
 	}
 
@@ -5063,7 +5228,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.TinySharkService"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.TinySharkService");
 		return ptr;
 	}
 
@@ -5086,7 +5251,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.TinySharkServiceParamsDataAsset"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.TinySharkServiceParamsDataAsset");
 		return ptr;
 	}
 
@@ -5101,7 +5266,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.TinySharkSpawner"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.TinySharkSpawner");
 		return ptr;
 	}
 
@@ -5182,7 +5347,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.Pet"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.Pet");
 		return ptr;
 	}
 
@@ -5211,7 +5376,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.BTTask_SetRoamingPetAnimationState"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.BTTask_SetRoamingPetAnimationState");
 		return ptr;
 	}
 
@@ -5219,15 +5384,15 @@ public:
 
 
 // Class AthenaAI.PetDitherComponent
-// 0x0070 (0x01D8 - 0x0168)
+// 0x0070 (0x01E0 - 0x0170)
 class UPetDitherComponent : public UDitherComponent
 {
 public:
-	unsigned char                                      UnknownData00[0x70];                                      // 0x0168(0x0070) MISSED OFFSET
+	unsigned char                                      UnknownData00[0x70];                                      // 0x0170(0x0070) MISSED OFFSET
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.PetDitherComponent"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.PetDitherComponent");
 		return ptr;
 	}
 
@@ -5239,12 +5404,12 @@ public:
 class UPetNameplateComponent : public UAINameplateComponent
 {
 public:
-	class FString                                      DefaultPetName;                                           // 0x0390(0x0010) (Edit, BlueprintVisible, BlueprintReadOnly, ZeroConstructor, DisableEditOnInstance)
+	struct FString                                     DefaultPetName;                                           // 0x0390(0x0010) (Edit, BlueprintVisible, BlueprintReadOnly, ZeroConstructor, DisableEditOnInstance)
 	unsigned char                                      UnknownData00[0x20];                                      // 0x03A0(0x0020) MISSED OFFSET
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.PetNameplateComponent"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.PetNameplateComponent");
 		return ptr;
 	}
 
@@ -5267,7 +5432,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.PetPartCustomisationComponent"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.PetPartCustomisationComponent");
 		return ptr;
 	}
 
@@ -5284,7 +5449,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.PetPartSizeMappingsDataAsset"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.PetPartSizeMappingsDataAsset");
 		return ptr;
 	}
 
@@ -5300,7 +5465,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.PetSicknessComponent"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.PetSicknessComponent");
 		return ptr;
 	}
 
@@ -5320,7 +5485,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.PetsPartsDesc"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.PetsPartsDesc");
 		return ptr;
 	}
 
@@ -5336,7 +5501,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.PetTelemetryComponent"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.PetTelemetryComponent");
 		return ptr;
 	}
 
@@ -5352,7 +5517,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.PetWieldableReactMappingsDataAsset"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.PetWieldableReactMappingsDataAsset");
 		return ptr;
 	}
 
@@ -5377,7 +5542,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaAI.PreviewPet"));
+		static auto ptr = UObject::FindClass("Class AthenaAI.PreviewPet");
 		return ptr;
 	}
 

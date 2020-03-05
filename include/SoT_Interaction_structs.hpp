@@ -1,19 +1,39 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
 
-#include "SoT_Basic.hpp"
-#include "SoT_Interaction_enums.hpp"
-#include "SoT_CoreUObject_classes.hpp"
-#include "SoT_Engine_classes.hpp"
-#include "SoT_Athena_classes.hpp"
-
 namespace SDK
 {
+//---------------------------------------------------------------------------
+//Enums
+//---------------------------------------------------------------------------
+
+// Enum Interaction.EInteractionBlockReason
+enum class EInteractionBlockReason : uint8_t
+{
+	None                           = 0,
+	Radial                         = 1,
+	Other                          = 2,
+	EInteractionBlockReason_MAX    = 3
+};
+
+
+// Enum Interaction.EInteractionObject
+enum class EInteractionObject : uint8_t
+{
+	None                           = 0,
+	Shop                           = 1,
+	Chest                          = 2,
+	Barrel                         = 3,
+	EInteractionObject_MAX         = 4
+};
+
+
+
 //---------------------------------------------------------------------------
 //Script Structs
 //---------------------------------------------------------------------------

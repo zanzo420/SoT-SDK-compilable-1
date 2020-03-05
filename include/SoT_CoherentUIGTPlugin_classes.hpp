@@ -1,12 +1,10 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
-
-#include "SoT_CoherentUIGTPlugin_structs.hpp"
 
 namespace SDK
 {
@@ -47,21 +45,21 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class CoherentUIGTPlugin.CoherentUIGTBaseComponent"));
+		static auto ptr = UObject::FindClass("Class CoherentUIGTPlugin.CoherentUIGTBaseComponent");
 		return ptr;
 	}
 
 
 	void UpdateWholeDataModelFromStruct(class UStructProperty* Arg);
 	void UpdateWholeDataModelFromObject(class UObject* Model);
-	void TriggerJSEvent(const class FString& Name, class UCoherentUIGTJSEvent* EventData);
+	void TriggerJSEvent(const struct FString& Name, class UCoherentUIGTJSEvent* EventData);
 	void SynchronizeModels();
 	void ShowPaintRects(bool show);
 	void SetClickThroughAlphaThreshold(float Threshold);
 	void Resize(int Width, int Height);
 	void Reload();
 	void Redraw();
-	void Load(const class FString& path);
+	void Load(const struct FString& path);
 	bool IsTransparent();
 	bool IsReadyToCreateView();
 	bool IsReadyForBindings();
@@ -72,8 +70,8 @@ public:
 	void EnableDelayedUpdate(bool bEnabled);
 	void DebugSaveNextFrame();
 	class UCoherentUIGTJSEvent* CreateJSEvent();
-	void CreateDataModelFromStruct(const class FString& Name, class UStructProperty* Arg);
-	void CreateDataModelFromObject(const class FString& Name, class UObject* Model);
+	void CreateDataModelFromStruct(const struct FString& Name, class UStructProperty* Arg);
+	void CreateDataModelFromObject(const struct FString& Name, class UObject* Model);
 	void BeginDebugFrameSave();
 };
 
@@ -83,7 +81,7 @@ public:
 class UCoherentUIGTComponent : public UCoherentUIGTBaseComponent
 {
 public:
-	class FString                                      URL;                                                      // 0x0340(0x0010) (Edit, BlueprintVisible, ZeroConstructor)
+	struct FString                                     URL;                                                      // 0x0340(0x0010) (Edit, BlueprintVisible, ZeroConstructor)
 	int                                                Width;                                                    // 0x0350(0x0004) (Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData)
 	int                                                Height;                                                   // 0x0354(0x0004) (Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData)
 	bool                                               ManualTexture;                                            // 0x0358(0x0001) (Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData)
@@ -94,7 +92,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class CoherentUIGTPlugin.CoherentUIGTComponent"));
+		static auto ptr = UObject::FindClass("Class CoherentUIGTPlugin.CoherentUIGTComponent");
 		return ptr;
 	}
 
@@ -106,18 +104,18 @@ public:
 class UCoherentUIGTLiveView : public UActorComponent
 {
 public:
-	class FString                                      LinkName;                                                 // 0x00C8(0x0010) (Edit, BlueprintVisible, ZeroConstructor)
+	struct FString                                     LinkName;                                                 // 0x00C8(0x0010) (Edit, BlueprintVisible, ZeroConstructor)
 	class UTextureRenderTarget2D*                      Texture;                                                  // 0x00D8(0x0008) (Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x18];                                      // 0x00E0(0x0018) MISSED OFFSET
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class CoherentUIGTPlugin.CoherentUIGTLiveView"));
+		static auto ptr = UObject::FindClass("Class CoherentUIGTPlugin.CoherentUIGTLiveView");
 		return ptr;
 	}
 
 
-	void OnLiveViewSizeRequest(class UCoherentUIGTBaseComponent* BaseComponent, const class FString& Name, int* Width, int* Height);
+	void OnLiveViewSizeRequest(class UCoherentUIGTBaseComponent* BaseComponent, const struct FString& Name, int* Width, int* Height);
 };
 
 
@@ -130,7 +128,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class CoherentUIGTPlugin.CoherentUIGTRenderToTextureLiveView"));
+		static auto ptr = UObject::FindClass("Class CoherentUIGTPlugin.CoherentUIGTRenderToTextureLiveView");
 		return ptr;
 	}
 
@@ -145,7 +143,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class CoherentUIGTPlugin.CoherentUIGTAssetReferencer"));
+		static auto ptr = UObject::FindClass("Class CoherentUIGTPlugin.CoherentUIGTAssetReferencer");
 		return ptr;
 	}
 
@@ -161,7 +159,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class CoherentUIGTPlugin.CoherentUIGTSystem"));
+		static auto ptr = UObject::FindClass("Class CoherentUIGTPlugin.CoherentUIGTSystem");
 		return ptr;
 	}
 
@@ -178,14 +176,14 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class CoherentUIGTPlugin.CoherentUIGTJSEvent"));
+		static auto ptr = UObject::FindClass("Class CoherentUIGTPlugin.CoherentUIGTJSEvent");
 		return ptr;
 	}
 
 
 	void AddText(const struct FText& Text);
 	void AddStructArg(class UStructProperty* Arg);
-	void AddString(const class FString& Str);
+	void AddString(const struct FString& Str);
 	void AddObject(class UObject* Object);
 	void AddName(const struct FName& Name);
 	void AddInt32(int integer);
@@ -201,18 +199,18 @@ public:
 class UCoherentUIGTJSPayload : public UObject
 {
 public:
-	class FString                                      EventName;                                                // 0x0028(0x0010) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor)
+	struct FString                                     EventName;                                                // 0x0028(0x0010) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor)
 	unsigned char                                      UnknownData00[0x8];                                       // 0x0038(0x0008) MISSED OFFSET
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class CoherentUIGTPlugin.CoherentUIGTJSPayload"));
+		static auto ptr = UObject::FindClass("Class CoherentUIGTPlugin.CoherentUIGTJSPayload");
 		return ptr;
 	}
 
 
 	void ReadObject(int Index, class UObject* Object);
-	class FString GetString(int Index);
+	struct FString GetString(int Index);
 	float GetNumber(int Index);
 	int GetInt32(int Index);
 	bool GetBool(int Index);
@@ -227,7 +225,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class CoherentUIGTPlugin.CoherentUIGTEventHelpers"));
+		static auto ptr = UObject::FindClass("Class CoherentUIGTPlugin.CoherentUIGTEventHelpers");
 		return ptr;
 	}
 
@@ -246,7 +244,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class CoherentUIGTPlugin.CoherentUIGTHUD"));
+		static auto ptr = UObject::FindClass("Class CoherentUIGTPlugin.CoherentUIGTHUD");
 		return ptr;
 	}
 
@@ -261,23 +259,23 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class CoherentUIGTPlugin.CoherentUIGTBlueprintFunctionLibrary"));
+		static auto ptr = UObject::FindClass("Class CoherentUIGTPlugin.CoherentUIGTBlueprintFunctionLibrary");
 		return ptr;
 	}
 
 
-	static void TriggerJSEvent(class UCoherentUIGTBaseComponent* Component, const class FString& EventName, class UCoherentUIGTJSEvent* JSEvent);
-	static void SetupLoadingScreen(class UObject* WorldContextObject, const struct FCoherentUIGTLoadingScreenSettings& Settings);
-	static class UCoherentUIGTJSEvent* CreateJSEvent(class UObject* WorldContextObject);
-	static void AddStructArg(class UCoherentUIGTJSEvent* JSEvent, class UStructProperty* Arg);
-	static void AddString(class UCoherentUIGTJSEvent* JSEvent, const class FString& Arg);
-	static void AddObject(class UCoherentUIGTJSEvent* JSEvent, class UObject* Arg);
-	static void AddInt32(class UCoherentUIGTJSEvent* JSEvent, int Arg);
-	static void AddFloat(class UCoherentUIGTJSEvent* JSEvent, float Arg);
-	static void AddByte(class UCoherentUIGTJSEvent* JSEvent, unsigned char Arg);
-	static void AddBool(class UCoherentUIGTJSEvent* JSEvent, bool Arg);
-	static void AddArrayOfStructs(class UCoherentUIGTJSEvent* JSEvent, TArray<int> Arg);
-	static void AddArray(class UCoherentUIGTJSEvent* JSEvent, TArray<int> Arg, int ArrayType);
+	void STATIC_TriggerJSEvent(class UCoherentUIGTBaseComponent* Component, const struct FString& EventName, class UCoherentUIGTJSEvent* JSEvent);
+	void STATIC_SetupLoadingScreen(class UObject* WorldContextObject, const struct FCoherentUIGTLoadingScreenSettings& Settings);
+	class UCoherentUIGTJSEvent* STATIC_CreateJSEvent(class UObject* WorldContextObject);
+	void STATIC_AddStructArg(class UCoherentUIGTJSEvent* JSEvent, class UStructProperty* Arg);
+	void STATIC_AddString(class UCoherentUIGTJSEvent* JSEvent, const struct FString& Arg);
+	void STATIC_AddObject(class UCoherentUIGTJSEvent* JSEvent, class UObject* Arg);
+	void STATIC_AddInt32(class UCoherentUIGTJSEvent* JSEvent, int Arg);
+	void STATIC_AddFloat(class UCoherentUIGTJSEvent* JSEvent, float Arg);
+	void STATIC_AddByte(class UCoherentUIGTJSEvent* JSEvent, unsigned char Arg);
+	void STATIC_AddBool(class UCoherentUIGTJSEvent* JSEvent, bool Arg);
+	void STATIC_AddArrayOfStructs(class UCoherentUIGTJSEvent* JSEvent, TArray<int> Arg);
+	void STATIC_AddArray(class UCoherentUIGTJSEvent* JSEvent, TArray<int> Arg, int ArrayType);
 };
 
 
@@ -291,12 +289,12 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class CoherentUIGTPlugin.CoherentUIGTGameHUD"));
+		static auto ptr = UObject::FindClass("Class CoherentUIGTPlugin.CoherentUIGTGameHUD");
 		return ptr;
 	}
 
 
-	void SetupUIGTView(const class FString& PageUrl, bool bIsTransparent, float ClickThroughAlphaThreshold, float AnimationFrameDefer, bool bDelayedUpdate);
+	void SetupUIGTView(const struct FString& PageUrl, bool bIsTransparent, float ClickThroughAlphaThreshold, float AnimationFrameDefer, bool bDelayedUpdate);
 	bool HasSetupUIGTView();
 };
 
@@ -314,7 +312,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class CoherentUIGTPlugin.CoherentUIGTInputActor"));
+		static auto ptr = UObject::FindClass("Class CoherentUIGTPlugin.CoherentUIGTInputActor");
 		return ptr;
 	}
 
@@ -354,15 +352,15 @@ public:
 	bool                                               bRespectTitleSafeZone;                                    // 0x003D(0x0001) (Edit, ZeroConstructor, Config, IsPlainOldData)
 	bool                                               bRespectLetterboxing;                                     // 0x003E(0x0001) (Edit, ZeroConstructor, Config, IsPlainOldData)
 	unsigned char                                      UnknownData01[0x1];                                       // 0x003F(0x0001) MISSED OFFSET
-	class FString                                      HUDMaterialName;                                          // 0x0040(0x0010) (Edit, ZeroConstructor, Config)
-	class FString                                      CoUIResourcesRoot;                                        // 0x0050(0x0010) (Edit, ZeroConstructor, Config)
+	struct FString                                     HUDMaterialName;                                          // 0x0040(0x0010) (Edit, ZeroConstructor, Config)
+	struct FString                                     CoUIResourcesRoot;                                        // 0x0050(0x0010) (Edit, ZeroConstructor, Config)
 	bool                                               TickWhileGameIsPaused;                                    // 0x0060(0x0001) (Edit, ZeroConstructor, Config, IsPlainOldData)
 	TEnumAsByte<ECoherentUIGTMSAA>                     MSAA;                                                     // 0x0061(0x0001) (ZeroConstructor, Config, IsPlainOldData)
 	unsigned char                                      UnknownData02[0x6];                                       // 0x0062(0x0006) MISSED OFFSET
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class CoherentUIGTPlugin.CoherentUIGTSettings"));
+		static auto ptr = UObject::FindClass("Class CoherentUIGTPlugin.CoherentUIGTSettings");
 		return ptr;
 	}
 
@@ -400,27 +398,27 @@ public:
 	int                                                LayerHeightThreshold;                                     // 0x0248(0x0004) (Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData)
 	bool                                               bEnableAdditionalDefaultStyles;                           // 0x024C(0x0001) (Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData03[0x1A3];                                     // 0x024D(0x01A3) MISSED OFFSET
-	class FString                                      URL;                                                      // 0x03F0(0x0010) (Edit, BlueprintVisible, ZeroConstructor)
+	struct FString                                     URL;                                                      // 0x03F0(0x0010) (Edit, BlueprintVisible, ZeroConstructor)
 	float                                              ClickThroughAlphaThreshold;                               // 0x0400(0x0004) (Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData)
 	bool                                               Transparent;                                              // 0x0404(0x0001) (Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData04[0x3];                                       // 0x0405(0x0003) MISSED OFFSET
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class CoherentUIGTPlugin.CoherentUIGTWidget"));
+		static auto ptr = UObject::FindClass("Class CoherentUIGTPlugin.CoherentUIGTWidget");
 		return ptr;
 	}
 
 
 	void UpdateWholeDataModelFromStruct(class UStructProperty* Arg);
 	void UpdateWholeDataModelFromObject(class UObject* Model);
-	void TriggerJSEvent(const class FString& Name, class UCoherentUIGTJSEvent* EventData);
+	void TriggerJSEvent(const struct FString& Name, class UCoherentUIGTJSEvent* EventData);
 	void SynchronizeModels();
 	void ShowPaintRects(bool show);
 	void SetClickThroughAlphaThreshold(float Threshold);
 	void Reload();
 	void Redraw();
-	void Load(const class FString& path);
+	void Load(const struct FString& path);
 	bool IsTransparent();
 	bool IsReadyToCreateView();
 	bool IsReadyForBindings();
@@ -431,8 +429,8 @@ public:
 	void EndDebugFrameSave();
 	void DebugSaveNextFrame();
 	class UCoherentUIGTJSEvent* CreateJSEvent();
-	void CreateDataModelFromStruct(const class FString& Name, class UStructProperty* Arg);
-	void CreateDataModelFromObject(const class FString& Name, class UObject* Model);
+	void CreateDataModelFromStruct(const struct FString& Name, class UStructProperty* Arg);
+	void CreateDataModelFromObject(const struct FString& Name, class UObject* Model);
 	void BeginDebugFrameSave();
 };
 

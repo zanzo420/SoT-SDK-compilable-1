@@ -1,19 +1,29 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
 
-#include "SoT_Basic.hpp"
-#include "SoT_PositionalVoice_enums.hpp"
-#include "SoT_Engine_classes.hpp"
-#include "SoT_CoreUObject_classes.hpp"
-#include "SoT_RareAudio_classes.hpp"
-
 namespace SDK
 {
+//---------------------------------------------------------------------------
+//Enums
+//---------------------------------------------------------------------------
+
+// Enum PositionalVoice.EVoiceChatState
+enum class EVoiceChatState : uint8_t
+{
+	Silent                         = 0,
+	Talking                        = 1,
+	Muted                          = 2,
+	Deafened                       = 3,
+	EVoiceChatState_MAX            = 4
+};
+
+
+
 }
 
 #ifdef _MSC_VER

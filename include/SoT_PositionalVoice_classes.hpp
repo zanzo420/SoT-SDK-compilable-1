@@ -1,12 +1,10 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
-
-#include "SoT_PositionalVoice_structs.hpp"
 
 namespace SDK
 {
@@ -22,7 +20,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class PositionalVoice.VoiceChatRendererInterface"));
+		static auto ptr = UObject::FindClass("Class PositionalVoice.VoiceChatRendererInterface");
 		return ptr;
 	}
 
@@ -38,7 +36,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class PositionalVoice.MockVoiceChatRenderer"));
+		static auto ptr = UObject::FindClass("Class PositionalVoice.MockVoiceChatRenderer");
 		return ptr;
 	}
 
@@ -53,7 +51,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class PositionalVoice.VoiceChatRendererRetreivalInterface"));
+		static auto ptr = UObject::FindClass("Class PositionalVoice.VoiceChatRendererRetreivalInterface");
 		return ptr;
 	}
 
@@ -69,7 +67,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class PositionalVoice.MockVoiceChatRendererRetriever"));
+		static auto ptr = UObject::FindClass("Class PositionalVoice.MockVoiceChatRendererRetriever");
 		return ptr;
 	}
 
@@ -92,7 +90,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class PositionalVoice.VoiceChatRenderer"));
+		static auto ptr = UObject::FindClass("Class PositionalVoice.VoiceChatRenderer");
 		return ptr;
 	}
 
@@ -107,14 +105,14 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class PositionalVoice.PositionalVoiceTestFunctionLibrary"));
+		static auto ptr = UObject::FindClass("Class PositionalVoice.PositionalVoiceTestFunctionLibrary");
 		return ptr;
 	}
 
 
-	static int GetNumberOfUnmutedRemotePlayers(class APlayerController* CurrentPlayer);
-	static int GetNumberOfRegisteredChatEmitters(class UObject* WorldContextObject, class UClass* VoiceChatRendererClass);
-	static int GetMaxNumberOfAudibleChatEmitters();
+	int STATIC_GetNumberOfUnmutedRemotePlayers(class APlayerController* CurrentPlayer);
+	int STATIC_GetNumberOfRegisteredChatEmitters(class UObject* WorldContextObject, class UClass* VoiceChatRendererClass);
+	int STATIC_GetMaxNumberOfAudibleChatEmitters();
 };
 
 
@@ -126,7 +124,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class PositionalVoice.VoiceChatEmitterInterface"));
+		static auto ptr = UObject::FindClass("Class PositionalVoice.VoiceChatEmitterInterface");
 		return ptr;
 	}
 
@@ -146,7 +144,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class PositionalVoice.TestVoiceChatEmitter"));
+		static auto ptr = UObject::FindClass("Class PositionalVoice.TestVoiceChatEmitter");
 		return ptr;
 	}
 

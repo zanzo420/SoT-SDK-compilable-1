@@ -1,19 +1,40 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
 
-#include "SoT_Basic.hpp"
-#include "SoT_MovieSceneTracks_enums.hpp"
-#include "SoT_MovieScene_classes.hpp"
-#include "SoT_Engine_classes.hpp"
-#include "SoT_CoreUObject_classes.hpp"
-
 namespace SDK
 {
+//---------------------------------------------------------------------------
+//Enums
+//---------------------------------------------------------------------------
+
+// Enum MovieSceneTracks.MovieScene3DPathSection_Axis
+enum class EMovieScene3DPathSection_Axis : uint8_t
+{
+	X                              = 0,
+	Y                              = 1,
+	Z                              = 2,
+	NEG_X                          = 3,
+	NEG_Y                          = 4,
+	NEG_Z                          = 5,
+	MovieScene3DPathSection_MAX    = 6
+};
+
+
+// Enum MovieSceneTracks.EParticleKey
+enum class EParticleKey : uint8_t
+{
+	Active                         = 0,
+	Inactive                       = 1,
+	EParticleKey_MAX               = 2
+};
+
+
+
 //---------------------------------------------------------------------------
 //Script Structs
 //---------------------------------------------------------------------------

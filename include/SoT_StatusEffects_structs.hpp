@@ -1,14 +1,10 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
-
-#include "SoT_Basic.hpp"
-#include "SoT_Engine_classes.hpp"
-#include "SoT_CoreUObject_classes.hpp"
 
 namespace SDK
 {
@@ -20,15 +16,15 @@ namespace SDK
 // 0x0004
 struct FStatusDescriptor
 {
-	float                                              Intensity;                                                // 0x0000(0x0004) (Edit, ZeroConstructor, IsPlainOldData)
+	float                                              Intensity;                                                // 0x0000(0x0004) (Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData)
 };
 
 // ScriptStruct StatusEffects.Status
 // 0x0018
 struct FStatus
 {
-	TArray<class UClass*>                              Type;                                                     // 0x0000(0x0010) (Edit, ZeroConstructor)
-	struct FStatusDescriptor                           Descriptor;                                               // 0x0010(0x0004) (Edit)
+	TArray<class UClass*>                              Type;                                                     // 0x0000(0x0010) (Edit, BlueprintVisible, ZeroConstructor)
+	struct FStatusDescriptor                           Descriptor;                                               // 0x0010(0x0004) (Edit, BlueprintVisible)
 	unsigned char                                      UnknownData00[0x4];                                       // 0x0014(0x0004) MISSED OFFSET
 };
 
@@ -68,6 +64,14 @@ struct FActiveStatusEffect
 	TArray<class UStatusResponse*>                     InstancedResponses;                                       // 0x0028(0x0010) (ZeroConstructor, RepSkip, RepNotify, Interp, NonTransactional, EditorOnly, NoDestructor, AutoWeak, ContainsInstancedReference, AssetRegistrySearchable, SimpleDisplay, AdvancedDisplay, Protected, BlueprintCallable, BlueprintAuthorityOnly, TextExportTransient, NonPIEDuplicateTransient, ExposeOnSpawn, PersistentInstance, UObjectWrapper, HasGetValueTypeHash, NativeAccessSpecifierPublic, NativeAccessSpecifierProtected, NativeAccessSpecifierPrivate)
 	bool                                               ResponsesAreActive;                                       // 0x0038(0x0001) (ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData01[0x17];                                      // 0x0039(0x0017) MISSED OFFSET
+};
+
+// ScriptStruct StatusEffects.EventAppliedStatusToTargets
+// 0x0020
+struct FEventAppliedStatusToTargets
+{
+	TArray<class UClass*>                              StatusApplied;                                            // 0x0000(0x0010) (ZeroConstructor)
+	TArray<class AActor*>                              Targets;                                                  // 0x0010(0x0010) (ZeroConstructor)
 };
 
 // ScriptStruct StatusEffects.StatusEffectPersistenceKey

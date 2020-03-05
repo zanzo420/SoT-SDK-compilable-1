@@ -1,20 +1,28 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
 
-#include "SoT_Basic.hpp"
-#include "SoT_RareAudio_enums.hpp"
-#include "SoT_WwiseAudio_classes.hpp"
-#include "SoT_CoreUObject_classes.hpp"
-#include "SoT_Engine_classes.hpp"
-#include "SoT_RareEngine_classes.hpp"
-
 namespace SDK
 {
+//---------------------------------------------------------------------------
+//Enums
+//---------------------------------------------------------------------------
+
+// Enum RareAudio.EEmitterRelationship
+enum class EEmitterRelationship : uint8_t
+{
+	Audio_Remote                   = 0,
+	Audio_Local                    = 1,
+	Audio_Default                  = 2,
+	Audio_MAX                      = 3
+};
+
+
+
 //---------------------------------------------------------------------------
 //Script Structs
 //---------------------------------------------------------------------------

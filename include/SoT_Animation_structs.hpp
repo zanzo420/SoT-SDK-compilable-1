@@ -1,19 +1,49 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
 
-#include "SoT_Basic.hpp"
-#include "SoT_Animation_enums.hpp"
-#include "SoT_CoreUObject_classes.hpp"
-#include "SoT_Engine_classes.hpp"
-#include "SoT_Athena_classes.hpp"
-
 namespace SDK
 {
+//---------------------------------------------------------------------------
+//Enums
+//---------------------------------------------------------------------------
+
+// Enum Animation.ECharacterIKLimb
+enum class ECharacterIKLimb : uint8_t
+{
+	None                           = 0,
+	LeftHand                       = 1,
+	RightHand                      = 2,
+	LeftFoot                       = 3,
+	RightFoot                      = 4,
+	ECharacterIKLimb_MAX           = 5
+};
+
+
+// Enum Animation.ELimbIKSpace
+enum class ELimbIKSpace : uint8_t
+{
+	Local                          = 0,
+	World                          = 1,
+	Character                      = 2,
+	ELimbIKSpace_MAX               = 3
+};
+
+
+// Enum Animation.EDockableSocketOverlapUpdates
+enum class EDockableSocketOverlapUpdates : uint8_t
+{
+	AllowUpdate                    = 0,
+	BlockUpdate                    = 1,
+	EDockableSocketOverlapUpdates_MAX = 2
+};
+
+
+
 //---------------------------------------------------------------------------
 //Script Structs
 //---------------------------------------------------------------------------
@@ -87,6 +117,14 @@ struct FCosmeticItems
 	TArray<class AActor*>                              CosmeticItemArray;                                        // 0x0000(0x0010) (ZeroConstructor)
 };
 
+// ScriptStruct Animation.CosmeticItemAnimationSetLoopData
+// 0x0010
+struct FCosmeticItemAnimationSetLoopData
+{
+	class UAnimSequenceBase*                           Into;                                                     // 0x0000(0x0008) (Edit, ZeroConstructor, DisableEditOnInstance, IsPlainOldData)
+	class UAnimSequenceBase*                           Loop;                                                     // 0x0008(0x0008) (Edit, ZeroConstructor, DisableEditOnInstance, IsPlainOldData)
+};
+
 // ScriptStruct Animation.DockableInfo
 // 0x0018
 struct FDockableInfo
@@ -142,10 +180,11 @@ struct FEventCosmeticItemAttachmentSwitched
 };
 
 // ScriptStruct Animation.EventCosmeticItemSpawned
-// 0x0008
+// 0x0010
 struct FEventCosmeticItemSpawned
 {
 	class AActor*                                      Owner;                                                    // 0x0000(0x0008) (ZeroConstructor, IsPlainOldData)
+	class UCosmeticItemAnimationSetDataAsset*          CosmeticData;                                             // 0x0008(0x0008) (ZeroConstructor, IsPlainOldData)
 };
 
 // ScriptStruct Animation.EventDockableObjectDestroyed
@@ -195,6 +234,13 @@ struct FHitReactionAnimationState
 struct FEventPreviewCharacterAnimationRequest
 {
 	class UAnimationAsset*                             AnimationToPlay;                                          // 0x0000(0x0008) (ZeroConstructor, IsPlainOldData)
+};
+
+// ScriptStruct Animation.AnimationStateCompleteEvent
+// 0x0008
+struct FAnimationStateCompleteEvent
+{
+	class UClass*                                      CompletedStateId;                                         // 0x0000(0x0008) (ZeroConstructor, IsPlainOldData)
 };
 
 // ScriptStruct Animation.WeightedAnimationTimeout

@@ -1,12 +1,10 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
-
-#include "SoT_Wind_structs.hpp"
 
 namespace SDK
 {
@@ -22,7 +20,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Wind.WindZoneInterface"));
+		static auto ptr = UObject::FindClass("Class Wind.WindZoneInterface");
 		return ptr;
 	}
 
@@ -41,7 +39,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Wind.WindInterface"));
+		static auto ptr = UObject::FindClass("Class Wind.WindInterface");
 		return ptr;
 	}
 
@@ -73,7 +71,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Wind.DebugWindInterface"));
+		static auto ptr = UObject::FindClass("Class Wind.DebugWindInterface");
 		return ptr;
 	}
 
@@ -89,7 +87,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Wind.MockWindService"));
+		static auto ptr = UObject::FindClass("Class Wind.MockWindService");
 		return ptr;
 	}
 
@@ -106,7 +104,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Wind.TestWindInterface"));
+		static auto ptr = UObject::FindClass("Class Wind.TestWindInterface");
 		return ptr;
 	}
 
@@ -122,7 +120,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Wind.TestWindZone"));
+		static auto ptr = UObject::FindClass("Class Wind.TestWindZone");
 		return ptr;
 	}
 
@@ -137,13 +135,13 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Wind.WindFunctions"));
+		static auto ptr = UObject::FindClass("Class Wind.WindFunctions");
 		return ptr;
 	}
 
 
-	static void SetDefaultWindBlowingNorth(class UObject* WorldContextObject);
-	static struct FVector GetWindAtLocation(class UObject* WorldContextObject, const struct FVector& WorldPosition);
+	void STATIC_SetDefaultWindBlowingNorth(class UObject* WorldContextObject);
+	struct FVector STATIC_GetWindAtLocation(class UObject* WorldContextObject, const struct FVector& WorldPosition);
 };
 
 
@@ -162,7 +160,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Wind.WindService"));
+		static auto ptr = UObject::FindClass("Class Wind.WindService");
 		return ptr;
 	}
 
@@ -182,7 +180,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Wind.DebugWindService"));
+		static auto ptr = UObject::FindClass("Class Wind.DebugWindService");
 		return ptr;
 	}
 
@@ -197,12 +195,12 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Wind.WindServiceParamsFunctionLibrary"));
+		static auto ptr = UObject::FindClass("Class Wind.WindServiceParamsFunctionLibrary");
 		return ptr;
 	}
 
 
-	static bool AreWindServiceParamsEqual(const struct FWindServiceParams& Params1, const struct FWindServiceParams& Params2);
+	bool STATIC_AreWindServiceParamsEqual(const struct FWindServiceParams& Params1, const struct FWindServiceParams& Params2);
 };
 
 
@@ -217,7 +215,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Wind.WindZoneComponent"));
+		static auto ptr = UObject::FindClass("Class Wind.WindZoneComponent");
 		return ptr;
 	}
 
@@ -232,7 +230,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Wind.TestWindZoneComponent"));
+		static auto ptr = UObject::FindClass("Class Wind.TestWindZoneComponent");
 		return ptr;
 	}
 

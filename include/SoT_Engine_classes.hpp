@@ -1,13 +1,11 @@
 #pragma once
-#define DrawText DrawText
+#include <SoT_Engine_structs.hpp>
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
-
-#include "SoT_Engine_structs.hpp"
 
 namespace SDK
 {
@@ -40,12 +38,13 @@ public:
 	unsigned char                                      UnknownData06 : 3;                                        // 0x00C3(0x0001)
 	unsigned char                                      bNeedsLoadForClient : 1;                                  // 0x00C3(0x0001) (Edit)
 	unsigned char                                      bNeedsLoadForServer : 1;                                  // 0x00C3(0x0001) (Edit)
-	TEnumAsByte<EComponentCreationMethod>              CreationMethod;                                           // 0x00C4(0x0001) (ZeroConstructor, IsPlainOldData)
-	unsigned char                                      UnknownData07[0x3];                                       // 0x00C5(0x0003) MISSED OFFSET
+	TEnumAsByte<EComponentNetDormancy>                 TargetNetDormancy;                                        // 0x00C4(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
+	TEnumAsByte<EComponentCreationMethod>              CreationMethod;                                           // 0x00C5(0x0001) (ZeroConstructor, IsPlainOldData)
+	unsigned char                                      UnknownData07[0x2];                                       // 0x00C6(0x0002) MISSED OFFSET
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ActorComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.ActorComponent");
 		return ptr;
 	}
 
@@ -66,7 +65,9 @@ public:
 	bool IsComponentTickEnabled();
 	bool IsBeingDestroyed();
 	bool IsActive();
+	TEnumAsByte<EComponentNetDormancy> GetTargetNetDormancy();
 	class AActor* GetOwner();
+	bool FlushNetDormancy();
 	void Deactivate();
 	bool ComponentHasTag(const struct FName& Tag);
 	void AddTickPrerequisiteComponent(class UActorComponent* PrerequisiteComponent);
@@ -170,7 +171,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Actor"));
+		static auto ptr = UObject::FindClass("Class Engine.Actor");
 		return ptr;
 	}
 
@@ -284,7 +285,7 @@ public:
 	bool GetActorEnableCollision();
 	void GetActorBounds(bool bOnlyCollidingComponents, struct FVector* Origin, struct FVector* BoxExtent);
 	void ForceNetUpdate();
-	void FlushNetDormancy();
+	bool FlushNetDormancy();
 	void EnableInput(class APlayerController* PlayerController);
 	void DisableInput(class APlayerController* PlayerController);
 	void DetachRootComponentFromParent(bool bMaintainWorldPosition);
@@ -305,7 +306,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DataAsset"));
+		static auto ptr = UObject::FindClass("Class Engine.DataAsset");
 		return ptr;
 	}
 
@@ -320,7 +321,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.BlueprintFunctionLibrary"));
+		static auto ptr = UObject::FindClass("Class Engine.BlueprintFunctionLibrary");
 		return ptr;
 	}
 
@@ -355,7 +356,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Pawn"));
+		static auto ptr = UObject::FindClass("Class Engine.Pawn");
 		return ptr;
 	}
 
@@ -375,7 +376,7 @@ public:
 	struct FVector GetPendingMovementInputVector();
 	struct FVector GetNavAgentLocation();
 	class UPawnMovementComponent* GetMovementComponent();
-	static class AActor* GetMovementBaseActor(class APawn* Pawn);
+	class AActor* STATIC_GetMovementBaseActor(class APawn* Pawn);
 	struct FVector GetLastMovementInputVector();
 	struct FRotator GetControlRotation();
 	class AController* GetController();
@@ -428,7 +429,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Character"));
+		static auto ptr = UObject::FindClass("Class Engine.Character");
 		return ptr;
 	}
 
@@ -506,7 +507,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SceneComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.SceneComponent");
 		return ptr;
 	}
 
@@ -603,7 +604,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AnimInstance"));
+		static auto ptr = UObject::FindClass("Class Engine.AnimInstance");
 		return ptr;
 	}
 
@@ -650,10 +651,10 @@ public:
 	float GetCurveValue(const struct FName& CurveName);
 	struct FName GetCurrentStateName(int MachineIndex);
 	float GetCurrentStateElapsedTime(int MachineIndex);
-	static float GetAnimAssetPlayerTimeFromEndFraction(class UAnimationAsset* AnimAsset, float CurrentTime);
+	float STATIC_GetAnimAssetPlayerTimeFromEndFraction(class UAnimationAsset* AnimAsset, float CurrentTime);
 	float GetAnimAssetPlayerTimeFromEnd(class UAnimationAsset* AnimAsset, float CurrentTime);
-	static float GetAnimAssetPlayerTimeFraction(class UAnimationAsset* AnimAsset, float CurrentTime);
-	static float GetAnimAssetPlayerLength(class UAnimationAsset* AnimAsset);
+	float STATIC_GetAnimAssetPlayerTimeFraction(class UAnimationAsset* AnimAsset, float CurrentTime);
+	float STATIC_GetAnimAssetPlayerLength(class UAnimationAsset* AnimAsset);
 	void ClearMorphTargets();
 	float CalculateDirection(const struct FVector& Velocity, const struct FRotator& BaseRotation);
 	void BlueprintUpdateAnimation(float DeltaTimeX);
@@ -673,13 +674,13 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AnimNotify"));
+		static auto ptr = UObject::FindClass("Class Engine.AnimNotify");
 		return ptr;
 	}
 
 
 	bool Received_Notify(class USkeletalMeshComponent* MeshComp, class UAnimSequenceBase* Animation);
-	class FString GetNotifyName();
+	struct FString GetNotifyName();
 };
 
 
@@ -691,7 +692,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AnimNotifyState"));
+		static auto ptr = UObject::FindClass("Class Engine.AnimNotifyState");
 		return ptr;
 	}
 
@@ -699,7 +700,7 @@ public:
 	bool Received_NotifyTick(class USkeletalMeshComponent* MeshComp, class UAnimSequenceBase* Animation, float FrameDeltaTime);
 	bool Received_NotifyEnd(class USkeletalMeshComponent* MeshComp, class UAnimSequenceBase* Animation);
 	bool Received_NotifyBegin(class USkeletalMeshComponent* MeshComp, class UAnimSequenceBase* Animation, float TotalDuration);
-	class FString GetNotifyName();
+	struct FString GetNotifyName();
 };
 
 
@@ -725,7 +726,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.CameraComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.CameraComponent");
 		return ptr;
 	}
 
@@ -759,7 +760,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MovementComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.MovementComponent");
 		return ptr;
 	}
 
@@ -805,7 +806,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavMovementComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.NavMovementComponent");
 		return ptr;
 	}
 
@@ -830,7 +831,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PawnMovementComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.PawnMovementComponent");
 		return ptr;
 	}
 
@@ -1003,7 +1004,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.CharacterMovementComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.CharacterMovementComponent");
 		return ptr;
 	}
 
@@ -1070,7 +1071,7 @@ public:
 	struct FStringAssetReference                       HugeFontName;                                             // 0x00C8(0x0010) (Edit, ZeroConstructor, Config, GlobalConfig)
 	TArray<class UFont*>                               AdditionalFonts;                                          // 0x00D8(0x0010) (ZeroConstructor)
 	unsigned char                                      UnknownData01[0x8];                                       // 0x00E8(0x0008) MISSED OFFSET
-	TArray<class FString>                              AdditionalFontNames;                                      // 0x00F0(0x0010) (Edit, ZeroConstructor, Config, GlobalConfig)
+	TArray<struct FString>                             AdditionalFontNames;                                      // 0x00F0(0x0010) (Edit, ZeroConstructor, Config, GlobalConfig)
 	class UClass*                                      ConsoleClass;                                             // 0x0100(0x0008) (ZeroConstructor, IsPlainOldData)
 	struct FStringClassReference                       ConsoleClassName;                                         // 0x0108(0x0010) (Edit, ZeroConstructor, Config, GlobalConfig, NoClear)
 	class UClass*                                      GameViewportClientClass;                                  // 0x0118(0x0008) (ZeroConstructor, IsPlainOldData)
@@ -1096,7 +1097,7 @@ public:
 	class UObject*                                     GameSingleton;                                            // 0x0210(0x0008) (ZeroConstructor, IsPlainOldData)
 	class UClass*                                      DefaultPreviewPawnClass;                                  // 0x0218(0x0008) (ZeroConstructor, IsPlainOldData)
 	struct FStringClassReference                       DefaultPreviewPawnClassName;                              // 0x0220(0x0010) (Edit, ZeroConstructor, Config, GlobalConfig, NoClear)
-	class FString                                      PlayOnConsoleSaveDir;                                     // 0x0230(0x0010) (ZeroConstructor, Config)
+	struct FString                                     PlayOnConsoleSaveDir;                                     // 0x0230(0x0010) (ZeroConstructor, Config)
 	class UTexture2D*                                  DefaultTexture;                                           // 0x0240(0x0008) (ZeroConstructor, IsPlainOldData)
 	struct FStringAssetReference                       DefaultTextureName;                                       // 0x0248(0x0010) (ZeroConstructor, Config, GlobalConfig)
 	class UTexture*                                    DefaultDiffuseTexture;                                    // 0x0258(0x0008) (ZeroConstructor, IsPlainOldData)
@@ -1110,37 +1111,37 @@ public:
 	class UTexture2D*                                  HDRCalibrationTexture;                                    // 0x02B8(0x0008) (ZeroConstructor, IsPlainOldData)
 	struct FStringAssetReference                       HDRCalibrationTextureName;                                // 0x02C0(0x0010) (ZeroConstructor, Config, GlobalConfig)
 	class UMaterial*                                   WireframeMaterial;                                        // 0x02D0(0x0008) (ZeroConstructor, IsPlainOldData)
-	class FString                                      WireframeMaterialName;                                    // 0x02D8(0x0010) (ZeroConstructor, Config, GlobalConfig)
+	struct FString                                     WireframeMaterialName;                                    // 0x02D8(0x0010) (ZeroConstructor, Config, GlobalConfig)
 	class UMaterial*                                   DebugMeshMaterial;                                        // 0x02E8(0x0008) (ZeroConstructor, IsPlainOldData)
 	struct FStringAssetReference                       DebugMeshMaterialName;                                    // 0x02F0(0x0010) (ZeroConstructor, Config, GlobalConfig)
 	class UMaterial*                                   LevelColorationLitMaterial;                               // 0x0300(0x0008) (ZeroConstructor, IsPlainOldData)
-	class FString                                      LevelColorationLitMaterialName;                           // 0x0308(0x0010) (ZeroConstructor, Config, GlobalConfig)
+	struct FString                                     LevelColorationLitMaterialName;                           // 0x0308(0x0010) (ZeroConstructor, Config, GlobalConfig)
 	class UMaterial*                                   LevelColorationUnlitMaterial;                             // 0x0318(0x0008) (ZeroConstructor, IsPlainOldData)
-	class FString                                      LevelColorationUnlitMaterialName;                         // 0x0320(0x0010) (ZeroConstructor, Config, GlobalConfig)
+	struct FString                                     LevelColorationUnlitMaterialName;                         // 0x0320(0x0010) (ZeroConstructor, Config, GlobalConfig)
 	class UMaterial*                                   TriangleDensityScreenSpaceMaterial;                       // 0x0330(0x0008) (ZeroConstructor, IsPlainOldData)
-	class FString                                      TriangleDensityScreenSpaceMaterialName;                   // 0x0338(0x0010) (ZeroConstructor, Config, GlobalConfig)
+	struct FString                                     TriangleDensityScreenSpaceMaterialName;                   // 0x0338(0x0010) (ZeroConstructor, Config, GlobalConfig)
 	class UMaterial*                                   TriangleDensityWorldSpaceMaterial;                        // 0x0348(0x0008) (ZeroConstructor, IsPlainOldData)
-	class FString                                      TriangleDensityWorldSpaceMaterialName;                    // 0x0350(0x0010) (ZeroConstructor, Config, GlobalConfig)
+	struct FString                                     TriangleDensityWorldSpaceMaterialName;                    // 0x0350(0x0010) (ZeroConstructor, Config, GlobalConfig)
 	class UMaterial*                                   LightingTexelDensityMaterial;                             // 0x0360(0x0008) (ZeroConstructor, IsPlainOldData)
-	class FString                                      LightingTexelDensityName;                                 // 0x0368(0x0010) (ZeroConstructor, Config, GlobalConfig)
+	struct FString                                     LightingTexelDensityName;                                 // 0x0368(0x0010) (ZeroConstructor, Config, GlobalConfig)
 	class UMaterial*                                   ShadedLevelColorationLitMaterial;                         // 0x0378(0x0008) (ZeroConstructor, IsPlainOldData)
-	class FString                                      ShadedLevelColorationLitMaterialName;                     // 0x0380(0x0010) (ZeroConstructor, Config, GlobalConfig)
+	struct FString                                     ShadedLevelColorationLitMaterialName;                     // 0x0380(0x0010) (ZeroConstructor, Config, GlobalConfig)
 	class UMaterial*                                   ShadedLevelColorationUnlitMaterial;                       // 0x0390(0x0008) (ZeroConstructor, IsPlainOldData)
-	class FString                                      ShadedLevelColorationUnlitMaterialName;                   // 0x0398(0x0010) (ZeroConstructor, Config, GlobalConfig)
+	struct FString                                     ShadedLevelColorationUnlitMaterialName;                   // 0x0398(0x0010) (ZeroConstructor, Config, GlobalConfig)
 	class UMaterial*                                   RemoveSurfaceMaterial;                                    // 0x03A8(0x0008) (ZeroConstructor, IsPlainOldData)
 	struct FStringAssetReference                       RemoveSurfaceMaterialName;                                // 0x03B0(0x0010) (ZeroConstructor, Config, GlobalConfig)
 	class UMaterial*                                   VertexColorMaterial;                                      // 0x03C0(0x0008) (ZeroConstructor, IsPlainOldData)
-	class FString                                      VertexColorMaterialName;                                  // 0x03C8(0x0010) (ZeroConstructor, Config, GlobalConfig)
+	struct FString                                     VertexColorMaterialName;                                  // 0x03C8(0x0010) (ZeroConstructor, Config, GlobalConfig)
 	class UMaterial*                                   VertexColorViewModeMaterial_ColorOnly;                    // 0x03D8(0x0008) (ZeroConstructor, IsPlainOldData)
-	class FString                                      VertexColorViewModeMaterialName_ColorOnly;                // 0x03E0(0x0010) (ZeroConstructor, Config, GlobalConfig)
+	struct FString                                     VertexColorViewModeMaterialName_ColorOnly;                // 0x03E0(0x0010) (ZeroConstructor, Config, GlobalConfig)
 	class UMaterial*                                   VertexColorViewModeMaterial_AlphaAsColor;                 // 0x03F0(0x0008) (ZeroConstructor, IsPlainOldData)
-	class FString                                      VertexColorViewModeMaterialName_AlphaAsColor;             // 0x03F8(0x0010) (ZeroConstructor, Config, GlobalConfig)
+	struct FString                                     VertexColorViewModeMaterialName_AlphaAsColor;             // 0x03F8(0x0010) (ZeroConstructor, Config, GlobalConfig)
 	class UMaterial*                                   VertexColorViewModeMaterial_RedOnly;                      // 0x0408(0x0008) (ZeroConstructor, IsPlainOldData)
-	class FString                                      VertexColorViewModeMaterialName_RedOnly;                  // 0x0410(0x0010) (ZeroConstructor, Config, GlobalConfig)
+	struct FString                                     VertexColorViewModeMaterialName_RedOnly;                  // 0x0410(0x0010) (ZeroConstructor, Config, GlobalConfig)
 	class UMaterial*                                   VertexColorViewModeMaterial_GreenOnly;                    // 0x0420(0x0008) (ZeroConstructor, IsPlainOldData)
-	class FString                                      VertexColorViewModeMaterialName_GreenOnly;                // 0x0428(0x0010) (ZeroConstructor, Config, GlobalConfig)
+	struct FString                                     VertexColorViewModeMaterialName_GreenOnly;                // 0x0428(0x0010) (ZeroConstructor, Config, GlobalConfig)
 	class UMaterial*                                   VertexColorViewModeMaterial_BlueOnly;                     // 0x0438(0x0008) (ZeroConstructor, IsPlainOldData)
-	class FString                                      VertexColorViewModeMaterialName_BlueOnly;                 // 0x0440(0x0010) (ZeroConstructor, Config, GlobalConfig)
+	struct FString                                     VertexColorViewModeMaterialName_BlueOnly;                 // 0x0440(0x0010) (ZeroConstructor, Config, GlobalConfig)
 	class UMaterial*                                   ConstraintLimitMaterial;                                  // 0x0450(0x0008) (ZeroConstructor, IsPlainOldData)
 	class UMaterialInstanceDynamic*                    ConstraintLimitMaterialX;                                 // 0x0458(0x0008) (ZeroConstructor, IsPlainOldData)
 	class UMaterialInstanceDynamic*                    ConstraintLimitMaterialY;                                 // 0x0460(0x0008) (ZeroConstructor, IsPlainOldData)
@@ -1185,7 +1186,7 @@ public:
 	struct FStringAssetReference                       LightMapDensityTextureName;                               // 0x0610(0x0010) (ZeroConstructor, Config, GlobalConfig)
 	unsigned char                                      UnknownData03[0x8];                                       // 0x0620(0x0008) MISSED OFFSET
 	class UGameViewportClient*                         GameViewport;                                             // 0x0628(0x0008) (ZeroConstructor, IsPlainOldData)
-	TArray<class FString>                              DeferredCommands;                                         // 0x0630(0x0010) (ZeroConstructor)
+	TArray<struct FString>                             DeferredCommands;                                         // 0x0630(0x0010) (ZeroConstructor)
 	int                                                TickCycles;                                               // 0x0640(0x0004) (ZeroConstructor, IsPlainOldData)
 	int                                                GameCycles;                                               // 0x0644(0x0004) (ZeroConstructor, IsPlainOldData)
 	int                                                ClientCycles;                                             // 0x0648(0x0004) (ZeroConstructor, IsPlainOldData)
@@ -1225,8 +1226,8 @@ public:
 	float                                              StreamingDistanceFactor;                                  // 0x06B0(0x0004) (Edit, ZeroConstructor, IsPlainOldData)
 	TEnumAsByte<ETransitionType>                       TransitionType;                                           // 0x06B4(0x0001) (ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData09[0x3];                                       // 0x06B5(0x0003) MISSED OFFSET
-	class FString                                      TransitionDescription;                                    // 0x06B8(0x0010) (ZeroConstructor)
-	class FString                                      TransitionGameMode;                                       // 0x06C8(0x0010) (ZeroConstructor)
+	struct FString                                     TransitionDescription;                                    // 0x06B8(0x0010) (ZeroConstructor)
+	struct FString                                     TransitionGameMode;                                       // 0x06C8(0x0010) (ZeroConstructor)
 	float                                              MeshLODRange;                                             // 0x06D8(0x0004) (ZeroConstructor, Config, IsPlainOldData)
 	unsigned char                                      bAllowMatureLanguage : 1;                                 // 0x06DC(0x0001) (Config)
 	unsigned char                                      UnknownData10[0x3];                                       // 0x06DD(0x0003) MISSED OFFSET
@@ -1264,7 +1265,7 @@ public:
 	int                                                ScreenSaverInhibitorSemaphore;                            // 0x079C(0x0004) (ZeroConstructor, Transient, IsPlainOldData)
 	unsigned char                                      bLockReadOnlyLevels : 1;                                  // 0x07A0(0x0001) (Transient)
 	unsigned char                                      UnknownData17[0x7];                                       // 0x07A1(0x0007) MISSED OFFSET
-	class FString                                      ParticleEventManagerClassPath;                            // 0x07A8(0x0010) (ZeroConstructor, Config, GlobalConfig)
+	struct FString                                     ParticleEventManagerClassPath;                            // 0x07A8(0x0010) (ZeroConstructor, Config, GlobalConfig)
 	unsigned char                                      UnknownData18[0x10];                                      // 0x07B8(0x0010) MISSED OFFSET
 	float                                              SelectionHighlightIntensity;                              // 0x07C8(0x0004) (ZeroConstructor, Transient, IsPlainOldData)
 	float                                              BSPSelectionHighlightIntensity;                           // 0x07CC(0x0004) (ZeroConstructor, Transient, IsPlainOldData)
@@ -1272,8 +1273,8 @@ public:
 	float                                              SelectionHighlightIntensityBillboards;                    // 0x07D4(0x0004) (ZeroConstructor, Transient, IsPlainOldData)
 	unsigned char                                      UnknownData19[0x1F0];                                     // 0x07D8(0x01F0) MISSED OFFSET
 	TArray<struct FNetDriverDefinition>                NetDriverDefinitions;                                     // 0x09C8(0x0010) (ZeroConstructor, Transient, Config)
-	TArray<class FString>                              ServerActors;                                             // 0x09D8(0x0010) (ZeroConstructor, Config)
-	TArray<class FString>                              RuntimeServerActors;                                      // 0x09E8(0x0010) (ZeroConstructor)
+	TArray<struct FString>                             ServerActors;                                             // 0x09D8(0x0010) (ZeroConstructor, Config)
+	TArray<struct FString>                             RuntimeServerActors;                                      // 0x09E8(0x0010) (ZeroConstructor)
 	unsigned char                                      bStartedLoadMapMovie : 1;                                 // 0x09F8(0x0001) (Transient)
 	unsigned char                                      UnknownData20[0x17];                                      // 0x09F9(0x0017) MISSED OFFSET
 	int                                                NextWorldContextHandle;                                   // 0x0A10(0x0004) (ZeroConstructor, IsPlainOldData)
@@ -1281,7 +1282,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Engine"));
+		static auto ptr = UObject::FindClass("Class Engine.Engine");
 		return ptr;
 	}
 
@@ -1300,7 +1301,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.GameEngine"));
+		static auto ptr = UObject::FindClass("Class Engine.GameEngine");
 		return ptr;
 	}
 
@@ -1320,7 +1321,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.GameInstance"));
+		static auto ptr = UObject::FindClass("Class Engine.GameInstance");
 		return ptr;
 	}
 
@@ -1340,7 +1341,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Info"));
+		static auto ptr = UObject::FindClass("Class Engine.Info");
 		return ptr;
 	}
 
@@ -1359,7 +1360,7 @@ public:
 	unsigned char                                      bStartPlayersAsSpectators : 1;                            // 0x0418(0x0001) (Edit, BlueprintVisible, BlueprintReadOnly)
 	unsigned char                                      bDelayedStart : 1;                                        // 0x0418(0x0001) (Edit, BlueprintVisible, BlueprintReadOnly)
 	unsigned char                                      UnknownData01[0x7];                                       // 0x0419(0x0007) MISSED OFFSET
-	class FString                                      OptionsString;                                            // 0x0420(0x0010) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor)
+	struct FString                                     OptionsString;                                            // 0x0420(0x0010) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor)
 	class UClass*                                      DefaultPawnClass;                                         // 0x0430(0x0008) (Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData)
 	class UClass*                                      HUDClass;                                                 // 0x0438(0x0008) (Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData)
 	int                                                NumSpectators;                                            // 0x0440(0x0004) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor, IsPlainOldData)
@@ -1386,7 +1387,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.GameMode"));
+		static auto ptr = UObject::FindClass("Class Engine.GameMode");
 		return ptr;
 	}
 
@@ -1408,7 +1409,7 @@ public:
 	void K2_OnSetMatchState(const struct FName& NewState);
 	void K2_OnRestartPlayer(class AController* NewPlayer);
 	void K2_OnLogout(class AController* ExitingController);
-	void K2_OnChangeName(class AController* Other, const class FString& NewName, bool bNameChange);
+	void K2_OnChangeName(class AController* Other, const struct FString& NewName, bool bNameChange);
 	class AActor* K2_FindPlayerStart(class AController* Player);
 	bool IsMatchInProgress();
 	void InitStartSpot(class AActor* StartSpot, class AController* NewPlayer);
@@ -1417,10 +1418,10 @@ public:
 	int GetNumPlayers();
 	struct FName GetMatchState();
 	class UClass* GetDefaultPawnClassForController(class AController* InController);
-	class AActor* FindPlayerStart(class AController* Player, const class FString& IncomingName);
+	class AActor* FindPlayerStart(class AController* Player, const struct FString& IncomingName);
 	void EndMatch();
 	class AActor* ChoosePlayerStart(class AController* Player);
-	void ChangeName(class AController* Controller, const class FString& NewName, bool bNameChange);
+	void ChangeName(class AController* Controller, const struct FString& NewName, bool bNameChange);
 	bool CanSpectate(class APlayerController* Viewer, class APlayerState* ViewTarget);
 	void AbortMatch();
 };
@@ -1537,7 +1538,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PrimitiveComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.PrimitiveComponent");
 		return ptr;
 	}
 
@@ -1639,7 +1640,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.GameState"));
+		static auto ptr = UObject::FindClass("Class Engine.GameState");
 		return ptr;
 	}
 
@@ -1676,7 +1677,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.GameUserSettings"));
+		static auto ptr = UObject::FindClass("Class Engine.GameUserSettings");
 		return ptr;
 	}
 
@@ -1692,7 +1693,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ScriptViewportClient"));
+		static auto ptr = UObject::FindClass("Class Engine.ScriptViewportClient");
 		return ptr;
 	}
 
@@ -1714,7 +1715,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.GameViewportClient"));
+		static auto ptr = UObject::FindClass("Class Engine.GameViewportClient");
 		return ptr;
 	}
 
@@ -1775,7 +1776,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PlayerCameraManager"));
+		static auto ptr = UObject::FindClass("Class Engine.PlayerCameraManager");
 		return ptr;
 	}
 
@@ -1815,7 +1816,7 @@ public:
 	float                                              Score;                                                    // 0x0410(0x0004) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor, IsPlainOldData)
 	unsigned char                                      Ping;                                                     // 0x0414(0x0001) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x3];                                       // 0x0415(0x0003) MISSED OFFSET
-	class FString                                      PlayerName;                                               // 0x0418(0x0010) (BlueprintVisible, BlueprintReadOnly, Net, ZeroConstructor)
+	struct FString                                     PlayerName;                                               // 0x0418(0x0010) (BlueprintVisible, BlueprintReadOnly, Net, ZeroConstructor)
 	unsigned char                                      UnknownData01[0x10];                                      // 0x0428(0x0010) MISSED OFFSET
 	int                                                PlayerId;                                                 // 0x0438(0x0004) (BlueprintVisible, BlueprintReadOnly, Net, ZeroConstructor, IsPlainOldData)
 	unsigned char                                      bIsSpectator : 1;                                         // 0x043C(0x0001) (BlueprintVisible, BlueprintReadOnly)
@@ -1834,7 +1835,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PlayerState"));
+		static auto ptr = UObject::FindClass("Class Engine.PlayerState");
 		return ptr;
 	}
 
@@ -1863,7 +1864,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Controller"));
+		static auto ptr = UObject::FindClass("Class Engine.Controller");
 		return ptr;
 	}
 
@@ -1960,7 +1961,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PlayerController"));
+		static auto ptr = UObject::FindClass("Class Engine.PlayerController");
 		return ptr;
 	}
 
@@ -1968,12 +1969,12 @@ public:
 	bool WasInputKeyJustReleased(const struct FKey& Key);
 	bool WasInputKeyJustPressed(const struct FKey& Key);
 	void ToggleSpeaking(bool bInSpeaking);
-	void SwitchLevel(const class FString& URL);
+	void SwitchLevel(const struct FString& URL);
 	void StopHapticEffect(TEnumAsByte<EControllerHand> Hand);
 	void StartFire(unsigned char FireModeNum);
 	void SetVirtualJoystickVisibility(bool bVisible);
 	void SetViewTargetWithBlend(class AActor* NewViewTarget, float BlendTime, TEnumAsByte<EViewTargetBlendFunction> BlendFunc, float BlendExp, bool bLockOutgoing);
-	void SetName(const class FString& S);
+	void SetName(const struct FString& S);
 	void SetIgnoreMoveInput(bool bNewMoveInput);
 	void SetIgnoreLookInput(bool bNewLookInput);
 	void SetHapticsByValue(float Frequency, float Amplitude, TEnumAsByte<EControllerHand> Hand);
@@ -1995,10 +1996,10 @@ public:
 	void ServerMutePlayer(const struct FUniqueNetIdRepl& PlayerId);
 	void ServerCheckClientPossessionReliable();
 	void ServerCheckClientPossession();
-	void ServerChangeName(const class FString& S);
+	void ServerChangeName(const struct FString& S);
 	void ServerCamera(const struct FName& NewMode);
 	void ServerAcknowledgePossession(class APawn* P);
-	void SendToConsole(const class FString& Command);
+	void SendToConsole(const struct FString& Command);
 	void RestartLevel();
 	void ResetIgnoreMoveInput();
 	void ResetIgnoreLookInput();
@@ -2008,7 +2009,7 @@ public:
 	void PlayDynamicForceFeedback(float Intensity, float Duration, bool bAffectsLeftLarge, bool bAffectsLeftSmall, bool bAffectsRightLarge, bool bAffectsRightSmall, TEnumAsByte<EDynamicForceFeedbackAction> Action, const struct FLatentActionInfo& LatentInfo);
 	void Pause();
 	void OnServerStartedVisualLogger(bool bIsLogging);
-	void LocalTravel(const class FString& URL);
+	void LocalTravel(const struct FString& URL);
 	bool IsSeamlessTravelInProgress();
 	bool IsPossessingServerAcknowledgedPawn();
 	bool IsMoveInputIgnored();
@@ -2039,11 +2040,12 @@ public:
 	void ConsoleKey(const struct FKey& Key);
 	void ClientWasKicked(const struct FText& KickReason);
 	void ClientVoiceHandshakeComplete();
+	void ClientUpdateLevelStreamingStatusBatched(const struct FString& PackageBasePath, TArray<struct FLevelStreamingStatusUpdateInfo> LevelStreamingStatusUpdateInfo);
 	void ClientUpdateLevelStreamingStatus(const struct FName& PackageName, bool bNewShouldBeLoaded, bool bNewShouldBeVisible, bool bNewShouldBlockOnLoad, int LODIndex);
 	void ClientUnmutePlayer(const struct FUniqueNetIdRepl& PlayerId);
-	void ClientTravelInternal(const class FString& URL, TEnumAsByte<ETravelType> TravelType, bool bSeamless, const struct FGuid& MapPackageGuid);
-	void ClientTravel(const class FString& URL, TEnumAsByte<ETravelType> TravelType, bool bSeamless, const struct FGuid& MapPackageGuid);
-	void ClientTeamMessage(class APlayerState* SenderPlayerState, const class FString& S, const struct FName& Type, float MsgLifeTime);
+	void ClientTravelInternal(const struct FString& URL, TEnumAsByte<ETravelType> TravelType, bool bSeamless, const struct FGuid& MapPackageGuid);
+	void ClientTravel(const struct FString& URL, TEnumAsByte<ETravelType> TravelType, bool bSeamless, const struct FGuid& MapPackageGuid);
+	void ClientTeamMessage(class APlayerState* SenderPlayerState, const struct FString& S, const struct FName& Type, float MsgLifeTime);
 	void ClientStopForceFeedback(class UForceFeedbackEffect* ForceFeedbackEffect, const struct FName& Tag);
 	void ClientStopCameraShake(class UClass* Shake);
 	void ClientStopCameraAnim(class UCameraAnim* AnimToStop);
@@ -2058,7 +2060,7 @@ public:
 	void ClientSetCameraFade(bool bEnableFading, const struct FColor& FadeColor, const struct FVector2D& FadeAlpha, float FadeTime, bool bFadeAudio);
 	void ClientSetBlockOnAsyncLoading();
 	void ClientSeamlessTravelComplete();
-	void ClientReturnToMainMenu(const class FString& ReturnReason);
+	void ClientReturnToMainMenu(const struct FString& ReturnReason);
 	void ClientRetryClientRestart(class APawn* NewPawn);
 	void ClientRestart(class APawn* NewPawn);
 	void ClientReset();
@@ -2072,7 +2074,7 @@ public:
 	void ClientPlayCameraShake(class UClass* Shake, float Scale, TEnumAsByte<ECameraAnimPlaySpace> PlaySpace, const struct FRotator& UserPlaySpaceRot);
 	void ClientPlayCameraAnim(class UCameraAnim* AnimToPlay, float Scale, float Rate, float BlendInTime, float BlendOutTime, bool bLoop, bool bRandomStartTime, TEnumAsByte<ECameraAnimPlaySpace> Space, const struct FRotator& CustomPlaySpace);
 	void ClientMutePlayer(const struct FUniqueNetIdRepl& PlayerId);
-	void ClientMessage(const class FString& S, const struct FName& Type, float MsgLifeTime);
+	void ClientMessage(const struct FString& S, const struct FName& Type, float MsgLifeTime);
 	void ClientIgnoreMoveInput(bool bIgnore);
 	void ClientIgnoreLookInput(bool bIgnore);
 	void ClientGotoState(const struct FName& NewState);
@@ -2123,7 +2125,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SpringArmComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.SpringArmComponent");
 		return ptr;
 	}
 
@@ -2142,7 +2144,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.StaticMeshActor"));
+		static auto ptr = UObject::FindClass("Class Engine.StaticMeshActor");
 		return ptr;
 	}
 
@@ -2171,7 +2173,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Brush"));
+		static auto ptr = UObject::FindClass("Class Engine.Brush");
 		return ptr;
 	}
 
@@ -2186,7 +2188,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Volume"));
+		static auto ptr = UObject::FindClass("Class Engine.Volume");
 		return ptr;
 	}
 
@@ -2201,7 +2203,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.BlockingVolume"));
+		static auto ptr = UObject::FindClass("Class Engine.BlockingVolume");
 		return ptr;
 	}
 
@@ -2267,7 +2269,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.WorldSettings"));
+		static auto ptr = UObject::FindClass("Class Engine.WorldSettings");
 		return ptr;
 	}
 
@@ -2291,7 +2293,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PostProcessComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.PostProcessComponent");
 		return ptr;
 	}
 
@@ -2329,7 +2331,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Texture"));
+		static auto ptr = UObject::FindClass("Class Engine.Texture");
 		return ptr;
 	}
 
@@ -2346,7 +2348,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.TextureRenderTarget"));
+		static auto ptr = UObject::FindClass("Class Engine.TextureRenderTarget");
 		return ptr;
 	}
 
@@ -2368,13 +2370,13 @@ public:
 	unsigned char                                      bHDR : 1;                                                 // 0x015C(0x0001) (Edit, BlueprintVisible, BlueprintReadOnly)
 	unsigned char                                      bAutoGenerateMips : 1;                                    // 0x015C(0x0001) (Edit, BlueprintVisible, BlueprintReadOnly)
 	unsigned char                                      UnknownData01[0x3];                                       // 0x015D(0x0003) MISSED OFFSET
-	unsigned char                                      OverrideFormat[1];                                           // 0x0160(0x0001) (ZeroConstructor, IsPlainOldData)
+	TEnumAsByte<EPixelFormat>                          OverrideFormat;                                           // 0x0160(0x0001) (ZeroConstructor, IsPlainOldData)
 	bool                                               bDontClearOnCreation;                                     // 0x0161(0x0001) (ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData02[0x6];                                       // 0x0162(0x0006) MISSED OFFSET
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.TextureRenderTarget2D"));
+		static auto ptr = UObject::FindClass("Class Engine.TextureRenderTarget2D");
 		return ptr;
 	}
 
@@ -2404,7 +2406,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DebugCameraController"));
+		static auto ptr = UObject::FindClass("Class Engine.DebugCameraController");
 		return ptr;
 	}
 
@@ -2449,7 +2451,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.HUD"));
+		static auto ptr = UObject::FindClass("Class Engine.HUD");
 		return ptr;
 	}
 
@@ -2466,13 +2468,13 @@ public:
 	void ReceiveHitBoxBeginCursorOver(const struct FName& BoxName);
 	void ReceiveDrawHUD(int SizeX, int SizeY);
 	struct FVector Project(const struct FVector& Location);
-	void GetTextSize(const class FString& Text, class UFont* Font, float Scale, float* OutWidth, float* OutHeight);
+	void GetTextSize(const struct FString& Text, class UFont* Font, float Scale, float* OutWidth, float* OutHeight);
 	class APlayerController* GetOwningPlayerController();
 	class APawn* GetOwningPawn();
 	void GetActorsInSelectionRectangle(class UClass* ClassFilter, const struct FVector2D& FirstPoint, const struct FVector2D& SecondPoint, bool bIncludeNonCollidingComponents, bool bActorMustBeFullyEnclosed, TArray<class AActor*>* OutActors);
 	void DrawTextureSimple(class UTexture* Texture, float ScreenX, float ScreenY, float Scale, bool bScalePosition);
 	void DrawTexture(class UTexture* Texture, float ScreenX, float ScreenY, float ScreenW, float ScreenH, float TextureU, float TextureV, float TextureUWidth, float TextureVHeight, const struct FLinearColor& TintColor, TEnumAsByte<EBlendMode> BlendMode, float Scale, bool bScalePosition, float Rotation, const struct FVector2D& RotPivot);
-	void DrawText(const class FString& Text, const struct FLinearColor& TextColor, float ScreenX, float ScreenY, class UFont* Font, float Scale, bool bScalePosition);
+	void DrawText(const struct FString& Text, const struct FLinearColor& TextColor, float ScreenX, float ScreenY, class UFont* Font, float Scale, bool bScalePosition);
 	void DrawRect(const struct FLinearColor& RectColor, float ScreenX, float ScreenY, float ScreenW, float ScreenH);
 	void DrawMaterialTriangle(class UMaterialInterface* Material, const struct FVector2D& V0_Pos, const struct FVector2D& V1_Pos, const struct FVector2D& V2_Pos, const struct FVector2D& V0_UV, const struct FVector2D& V1_UV, const struct FVector2D& V2_UV, const struct FLinearColor& V0_Color, const struct FLinearColor& V1_Color, const struct FLinearColor& V2_Color);
 	void DrawMaterialSimple(class UMaterialInterface* Material, float ScreenX, float ScreenY, float ScreenW, float ScreenH, float Scale, bool bScalePosition);
@@ -2480,7 +2482,7 @@ public:
 	void DrawLine(float StartScreenX, float StartScreenY, float EndScreenX, float EndScreenY, const struct FLinearColor& LineColor);
 	void Deproject(float ScreenX, float ScreenY, struct FVector* WorldPosition, struct FVector* WorldDirection);
 	void AddHitBox(const struct FVector2D& Position, const struct FVector2D& Size, const struct FName& InName, bool bConsumesInput, int Priority);
-	void AddDebugText(const class FString& DebugText, class AActor* SrcActor, float Duration, const struct FVector& Offset, const struct FVector& DesiredOffset, const struct FColor& TextColor, bool bSkipOverwriteCheck, bool bAbsoluteLocation, bool bKeepAttachedToActor, class UFont* InFont, float FontScale, bool bDrawShadow);
+	void AddDebugText(const struct FString& DebugText, class AActor* SrcActor, float Duration, const struct FVector& Offset, const struct FVector& DesiredOffset, const struct FColor& TextColor, bool bSkipOverwriteCheck, bool bAbsoluteLocation, bool bKeepAttachedToActor, class UFont* InFont, float FontScale, bool bDrawShadow);
 };
 
 
@@ -2494,7 +2496,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.FeatureToggledStringAssetReference"));
+		static auto ptr = UObject::FindClass("Class Engine.FeatureToggledStringAssetReference");
 		return ptr;
 	}
 
@@ -2511,7 +2513,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.LevelScriptActor"));
+		static auto ptr = UObject::FindClass("Class Engine.LevelScriptActor");
 		return ptr;
 	}
 
@@ -2534,7 +2536,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MeshComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.MeshComponent");
 		return ptr;
 	}
 
@@ -2570,7 +2572,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.StaticMeshComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.StaticMeshComponent");
 		return ptr;
 	}
 
@@ -2593,7 +2595,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.FogVolume"));
+		static auto ptr = UObject::FindClass("Class Engine.FogVolume");
 		return ptr;
 	}
 
@@ -2608,7 +2610,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ThreadedActor"));
+		static auto ptr = UObject::FindClass("Class Engine.ThreadedActor");
 		return ptr;
 	}
 
@@ -2628,7 +2630,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialInterface"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialInterface");
 		return ptr;
 	}
 
@@ -2808,7 +2810,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Material"));
+		static auto ptr = UObject::FindClass("Class Engine.Material");
 		return ptr;
 	}
 
@@ -2833,7 +2835,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.CameraModifier"));
+		static auto ptr = UObject::FindClass("Class Engine.CameraModifier");
 		return ptr;
 	}
 
@@ -2859,7 +2861,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.RotatingMovementComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.RotatingMovementComponent");
 		return ptr;
 	}
 
@@ -2916,7 +2918,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleSystemComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleSystemComponent");
 		return ptr;
 	}
 
@@ -2964,7 +2966,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PhysicsVolume"));
+		static auto ptr = UObject::FindClass("Class Engine.PhysicsVolume");
 		return ptr;
 	}
 
@@ -2993,7 +2995,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SplineComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.SplineComponent");
 		return ptr;
 	}
 
@@ -3079,7 +3081,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ShapeComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.ShapeComponent");
 		return ptr;
 	}
 
@@ -3097,7 +3099,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.CapsuleComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.CapsuleComponent");
 		return ptr;
 	}
 
@@ -3124,7 +3126,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.TextureProxy"));
+		static auto ptr = UObject::FindClass("Class Engine.TextureProxy");
 		return ptr;
 	}
 
@@ -3136,11 +3138,11 @@ public:
 class UCommandlet : public UObject
 {
 public:
-	class FString                                      HelpDescription;                                          // 0x0028(0x0010) (ZeroConstructor)
-	class FString                                      HelpUsage;                                                // 0x0038(0x0010) (ZeroConstructor)
-	class FString                                      HelpWebLink;                                              // 0x0048(0x0010) (ZeroConstructor)
-	TArray<class FString>                              HelpParamNames;                                           // 0x0058(0x0010) (ZeroConstructor)
-	TArray<class FString>                              HelpParamDescriptions;                                    // 0x0068(0x0010) (ZeroConstructor)
+	struct FString                                     HelpDescription;                                          // 0x0028(0x0010) (ZeroConstructor)
+	struct FString                                     HelpUsage;                                                // 0x0038(0x0010) (ZeroConstructor)
+	struct FString                                     HelpWebLink;                                              // 0x0048(0x0010) (ZeroConstructor)
+	TArray<struct FString>                             HelpParamNames;                                           // 0x0058(0x0010) (ZeroConstructor)
+	TArray<struct FString>                             HelpParamDescriptions;                                    // 0x0068(0x0010) (ZeroConstructor)
 	unsigned char                                      IsServer : 1;                                             // 0x0078(0x0001)
 	unsigned char                                      IsClient : 1;                                             // 0x0078(0x0001)
 	unsigned char                                      IsEditor : 1;                                             // 0x0078(0x0001)
@@ -3150,7 +3152,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Commandlet"));
+		static auto ptr = UObject::FindClass("Class Engine.Commandlet");
 		return ptr;
 	}
 
@@ -3178,7 +3180,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InstancedStaticMeshComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.InstancedStaticMeshComponent");
 		return ptr;
 	}
 
@@ -3216,7 +3218,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.HierarchicalInstancedStaticMeshComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.HierarchicalInstancedStaticMeshComponent");
 		return ptr;
 	}
 
@@ -3246,7 +3248,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialInstance"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialInstance");
 		return ptr;
 	}
 
@@ -3261,7 +3263,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialInstanceConstant"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialInstanceConstant");
 		return ptr;
 	}
 
@@ -3275,7 +3277,7 @@ class UMaterialExpression : public UObject
 public:
 	class UMaterial*                                   Material;                                                 // 0x0028(0x0008) (ZeroConstructor, IsPlainOldData)
 	class UMaterialFunction*                           Function;                                                 // 0x0030(0x0008) (ZeroConstructor, IsPlainOldData)
-	class FString                                      Desc;                                                     // 0x0038(0x0010) (Edit, ZeroConstructor)
+	struct FString                                     Desc;                                                     // 0x0038(0x0010) (Edit, ZeroConstructor)
 	struct FColor                                      BorderColor;                                              // 0x0048(0x0004) (ZeroConstructor, IsPlainOldData)
 	unsigned char                                      bRealtimePreview : 1;                                     // 0x004C(0x0001)
 	unsigned char                                      bNeedToUpdatePreview : 1;                                 // 0x004C(0x0001) (Transient)
@@ -3293,7 +3295,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpression"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpression");
 		return ptr;
 	}
 
@@ -3308,7 +3310,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionCustomOutput"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionCustomOutput");
 		return ptr;
 	}
 
@@ -3323,7 +3325,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.BlueprintAsyncActionBase"));
+		static auto ptr = UObject::FindClass("Class Engine.BlueprintAsyncActionBase");
 		return ptr;
 	}
 
@@ -3350,7 +3352,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.BlueprintGeneratedClass"));
+		static auto ptr = UObject::FindClass("Class Engine.BlueprintGeneratedClass");
 		return ptr;
 	}
 
@@ -3367,7 +3369,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AISystemBase"));
+		static auto ptr = UObject::FindClass("Class Engine.AISystemBase");
 		return ptr;
 	}
 
@@ -3383,7 +3385,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.UserDefinedStruct"));
+		static auto ptr = UObject::FindClass("Class Engine.UserDefinedStruct");
 		return ptr;
 	}
 
@@ -3404,7 +3406,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Player"));
+		static auto ptr = UObject::FindClass("Class Engine.Player");
 		return ptr;
 	}
 
@@ -3434,7 +3436,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NetConnection"));
+		static auto ptr = UObject::FindClass("Class Engine.NetConnection");
 		return ptr;
 	}
 
@@ -3447,7 +3449,7 @@ class UNetDriver : public UObject
 {
 public:
 	unsigned char                                      UnknownData00[0x10];                                      // 0x0028(0x0010) MISSED OFFSET
-	class FString                                      NetConnectionClassName;                                   // 0x0038(0x0010) (ZeroConstructor, Config)
+	struct FString                                     NetConnectionClassName;                                   // 0x0038(0x0010) (ZeroConstructor, Config)
 	int                                                MaxDownloadSize;                                          // 0x0048(0x0004) (ZeroConstructor, Config, IsPlainOldData)
 	unsigned char                                      bClampListenServerTickRate : 1;                           // 0x004C(0x0001) (Config)
 	unsigned char                                      UnknownData01[0x3];                                       // 0x004D(0x0003) MISSED OFFSET
@@ -3473,7 +3475,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NetDriver"));
+		static auto ptr = UObject::FindClass("Class Engine.NetDriver");
 		return ptr;
 	}
 
@@ -3488,7 +3490,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.OnlineSession"));
+		static auto ptr = UObject::FindClass("Class Engine.OnlineSession");
 		return ptr;
 	}
 
@@ -3504,22 +3506,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Model"));
-		return ptr;
-	}
-
-};
-
-
-// Class Engine.EngineBaseTypes
-// 0x0000 (0x0028 - 0x0028)
-class UEngineBaseTypes : public UObject
-{
-public:
-
-	static UClass* StaticClass()
-	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.EngineBaseTypes"));
+		static auto ptr = UObject::FindClass("Class Engine.Model");
 		return ptr;
 	}
 
@@ -3538,12 +3525,12 @@ public:
 	int                                                NodeHeight;                                               // 0x0044(0x0004) (ZeroConstructor, IsPlainOldData)
 	unsigned char                                      bHasCompilerMessage : 1;                                  // 0x0048(0x0001)
 	unsigned char                                      UnknownData00[0x7];                                       // 0x0049(0x0007) MISSED OFFSET
-	class FString                                      NodeComment;                                              // 0x0050(0x0010) (ZeroConstructor)
+	struct FString                                     NodeComment;                                              // 0x0050(0x0010) (ZeroConstructor)
 	bool                                               bCommentBubblePinned;                                     // 0x0060(0x0001) (ZeroConstructor, IsPlainOldData)
 	bool                                               bCommentBubbleVisible;                                    // 0x0061(0x0001) (ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData01[0x2];                                       // 0x0062(0x0002) MISSED OFFSET
 	int                                                ErrorType;                                                // 0x0064(0x0004) (ZeroConstructor, IsPlainOldData)
-	class FString                                      ErrorMsg;                                                 // 0x0068(0x0010) (ZeroConstructor)
+	struct FString                                     ErrorMsg;                                                 // 0x0068(0x0010) (ZeroConstructor)
 	struct FGuid                                       NodeGuid;                                                 // 0x0078(0x0010) (ZeroConstructor, IsPlainOldData)
 	TEnumAsByte<ENodeAdvancedPins>                     AdvancedPinDisplay;                                       // 0x0088(0x0001) (ZeroConstructor, IsPlainOldData)
 	bool                                               bIsNodeEnabled;                                           // 0x0089(0x0001) (ZeroConstructor, IsPlainOldData)
@@ -3551,7 +3538,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.EdGraphNode"));
+		static auto ptr = UObject::FindClass("Class Engine.EdGraphNode");
 		return ptr;
 	}
 
@@ -3563,13 +3550,13 @@ public:
 class UEdGraphPin : public UObject
 {
 public:
-	class FString                                      PinName;                                                  // 0x0028(0x0010) (ZeroConstructor)
-	class FString                                      PinToolTip;                                               // 0x0038(0x0010) (ZeroConstructor)
+	struct FString                                     PinName;                                                  // 0x0028(0x0010) (ZeroConstructor)
+	struct FString                                     PinToolTip;                                               // 0x0038(0x0010) (ZeroConstructor)
 	TEnumAsByte<EEdGraphPinDirection>                  Direction;                                                // 0x0048(0x0001) (ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x7];                                       // 0x0049(0x0007) MISSED OFFSET
 	struct FEdGraphPinType                             PinType;                                                  // 0x0050(0x0050)
-	class FString                                      DefaultValue;                                             // 0x00A0(0x0010) (ZeroConstructor)
-	class FString                                      AutogeneratedDefaultValue;                                // 0x00B0(0x0010) (ZeroConstructor)
+	struct FString                                     DefaultValue;                                             // 0x00A0(0x0010) (ZeroConstructor)
+	struct FString                                     AutogeneratedDefaultValue;                                // 0x00B0(0x0010) (ZeroConstructor)
 	class UObject*                                     DefaultObject;                                            // 0x00C0(0x0008) (ZeroConstructor, IsPlainOldData)
 	struct FText                                       DefaultTextValue;                                         // 0x00C8(0x0038)
 	TArray<class UEdGraphPin*>                         LinkedTo;                                                 // 0x0100(0x0010) (ZeroConstructor)
@@ -3578,7 +3565,22 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.EdGraphPin"));
+		static auto ptr = UObject::FindClass("Class Engine.EdGraphPin");
+		return ptr;
+	}
+
+};
+
+
+// Class Engine.EngineBaseTypes
+// 0x0000 (0x0028 - 0x0028)
+class UEngineBaseTypes : public UObject
+{
+public:
+
+	static UClass* StaticClass()
+	{
+		static auto ptr = UObject::FindClass("Class Engine.EngineBaseTypes");
 		return ptr;
 	}
 
@@ -3602,7 +3604,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DamageType"));
+		static auto ptr = UObject::FindClass("Class Engine.DamageType");
 		return ptr;
 	}
 
@@ -3617,7 +3619,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.EngineTypes"));
+		static auto ptr = UObject::FindClass("Class Engine.EngineTypes");
 		return ptr;
 	}
 
@@ -3639,7 +3641,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.BlueprintCore"));
+		static auto ptr = UObject::FindClass("Class Engine.BlueprintCore");
 		return ptr;
 	}
 
@@ -3669,7 +3671,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Blueprint"));
+		static auto ptr = UObject::FindClass("Class Engine.Blueprint");
 		return ptr;
 	}
 
@@ -3684,7 +3686,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Interface_AssetUserData"));
+		static auto ptr = UObject::FindClass("Class Engine.Interface_AssetUserData");
 		return ptr;
 	}
 
@@ -3699,7 +3701,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.TestInterface"));
+		static auto ptr = UObject::FindClass("Class Engine.TestInterface");
 		return ptr;
 	}
 
@@ -3714,7 +3716,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DerivedTestInterface"));
+		static auto ptr = UObject::FindClass("Class Engine.DerivedTestInterface");
 		return ptr;
 	}
 
@@ -3730,7 +3732,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ComponentWithDerivedTestInterface"));
+		static auto ptr = UObject::FindClass("Class Engine.ComponentWithDerivedTestInterface");
 		return ptr;
 	}
 
@@ -3746,7 +3748,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ActorWithComponentWithDerivedTestInterface"));
+		static auto ptr = UObject::FindClass("Class Engine.ActorWithComponentWithDerivedTestInterface");
 		return ptr;
 	}
 
@@ -3762,7 +3764,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ActorWithTestInterface"));
+		static auto ptr = UObject::FindClass("Class Engine.ActorWithTestInterface");
 		return ptr;
 	}
 
@@ -3778,7 +3780,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AmbientSound"));
+		static auto ptr = UObject::FindClass("Class Engine.AmbientSound");
 		return ptr;
 	}
 
@@ -3797,12 +3799,12 @@ class AAutomaticInstancingActor : public AActor
 {
 public:
 	class USceneComponent*                             DummyRoot;                                                // 0x0410(0x0008) (ExportObject, ZeroConstructor, InstancedReference, IsPlainOldData)
-	TMap<class FString, class UInstancedStaticMeshComponent*> InstancedStaticMeshes;                                    // 0x0418(0x0050) (ExportObject, ZeroConstructor, Transient)
-	TMap<class FString, class UInstancedStaticMeshComponent*> CookedInstancedStaticMeshes;                              // 0x0468(0x0050) (ExportObject, ZeroConstructor)
+	TMap<struct FString, class UInstancedStaticMeshComponent*> InstancedStaticMeshes;                                    // 0x0418(0x0050) (ExportObject, ZeroConstructor, Transient)
+	TMap<struct FString, class UInstancedStaticMeshComponent*> CookedInstancedStaticMeshes;                              // 0x0468(0x0050) (ExportObject, ZeroConstructor)
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AutomaticInstancingActor"));
+		static auto ptr = UObject::FindClass("Class Engine.AutomaticInstancingActor");
 		return ptr;
 	}
 
@@ -3822,7 +3824,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PendingNetGame"));
+		static auto ptr = UObject::FindClass("Class Engine.PendingNetGame");
 		return ptr;
 	}
 
@@ -3846,7 +3848,7 @@ public:
 	TArray<class UObject*>                             ExtraReferencedObjects;                                   // 0x0070(0x0010) (ZeroConstructor, Transient)
 	TArray<class UObject*>                             PerModuleDataObjects;                                     // 0x0080(0x0010) (ZeroConstructor, Transient)
 	TArray<class ULevelStreaming*>                     StreamingLevels;                                          // 0x0090(0x0010) (ZeroConstructor, Transient)
-	class FString                                      StreamingLevelsPrefix;                                    // 0x00A0(0x0010) (ZeroConstructor)
+	struct FString                                     StreamingLevelsPrefix;                                    // 0x00A0(0x0010) (ZeroConstructor)
 	class ULevel*                                      CurrentLevelPendingVisibility;                            // 0x00B0(0x0008) (ZeroConstructor, Transient, IsPlainOldData)
 	class AParticleEventManager*                       MyParticleEventManager;                                   // 0x00B8(0x0008) (ZeroConstructor, IsPlainOldData)
 	class APhysicsVolume*                              DefaultPhysicsVolume;                                     // 0x00C0(0x0008) (ZeroConstructor, IsPlainOldData)
@@ -3859,7 +3861,7 @@ public:
 	bool                                               ParticleLOD_bUseMultipleViewportCase;                     // 0x0111(0x0001) (ZeroConstructor, Transient, IsPlainOldData)
 	unsigned char                                      UnknownData03[0x2];                                       // 0x0112(0x0002) MISSED OFFSET
 	struct FVector                                     ParticleLOD_PlayerViewpointLocation;                      // 0x0114(0x000C) (ZeroConstructor, Transient, IsPlainOldData)
-	class FString                                      TestMetadata;                                             // 0x0120(0x0010) (ZeroConstructor)
+	struct FString                                     TestMetadata;                                             // 0x0120(0x0010) (ZeroConstructor)
 	class UNavigationSystem*                           NavigationSystem;                                         // 0x0130(0x0008) (ZeroConstructor, Transient, IsPlainOldData)
 	class AGameMode*                                   AuthorityGameMode;                                        // 0x0138(0x0008) (ZeroConstructor, Transient, IsPlainOldData)
 	class UAISystemBase*                               AISystem;                                                 // 0x0140(0x0008) (ZeroConstructor, Transient, IsPlainOldData)
@@ -3879,7 +3881,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.World"));
+		static auto ptr = UObject::FindClass("Class Engine.World");
 		return ptr;
 	}
 
@@ -3891,9 +3893,7 @@ public:
 class ULevel : public UObject
 {
 public:
-	unsigned char                                      UnknownData00[0x78];                                      // 0x0028(0x00A0) MISSED OFFSET
-	TArray<class AActor*>                              AActors;                                                  // 0xA0(0x0010)
-	unsigned char                                      UnknownData10[0x18];                                      // 0x00B0(0x0018) MISSED OFFSET
+	unsigned char                                      UnknownData00[0xA0];                                      // 0x0028(0x00A0) MISSED OFFSET
 	class ULevelActorContainer*                        ActorCluster;                                             // 0x00C8(0x0008) (ExportObject, ZeroConstructor, Transient, InstancedReference, DuplicateTransient, IsPlainOldData)
 	class UWorld*                                      OwningWorld;                                              // 0x00D0(0x0008) (ZeroConstructor, Transient, IsPlainOldData)
 	class UModel*                                      Model;                                                    // 0x00D8(0x0008) (ZeroConstructor, IsPlainOldData)
@@ -3915,7 +3915,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Level"));
+		static auto ptr = UObject::FindClass("Class Engine.Level");
 		return ptr;
 	}
 
@@ -3930,7 +3930,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.BrushShape"));
+		static auto ptr = UObject::FindClass("Class Engine.BrushShape");
 		return ptr;
 	}
 
@@ -3952,7 +3952,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AudioVolume"));
+		static auto ptr = UObject::FindClass("Class Engine.AudioVolume");
 		return ptr;
 	}
 
@@ -3967,7 +3967,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.CameraBlockingVolume"));
+		static auto ptr = UObject::FindClass("Class Engine.CameraBlockingVolume");
 		return ptr;
 	}
 
@@ -3985,7 +3985,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.CullDistanceVolume"));
+		static auto ptr = UObject::FindClass("Class Engine.CullDistanceVolume");
 		return ptr;
 	}
 
@@ -4002,7 +4002,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.FFTWater"));
+		static auto ptr = UObject::FindClass("Class Engine.FFTWater");
 		return ptr;
 	}
 
@@ -4042,7 +4042,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.LevelStreamingVolume"));
+		static auto ptr = UObject::FindClass("Class Engine.LevelStreamingVolume");
 		return ptr;
 	}
 
@@ -4057,7 +4057,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.LightmassCharacterIndirectDetailVolume"));
+		static auto ptr = UObject::FindClass("Class Engine.LightmassCharacterIndirectDetailVolume");
 		return ptr;
 	}
 
@@ -4072,7 +4072,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.LightmassImportanceVolume"));
+		static auto ptr = UObject::FindClass("Class Engine.LightmassImportanceVolume");
 		return ptr;
 	}
 
@@ -4087,7 +4087,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavigationTypes"));
+		static auto ptr = UObject::FindClass("Class Engine.NavigationTypes");
 		return ptr;
 	}
 
@@ -4105,7 +4105,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavMeshBoundsVolume"));
+		static auto ptr = UObject::FindClass("Class Engine.NavMeshBoundsVolume");
 		return ptr;
 	}
 
@@ -4120,7 +4120,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InstancedNavMeshBoundsVolume"));
+		static auto ptr = UObject::FindClass("Class Engine.InstancedNavMeshBoundsVolume");
 		return ptr;
 	}
 
@@ -4156,7 +4156,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavArea"));
+		static auto ptr = UObject::FindClass("Class Engine.NavArea");
 		return ptr;
 	}
 
@@ -4171,7 +4171,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavRelevantInterface"));
+		static auto ptr = UObject::FindClass("Class Engine.NavRelevantInterface");
 		return ptr;
 	}
 
@@ -4188,7 +4188,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavModifierVolume"));
+		static auto ptr = UObject::FindClass("Class Engine.NavModifierVolume");
 		return ptr;
 	}
 
@@ -4205,7 +4205,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DefaultPhysicsVolume"));
+		static auto ptr = UObject::FindClass("Class Engine.DefaultPhysicsVolume");
 		return ptr;
 	}
 
@@ -4220,7 +4220,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.KillZVolume"));
+		static auto ptr = UObject::FindClass("Class Engine.KillZVolume");
 		return ptr;
 	}
 
@@ -4245,7 +4245,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PainCausingVolume"));
+		static auto ptr = UObject::FindClass("Class Engine.PainCausingVolume");
 		return ptr;
 	}
 
@@ -4260,7 +4260,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.BlendableInterface"));
+		static auto ptr = UObject::FindClass("Class Engine.BlendableInterface");
 		return ptr;
 	}
 
@@ -4275,7 +4275,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Scene"));
+		static auto ptr = UObject::FindClass("Class Engine.Scene");
 		return ptr;
 	}
 
@@ -4290,7 +4290,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Interface_PostProcessVolume"));
+		static auto ptr = UObject::FindClass("Class Engine.Interface_PostProcessVolume");
 		return ptr;
 	}
 
@@ -4313,7 +4313,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PostProcessVolume"));
+		static auto ptr = UObject::FindClass("Class Engine.PostProcessVolume");
 		return ptr;
 	}
 
@@ -4333,7 +4333,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PrecomputedVisibilityOverrideVolume"));
+		static auto ptr = UObject::FindClass("Class Engine.PrecomputedVisibilityOverrideVolume");
 		return ptr;
 	}
 
@@ -4348,7 +4348,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PrecomputedVisibilityVolume"));
+		static auto ptr = UObject::FindClass("Class Engine.PrecomputedVisibilityVolume");
 		return ptr;
 	}
 
@@ -4363,7 +4363,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.TriggerVolume"));
+		static auto ptr = UObject::FindClass("Class Engine.TriggerVolume");
 		return ptr;
 	}
 
@@ -4379,7 +4379,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.CalmWaterZone"));
+		static auto ptr = UObject::FindClass("Class Engine.CalmWaterZone");
 		return ptr;
 	}
 
@@ -4405,7 +4405,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.CameraActor"));
+		static auto ptr = UObject::FindClass("Class Engine.CameraActor");
 		return ptr;
 	}
 
@@ -4422,7 +4422,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ClientOnlyTestActor"));
+		static auto ptr = UObject::FindClass("Class Engine.ClientOnlyTestActor");
 		return ptr;
 	}
 
@@ -4437,7 +4437,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavAgentInterface"));
+		static auto ptr = UObject::FindClass("Class Engine.NavAgentInterface");
 		return ptr;
 	}
 
@@ -4473,7 +4473,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.CameraShake"));
+		static auto ptr = UObject::FindClass("Class Engine.CameraShake");
 		return ptr;
 	}
 
@@ -4494,7 +4494,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InputComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.InputComponent");
 		return ptr;
 	}
 
@@ -4520,7 +4520,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.CurveBase"));
+		static auto ptr = UObject::FindClass("Class Engine.CurveBase");
 		return ptr;
 	}
 
@@ -4541,7 +4541,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.CurveFloat"));
+		static auto ptr = UObject::FindClass("Class Engine.CurveFloat");
 		return ptr;
 	}
 
@@ -4561,7 +4561,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ForceFeedbackEffect"));
+		static auto ptr = UObject::FindClass("Class Engine.ForceFeedbackEffect");
 		return ptr;
 	}
 
@@ -4578,7 +4578,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.LogVisualizerCameraController"));
+		static auto ptr = UObject::FindClass("Class Engine.LogVisualizerCameraController");
 		return ptr;
 	}
 
@@ -4594,7 +4594,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DecalActor"));
+		static auto ptr = UObject::FindClass("Class Engine.DecalActor");
 		return ptr;
 	}
 
@@ -4617,7 +4617,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DestructibleActor"));
+		static auto ptr = UObject::FindClass("Class Engine.DestructibleActor");
 		return ptr;
 	}
 
@@ -4633,7 +4633,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DocumentationActor"));
+		static auto ptr = UObject::FindClass("Class Engine.DocumentationActor");
 		return ptr;
 	}
 
@@ -4657,7 +4657,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Emitter"));
+		static auto ptr = UObject::FindClass("Class Engine.Emitter");
 		return ptr;
 	}
 
@@ -4694,7 +4694,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.EmitterCameraLensEffectBase"));
+		static auto ptr = UObject::FindClass("Class Engine.EmitterCameraLensEffectBase");
 		return ptr;
 	}
 
@@ -4709,7 +4709,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DebugCameraHUD"));
+		static auto ptr = UObject::FindClass("Class Engine.DebugCameraHUD");
 		return ptr;
 	}
 
@@ -4725,7 +4725,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.LogVisualizerHUD"));
+		static auto ptr = UObject::FindClass("Class Engine.LogVisualizerHUD");
 		return ptr;
 	}
 
@@ -4741,7 +4741,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AtmosphericFog"));
+		static auto ptr = UObject::FindClass("Class Engine.AtmosphericFog");
 		return ptr;
 	}
 
@@ -4759,7 +4759,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ExponentialHeightFog"));
+		static auto ptr = UObject::FindClass("Class Engine.ExponentialHeightFog");
 		return ptr;
 	}
 
@@ -4782,7 +4782,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavigationObjectBase"));
+		static auto ptr = UObject::FindClass("Class Engine.NavigationObjectBase");
 		return ptr;
 	}
 
@@ -4798,7 +4798,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PlayerStart"));
+		static auto ptr = UObject::FindClass("Class Engine.PlayerStart");
 		return ptr;
 	}
 
@@ -4847,7 +4847,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.GameNetworkManager"));
+		static auto ptr = UObject::FindClass("Class Engine.GameNetworkManager");
 		return ptr;
 	}
 
@@ -4869,7 +4869,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.GameSession"));
+		static auto ptr = UObject::FindClass("Class Engine.GameSession");
 		return ptr;
 	}
 
@@ -4887,7 +4887,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SkyLight"));
+		static auto ptr = UObject::FindClass("Class Engine.SkyLight");
 		return ptr;
 	}
 
@@ -4905,7 +4905,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.WindDirectionalSource"));
+		static auto ptr = UObject::FindClass("Class Engine.WindDirectionalSource");
 		return ptr;
 	}
 
@@ -4924,7 +4924,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.LevelBounds"));
+		static auto ptr = UObject::FindClass("Class Engine.LevelBounds");
 		return ptr;
 	}
 
@@ -4955,7 +4955,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.LightComponentBase"));
+		static auto ptr = UObject::FindClass("Class Engine.LightComponentBase");
 		return ptr;
 	}
 
@@ -5003,7 +5003,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.LightComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.LightComponent");
 		return ptr;
 	}
 
@@ -5038,7 +5038,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Light"));
+		static auto ptr = UObject::FindClass("Class Engine.Light");
 		return ptr;
 	}
 
@@ -5068,7 +5068,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AmbientLightSource"));
+		static auto ptr = UObject::FindClass("Class Engine.AmbientLightSource");
 		return ptr;
 	}
 
@@ -5083,7 +5083,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DirectionalLight"));
+		static auto ptr = UObject::FindClass("Class Engine.DirectionalLight");
 		return ptr;
 	}
 
@@ -5099,7 +5099,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PointLight"));
+		static auto ptr = UObject::FindClass("Class Engine.PointLight");
 		return ptr;
 	}
 
@@ -5118,7 +5118,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SpotLight"));
+		static auto ptr = UObject::FindClass("Class Engine.SpotLight");
 		return ptr;
 	}
 
@@ -5136,7 +5136,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.GeneratedMeshAreaLight"));
+		static auto ptr = UObject::FindClass("Class Engine.GeneratedMeshAreaLight");
 		return ptr;
 	}
 
@@ -5157,7 +5157,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.LODActor"));
+		static auto ptr = UObject::FindClass("Class Engine.LODActor");
 		return ptr;
 	}
 
@@ -5173,7 +5173,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialInstanceActor"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialInstanceActor");
 		return ptr;
 	}
 
@@ -5226,7 +5226,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MatineeActor"));
+		static auto ptr = UObject::FindClass("Class Engine.MatineeActor");
 		return ptr;
 	}
 
@@ -5251,7 +5251,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MatineeActorCameraAnim"));
+		static auto ptr = UObject::FindClass("Class Engine.MatineeActorCameraAnim");
 		return ptr;
 	}
 
@@ -5267,7 +5267,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MergedCollisionActor"));
+		static auto ptr = UObject::FindClass("Class Engine.MergedCollisionActor");
 		return ptr;
 	}
 
@@ -5285,7 +5285,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavigationQueryFilter"));
+		static auto ptr = UObject::FindClass("Class Engine.NavigationQueryFilter");
 		return ptr;
 	}
 
@@ -5313,7 +5313,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavigationData"));
+		static auto ptr = UObject::FindClass("Class Engine.NavigationData");
 		return ptr;
 	}
 
@@ -5328,7 +5328,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AbstractNavData"));
+		static auto ptr = UObject::FindClass("Class Engine.AbstractNavData");
 		return ptr;
 	}
 
@@ -5343,7 +5343,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavigationGraph"));
+		static auto ptr = UObject::FindClass("Class Engine.NavigationGraph");
 		return ptr;
 	}
 
@@ -5417,7 +5417,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.RecastNavMesh"));
+		static auto ptr = UObject::FindClass("Class Engine.RecastNavMesh");
 		return ptr;
 	}
 
@@ -5432,7 +5432,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavigationGraphNode"));
+		static auto ptr = UObject::FindClass("Class Engine.NavigationGraphNode");
 		return ptr;
 	}
 
@@ -5447,7 +5447,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PlayerStartPIE"));
+		static auto ptr = UObject::FindClass("Class Engine.PlayerStartPIE");
 		return ptr;
 	}
 
@@ -5462,7 +5462,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavPathObserverInterface"));
+		static auto ptr = UObject::FindClass("Class Engine.NavPathObserverInterface");
 		return ptr;
 	}
 
@@ -5511,7 +5511,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavigationTestingActor"));
+		static auto ptr = UObject::FindClass("Class Engine.NavigationTestingActor");
 		return ptr;
 	}
 
@@ -5529,7 +5529,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavLinkDefinition"));
+		static auto ptr = UObject::FindClass("Class Engine.NavLinkDefinition");
 		return ptr;
 	}
 
@@ -5544,7 +5544,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavLinkHostInterface"));
+		static auto ptr = UObject::FindClass("Class Engine.NavLinkHostInterface");
 		return ptr;
 	}
 
@@ -5566,7 +5566,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavLinkProxy"));
+		static auto ptr = UObject::FindClass("Class Engine.NavLinkProxy");
 		return ptr;
 	}
 
@@ -5587,7 +5587,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Note"));
+		static auto ptr = UObject::FindClass("Class Engine.Note");
 		return ptr;
 	}
 
@@ -5648,7 +5648,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleSystem"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleSystem");
 		return ptr;
 	}
 
@@ -5670,7 +5670,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleSystemAggregateTickSettings"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleSystemAggregateTickSettings");
 		return ptr;
 	}
 
@@ -5685,7 +5685,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleEventManager"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleEventManager");
 		return ptr;
 	}
 
@@ -5700,7 +5700,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Interface_CollisionDataProvider"));
+		static auto ptr = UObject::FindClass("Class Engine.Interface_CollisionDataProvider");
 		return ptr;
 	}
 
@@ -5716,7 +5716,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MeshPatchAsset"));
+		static auto ptr = UObject::FindClass("Class Engine.MeshPatchAsset");
 		return ptr;
 	}
 
@@ -5764,7 +5764,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SkeletalMesh"));
+		static auto ptr = UObject::FindClass("Class Engine.SkeletalMesh");
 		return ptr;
 	}
 
@@ -5786,7 +5786,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AnimationAsset"));
+		static auto ptr = UObject::FindClass("Class Engine.AnimationAsset");
 		return ptr;
 	}
 
@@ -5808,7 +5808,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DefaultPawn"));
+		static auto ptr = UObject::FindClass("Class Engine.DefaultPawn");
 		return ptr;
 	}
 
@@ -5831,7 +5831,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SpectatorPawn"));
+		static auto ptr = UObject::FindClass("Class Engine.SpectatorPawn");
 		return ptr;
 	}
 
@@ -5847,7 +5847,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ReflectionCapture"));
+		static auto ptr = UObject::FindClass("Class Engine.ReflectionCapture");
 		return ptr;
 	}
 
@@ -5862,7 +5862,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.BoxReflectionCapture"));
+		static auto ptr = UObject::FindClass("Class Engine.BoxReflectionCapture");
 		return ptr;
 	}
 
@@ -5877,7 +5877,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PlaneReflectionCapture"));
+		static auto ptr = UObject::FindClass("Class Engine.PlaneReflectionCapture");
 		return ptr;
 	}
 
@@ -5893,7 +5893,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SphereReflectionCapture"));
+		static auto ptr = UObject::FindClass("Class Engine.SphereReflectionCapture");
 		return ptr;
 	}
 
@@ -5908,7 +5908,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.RigidBodyBase"));
+		static auto ptr = UObject::FindClass("Class Engine.RigidBodyBase");
 		return ptr;
 	}
 
@@ -5928,7 +5928,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PhysicsConstraintActor"));
+		static auto ptr = UObject::FindClass("Class Engine.PhysicsConstraintActor");
 		return ptr;
 	}
 
@@ -5944,7 +5944,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PhysicsThruster"));
+		static auto ptr = UObject::FindClass("Class Engine.PhysicsThruster");
 		return ptr;
 	}
 
@@ -5960,7 +5960,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.RadialForceActor"));
+		static auto ptr = UObject::FindClass("Class Engine.RadialForceActor");
 		return ptr;
 	}
 
@@ -5981,7 +5981,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SceneCapture"));
+		static auto ptr = UObject::FindClass("Class Engine.SceneCapture");
 		return ptr;
 	}
 
@@ -5998,7 +5998,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SceneCapture2D"));
+		static auto ptr = UObject::FindClass("Class Engine.SceneCapture2D");
 		return ptr;
 	}
 
@@ -6017,7 +6017,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SceneCaptureCube"));
+		static auto ptr = UObject::FindClass("Class Engine.SceneCaptureCube");
 		return ptr;
 	}
 
@@ -6034,7 +6034,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ServerOnlyTestActor"));
+		static auto ptr = UObject::FindClass("Class Engine.ServerOnlyTestActor");
 		return ptr;
 	}
 
@@ -6090,7 +6090,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SkinnedMeshComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.SkinnedMeshComponent");
 		return ptr;
 	}
 
@@ -6127,7 +6127,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PhysicsConstraintComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.PhysicsConstraintComponent");
 		return ptr;
 	}
 
@@ -6177,7 +6177,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Skeleton"));
+		static auto ptr = UObject::FindClass("Class Engine.Skeleton");
 		return ptr;
 	}
 
@@ -6192,7 +6192,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Interface_Animatable"));
+		static auto ptr = UObject::FindClass("Class Engine.Interface_Animatable");
 		return ptr;
 	}
 
@@ -6260,7 +6260,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SkeletalMeshComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.SkeletalMeshComponent");
 		return ptr;
 	}
 
@@ -6310,7 +6310,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MatineeAnimInterface"));
+		static auto ptr = UObject::FindClass("Class Engine.MatineeAnimInterface");
 		return ptr;
 	}
 
@@ -6335,7 +6335,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SkeletalMeshActor"));
+		static auto ptr = UObject::FindClass("Class Engine.SkeletalMeshActor");
 		return ptr;
 	}
 
@@ -6356,7 +6356,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SplineMeshActor"));
+		static auto ptr = UObject::FindClass("Class Engine.SplineMeshActor");
 		return ptr;
 	}
 
@@ -6372,7 +6372,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.CoveredMeshActor"));
+		static auto ptr = UObject::FindClass("Class Engine.CoveredMeshActor");
 		return ptr;
 	}
 
@@ -6387,7 +6387,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.StreamingProbe"));
+		static auto ptr = UObject::FindClass("Class Engine.StreamingProbe");
 		return ptr;
 	}
 
@@ -6402,7 +6402,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.TargetPoint"));
+		static auto ptr = UObject::FindClass("Class Engine.TargetPoint");
 		return ptr;
 	}
 
@@ -6418,7 +6418,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.TextRenderActor"));
+		static auto ptr = UObject::FindClass("Class Engine.TextRenderActor");
 		return ptr;
 	}
 
@@ -6435,7 +6435,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.TriggerBase"));
+		static auto ptr = UObject::FindClass("Class Engine.TriggerBase");
 		return ptr;
 	}
 
@@ -6450,7 +6450,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.TriggerBox"));
+		static auto ptr = UObject::FindClass("Class Engine.TriggerBox");
 		return ptr;
 	}
 
@@ -6465,7 +6465,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.TriggerCapsule"));
+		static auto ptr = UObject::FindClass("Class Engine.TriggerCapsule");
 		return ptr;
 	}
 
@@ -6480,7 +6480,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.TriggerSphere"));
+		static auto ptr = UObject::FindClass("Class Engine.TriggerSphere");
 		return ptr;
 	}
 
@@ -6496,7 +6496,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.VectorFieldVolume"));
+		static auto ptr = UObject::FindClass("Class Engine.VectorFieldVolume");
 		return ptr;
 	}
 
@@ -6512,7 +6512,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.WaterEmissionVolume"));
+		static auto ptr = UObject::FindClass("Class Engine.WaterEmissionVolume");
 		return ptr;
 	}
 
@@ -6528,7 +6528,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ComponentWithTestInterface"));
+		static auto ptr = UObject::FindClass("Class Engine.ComponentWithTestInterface");
 		return ptr;
 	}
 
@@ -6544,7 +6544,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AnotherComponentWithTestInterface"));
+		static auto ptr = UObject::FindClass("Class Engine.AnotherComponentWithTestInterface");
 		return ptr;
 	}
 
@@ -6564,7 +6564,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ApplicationLifecycleComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.ApplicationLifecycleComponent");
 		return ptr;
 	}
 
@@ -6581,7 +6581,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AggregatorInterface"));
+		static auto ptr = UObject::FindClass("Class Engine.AggregatorInterface");
 		return ptr;
 	}
 
@@ -6601,7 +6601,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ComponentAggregatorComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.ComponentAggregatorComponent");
 		return ptr;
 	}
 
@@ -6635,7 +6635,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpToMovementComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpToMovementComponent");
 		return ptr;
 	}
 
@@ -6684,32 +6684,32 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavigationSystem"));
+		static auto ptr = UObject::FindClass("Class Engine.NavigationSystem");
 		return ptr;
 	}
 
 
 	void UnregisterNavigationInvoker(class AActor* Invoker);
-	static void SimpleMoveToLocation(class AController* Controller, const struct FVector& Goal);
-	static void SimpleMoveToActor(class AController* Controller, class AActor* Goal);
+	void STATIC_SimpleMoveToLocation(class AController* Controller, const struct FVector& Goal);
+	void STATIC_SimpleMoveToActor(class AController* Controller, class AActor* Goal);
 	void SetMaxSimultaneousTileGenerationJobsCount(int MaxNumberOfJobs);
 	void SetGeometryGatheringMode(TEnumAsByte<ENavDataGatheringModeConfig> NewMode);
 	void ResetMaxSimultaneousTileGenerationJobsCount();
 	void RegisterNavigationInvoker(class AActor* Invoker, float TileGenerationRadius, float TileRemovalRadius);
-	static struct FVector ProjectPointToNavigation(class UObject* WorldContext, const struct FVector& Point, class ANavigationData* NavData, class UClass* FilterClass, const struct FVector& QueryExtent);
+	struct FVector STATIC_ProjectPointToNavigation(class UObject* WorldContext, const struct FVector& Point, class ANavigationData* NavData, class UClass* FilterClass, const struct FVector& QueryExtent);
 	void OnNavigationBoundsUpdated(class ANavMeshBoundsVolume* NavVolume);
-	static bool NavigationRaycast(class UObject* WorldContext, const struct FVector& RayStart, const struct FVector& RayEnd, class UClass* FilterClass, class AController* Querier, struct FVector* HitLocation);
-	static bool IsNavigationBeingBuilt(class UObject* WorldContext);
-	static struct FVector GetRandomReachablePointInRadius(class UObject* WorldContext, const struct FVector& Origin, float Radius, class ANavigationData* NavData, class UClass* FilterClass);
-	static struct FVector GetRandomPointInRadius(class UObject* WorldContext, const struct FVector& Origin, float Radius, class ANavigationData* NavData, class UClass* FilterClass);
-	static struct FVector GetRandomPointInNavigableRadius(class UObject* WorldContext, const struct FVector& Origin, float Radius, class ANavigationData* NavData, class UClass* FilterClass);
-	static struct FVector GetRandomPoint(class UObject* WorldContext, class ANavigationData* NavData, class UClass* FilterClass);
-	static TEnumAsByte<ENavigationQueryResult> GetPathLength(class UObject* WorldContext, const struct FVector& PathStart, const struct FVector& PathEnd, class ANavigationData* NavData, class UClass* FilterClass, float* PathLength);
-	static TEnumAsByte<ENavigationQueryResult> GetPathCost(class UObject* WorldContext, const struct FVector& PathStart, const struct FVector& PathEnd, class ANavigationData* NavData, class UClass* FilterClass, float* PathCost);
-	static class UNavigationSystem* GetNavigationSystem(class UObject* WorldContext);
+	bool STATIC_NavigationRaycast(class UObject* WorldContext, const struct FVector& RayStart, const struct FVector& RayEnd, class UClass* FilterClass, class AController* Querier, struct FVector* HitLocation);
+	bool STATIC_IsNavigationBeingBuilt(class UObject* WorldContext);
+	struct FVector STATIC_GetRandomReachablePointInRadius(class UObject* WorldContext, const struct FVector& Origin, float Radius, class ANavigationData* NavData, class UClass* FilterClass);
+	struct FVector STATIC_GetRandomPointInRadius(class UObject* WorldContext, const struct FVector& Origin, float Radius, class ANavigationData* NavData, class UClass* FilterClass);
+	struct FVector STATIC_GetRandomPointInNavigableRadius(class UObject* WorldContext, const struct FVector& Origin, float Radius, class ANavigationData* NavData, class UClass* FilterClass);
+	struct FVector STATIC_GetRandomPoint(class UObject* WorldContext, class ANavigationData* NavData, class UClass* FilterClass);
+	TEnumAsByte<ENavigationQueryResult> STATIC_GetPathLength(class UObject* WorldContext, const struct FVector& PathStart, const struct FVector& PathEnd, class ANavigationData* NavData, class UClass* FilterClass, float* PathLength);
+	TEnumAsByte<ENavigationQueryResult> STATIC_GetPathCost(class UObject* WorldContext, const struct FVector& PathStart, const struct FVector& PathEnd, class ANavigationData* NavData, class UClass* FilterClass, float* PathCost);
+	class UNavigationSystem* STATIC_GetNavigationSystem(class UObject* WorldContext);
 	class ANavigationData* GetMainNavData();
-	static class UNavigationPath* FindPathToLocationSynchronously(class UObject* WorldContext, const struct FVector& PathStart, const struct FVector& PathEnd, class AActor* PathfindingContext, class UClass* FilterClass);
-	static class UNavigationPath* FindPathToActorSynchronously(class UObject* WorldContext, const struct FVector& PathStart, class AActor* GoalActor, float TetherDistance, class AActor* PathfindingContext, class UClass* FilterClass);
+	class UNavigationPath* STATIC_FindPathToLocationSynchronously(class UObject* WorldContext, const struct FVector& PathStart, const struct FVector& PathEnd, class AActor* PathfindingContext, class UClass* FilterClass);
+	class UNavigationPath* STATIC_FindPathToActorSynchronously(class UObject* WorldContext, const struct FVector& PathStart, class AActor* GoalActor, float TetherDistance, class AActor* PathfindingContext, class UClass* FilterClass);
 	bool DoesMainNavDataHaveValidNavMesh();
 };
 
@@ -6726,7 +6726,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AnimSequenceBase"));
+		static auto ptr = UObject::FindClass("Class Engine.AnimSequenceBase");
 		return ptr;
 	}
 
@@ -6743,7 +6743,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AnimCompositeBase"));
+		static auto ptr = UObject::FindClass("Class Engine.AnimCompositeBase");
 		return ptr;
 	}
 
@@ -6758,7 +6758,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AnimStateMachineTypes"));
+		static auto ptr = UObject::FindClass("Class Engine.AnimStateMachineTypes");
 		return ptr;
 	}
 
@@ -6788,7 +6788,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AnimMontage"));
+		static auto ptr = UObject::FindClass("Class Engine.AnimMontage");
 		return ptr;
 	}
 
@@ -6803,7 +6803,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.RVOAvoidanceInterface"));
+		static auto ptr = UObject::FindClass("Class Engine.RVOAvoidanceInterface");
 		return ptr;
 	}
 
@@ -6818,7 +6818,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NetworkPredictionInterface"));
+		static auto ptr = UObject::FindClass("Class Engine.NetworkPredictionInterface");
 		return ptr;
 	}
 
@@ -6839,7 +6839,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.FloatingPawnMovement"));
+		static auto ptr = UObject::FindClass("Class Engine.FloatingPawnMovement");
 		return ptr;
 	}
 
@@ -6856,7 +6856,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SpectatorPawnMovement"));
+		static auto ptr = UObject::FindClass("Class Engine.SpectatorPawnMovement");
 		return ptr;
 	}
 
@@ -6895,7 +6895,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ProjectileMovementComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.ProjectileMovementComponent");
 		return ptr;
 	}
 
@@ -6918,7 +6918,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavigationInvokerComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.NavigationInvokerComponent");
 		return ptr;
 	}
 
@@ -6938,7 +6938,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavRelevantComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.NavRelevantComponent");
 		return ptr;
 	}
 
@@ -6955,7 +6955,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavLinkCustomInterface"));
+		static auto ptr = UObject::FindClass("Class Engine.NavLinkCustomInterface");
 		return ptr;
 	}
 
@@ -6991,7 +6991,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavLinkCustomComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.NavLinkCustomComponent");
 		return ptr;
 	}
 
@@ -7009,7 +7009,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavModifierComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.NavModifierComponent");
 		return ptr;
 	}
 
@@ -7033,7 +7033,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PawnNoiseEmitterComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.PawnNoiseEmitterComponent");
 		return ptr;
 	}
 
@@ -7059,7 +7059,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PhysicsHandleComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.PhysicsHandleComponent");
 		return ptr;
 	}
 
@@ -7088,7 +7088,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PlatformEventsComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.PlatformEventsComponent");
 		return ptr;
 	}
 
@@ -7125,7 +7125,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AtmosphericFogComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.AtmosphericFogComponent");
 		return ptr;
 	}
 
@@ -7156,7 +7156,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SoundAttenuation"));
+		static auto ptr = UObject::FindClass("Class Engine.SoundAttenuation");
 		return ptr;
 	}
 
@@ -7194,7 +7194,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AudioComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.AudioComponent");
 		return ptr;
 	}
 
@@ -7226,7 +7226,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.BasisComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.BasisComponent");
 		return ptr;
 	}
 
@@ -7243,7 +7243,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.CalmWaterComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.CalmWaterComponent");
 		return ptr;
 	}
 
@@ -7260,7 +7260,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ChildActorComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.ChildActorComponent");
 		return ptr;
 	}
 
@@ -7277,7 +7277,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.EditorOnlyChildActorComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.EditorOnlyChildActorComponent");
 		return ptr;
 	}
 
@@ -7296,7 +7296,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DecalComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.DecalComponent");
 		return ptr;
 	}
 
@@ -7333,7 +7333,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ExponentialHeightFogComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.ExponentialHeightFogComponent");
 		return ptr;
 	}
 
@@ -7391,7 +7391,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.FogVolumeComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.FogVolumeComponent");
 		return ptr;
 	}
 
@@ -7408,7 +7408,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InstancedNavMeshInterface"));
+		static auto ptr = UObject::FindClass("Class Engine.InstancedNavMeshInterface");
 		return ptr;
 	}
 
@@ -7425,7 +7425,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InstancedNavMeshComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.InstancedNavMeshComponent");
 		return ptr;
 	}
 
@@ -7446,7 +7446,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AmbientLightSourceComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.AmbientLightSourceComponent");
 		return ptr;
 	}
 
@@ -7493,7 +7493,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DirectionalLightComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.DirectionalLightComponent");
 		return ptr;
 	}
 
@@ -7538,7 +7538,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PointLightComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.PointLightComponent");
 		return ptr;
 	}
 
@@ -7561,7 +7561,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SpotLightComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.SpotLightComponent");
 		return ptr;
 	}
 
@@ -7592,7 +7592,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SkyLightComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.SkyLightComponent");
 		return ptr;
 	}
 
@@ -7619,7 +7619,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavigationGraphNodeComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.NavigationGraphNodeComponent");
 		return ptr;
 	}
 
@@ -7641,7 +7641,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PhysicsSpringComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.PhysicsSpringComponent");
 		return ptr;
 	}
 
@@ -7661,7 +7661,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PhysicsThrusterComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.PhysicsThrusterComponent");
 		return ptr;
 	}
 
@@ -7683,7 +7683,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ArrowComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.ArrowComponent");
 		return ptr;
 	}
 
@@ -7701,7 +7701,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.WaterId"));
+		static auto ptr = UObject::FindClass("Class Engine.WaterId");
 		return ptr;
 	}
 
@@ -7719,7 +7719,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.BaseWaterComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.BaseWaterComponent");
 		return ptr;
 	}
 
@@ -7742,7 +7742,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.FFTWaterComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.FFTWaterComponent");
 		return ptr;
 	}
 
@@ -7773,7 +7773,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.FFTWaterExtendedPlaneComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.FFTWaterExtendedPlaneComponent");
 		return ptr;
 	}
 
@@ -7798,7 +7798,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.BillboardComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.BillboardComponent");
 		return ptr;
 	}
 
@@ -7821,7 +7821,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.BrushComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.BrushComponent");
 		return ptr;
 	}
 
@@ -7843,7 +7843,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DrawFrustumComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.DrawFrustumComponent");
 		return ptr;
 	}
 
@@ -7859,7 +7859,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.LineBatchComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.LineBatchComponent");
 		return ptr;
 	}
 
@@ -7875,7 +7875,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialBillboardComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialBillboardComponent");
 		return ptr;
 	}
 
@@ -7893,7 +7893,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DeveloperSettings"));
+		static auto ptr = UObject::FindClass("Class Engine.DeveloperSettings");
 		return ptr;
 	}
 
@@ -7914,7 +7914,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.CollisionProfile"));
+		static auto ptr = UObject::FindClass("Class Engine.CollisionProfile");
 		return ptr;
 	}
 
@@ -7947,7 +7947,7 @@ public:
 	struct FVector                                     NegativeBoundsExtension;                                  // 0x00DC(0x000C) (Edit, ZeroConstructor, DisableEditOnInstance, IsPlainOldData)
 	struct FBoxSphereBounds                            ExtendedBounds;                                           // 0x00E8(0x001C) (ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData05[0x4];                                       // 0x0104(0x0004) MISSED OFFSET
-	TArray<class FString>                              SourceMaterials;                                          // 0x0108(0x0010) (ZeroConstructor)
+	TArray<struct FString>                             SourceMaterials;                                          // 0x0108(0x0010) (ZeroConstructor)
 	bool                                               bEnableAutomaticInstancing;                               // 0x0118(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData06[0x3];                                       // 0x0119(0x0003) MISSED OFFSET
 	int                                                ElementToIgnoreForTexFactor;                              // 0x011C(0x0004) (ZeroConstructor, IsPlainOldData)
@@ -7956,7 +7956,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.StaticMesh"));
+		static auto ptr = UObject::FindClass("Class Engine.StaticMesh");
 		return ptr;
 	}
 
@@ -7977,7 +7977,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MergedCollisionComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.MergedCollisionComponent");
 		return ptr;
 	}
 
@@ -8004,7 +8004,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DestructibleComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.DestructibleComponent");
 		return ptr;
 	}
 
@@ -8025,7 +8025,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PoseableMeshComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.PoseableMeshComponent");
 		return ptr;
 	}
 
@@ -8051,7 +8051,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PoseableSkeletalMeshComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.PoseableSkeletalMeshComponent");
 		return ptr;
 	}
 
@@ -8091,7 +8091,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.FlatWaterMeshComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.FlatWaterMeshComponent");
 		return ptr;
 	}
 
@@ -8137,7 +8137,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InstancedCoverageMeshComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.InstancedCoverageMeshComponent");
 		return ptr;
 	}
 
@@ -8161,7 +8161,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MergedStaticMeshComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.MergedStaticMeshComponent");
 		return ptr;
 	}
 
@@ -8185,7 +8185,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MobileInstancedStaticMeshComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.MobileInstancedStaticMeshComponent");
 		return ptr;
 	}
 
@@ -8217,7 +8217,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SplineMeshComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.SplineMeshComponent");
 		return ptr;
 	}
 
@@ -8266,7 +8266,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ModelComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.ModelComponent");
 		return ptr;
 	}
 
@@ -8281,7 +8281,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavLinkRenderingComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.NavLinkRenderingComponent");
 		return ptr;
 	}
 
@@ -8297,7 +8297,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavMeshRenderingComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.NavMeshRenderingComponent");
 		return ptr;
 	}
 
@@ -8312,7 +8312,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavTestRenderingComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.NavTestRenderingComponent");
 		return ptr;
 	}
 
@@ -8329,7 +8329,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.BoxComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.BoxComponent");
 		return ptr;
 	}
 
@@ -8350,7 +8350,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SphereComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.SphereComponent");
 		return ptr;
 	}
 
@@ -8370,7 +8370,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DrawSphereComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.DrawSphereComponent");
 		return ptr;
 	}
 
@@ -8385,7 +8385,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.EllipsoidComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.EllipsoidComponent");
 		return ptr;
 	}
 
@@ -8414,7 +8414,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.TextRenderComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.TextRenderComponent");
 		return ptr;
 	}
 
@@ -8424,7 +8424,7 @@ public:
 	void SetWorldSize(float Value);
 	void SetTextRenderColor(const struct FColor& Value);
 	void SetTextMaterial(class UMaterialInterface* Material);
-	void SetText(const class FString& Value);
+	void SetText(const struct FString& Value);
 	void SetHorizSpacingAdjust(float Value);
 	void SetHorizontalAlignment(TEnumAsByte<EHorizTextAligment> Value);
 	void SetFont(class UFont* Value);
@@ -8447,7 +8447,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.VectorFieldComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.VectorFieldComponent");
 		return ptr;
 	}
 
@@ -8472,7 +8472,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.RadialForceComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.RadialForceComponent");
 		return ptr;
 	}
 
@@ -8497,7 +8497,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ReflectionCaptureComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.ReflectionCaptureComponent");
 		return ptr;
 	}
 
@@ -8521,7 +8521,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.BoxReflectionCaptureComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.BoxReflectionCaptureComponent");
 		return ptr;
 	}
 
@@ -8538,7 +8538,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PlaneReflectionCaptureComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.PlaneReflectionCaptureComponent");
 		return ptr;
 	}
 
@@ -8555,7 +8555,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SphereReflectionCaptureComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.SphereReflectionCaptureComponent");
 		return ptr;
 	}
 
@@ -8576,7 +8576,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SceneCaptureComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.SceneCaptureComponent");
 		return ptr;
 	}
 
@@ -8610,7 +8610,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SceneCaptureComponent2D"));
+		static auto ptr = UObject::FindClass("Class Engine.SceneCaptureComponent2D");
 		return ptr;
 	}
 
@@ -8630,7 +8630,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SceneCaptureComponentCube"));
+		static auto ptr = UObject::FindClass("Class Engine.SceneCaptureComponentCube");
 		return ptr;
 	}
 
@@ -8648,7 +8648,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.WaterEmissionVolumeComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.WaterEmissionVolumeComponent");
 		return ptr;
 	}
 
@@ -8666,7 +8666,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.WindDirectionalSourceComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.WindDirectionalSourceComponent");
 		return ptr;
 	}
 
@@ -8682,7 +8682,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.TimelineComponent"));
+		static auto ptr = UObject::FindClass("Class Engine.TimelineComponent");
 		return ptr;
 	}
 
@@ -8716,7 +8716,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AggregatableInterface"));
+		static auto ptr = UObject::FindClass("Class Engine.AggregatableInterface");
 		return ptr;
 	}
 
@@ -8732,7 +8732,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AnimComposite"));
+		static auto ptr = UObject::FindClass("Class Engine.AnimComposite");
 		return ptr;
 	}
 
@@ -8774,7 +8774,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AnimSequence"));
+		static auto ptr = UObject::FindClass("Class Engine.AnimSequence");
 		return ptr;
 	}
 
@@ -8800,7 +8800,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.BlendSpaceBase"));
+		static auto ptr = UObject::FindClass("Class Engine.BlendSpaceBase");
 		return ptr;
 	}
 
@@ -8817,7 +8817,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.BlendSpace"));
+		static auto ptr = UObject::FindClass("Class Engine.BlendSpace");
 		return ptr;
 	}
 
@@ -8832,7 +8832,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AimOffsetBlendSpace"));
+		static auto ptr = UObject::FindClass("Class Engine.AimOffsetBlendSpace");
 		return ptr;
 	}
 
@@ -8849,7 +8849,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.BlendSpace1D"));
+		static auto ptr = UObject::FindClass("Class Engine.BlendSpace1D");
 		return ptr;
 	}
 
@@ -8864,7 +8864,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AimOffsetBlendSpace1D"));
+		static auto ptr = UObject::FindClass("Class Engine.AimOffsetBlendSpace1D");
 		return ptr;
 	}
 
@@ -8876,7 +8876,7 @@ public:
 class UAnimCompress : public UObject
 {
 public:
-	class FString                                      Description;                                              // 0x0028(0x0010) (Edit, ZeroConstructor, EditConst)
+	struct FString                                     Description;                                              // 0x0028(0x0010) (Edit, ZeroConstructor, EditConst)
 	unsigned char                                      bNeedsSkeleton : 1;                                       // 0x0038(0x0001)
 	unsigned char                                      UnknownData00[0x3];                                       // 0x0039(0x0003) MISSED OFFSET
 	TEnumAsByte<EAnimationCompressionFormat>           TranslationCompressionFormat;                             // 0x003C(0x0001) (ZeroConstructor, IsPlainOldData)
@@ -8886,7 +8886,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AnimCompress"));
+		static auto ptr = UObject::FindClass("Class Engine.AnimCompress");
 		return ptr;
 	}
 
@@ -8910,7 +8910,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AnimCompress_Automatic"));
+		static auto ptr = UObject::FindClass("Class Engine.AnimCompress_Automatic");
 		return ptr;
 	}
 
@@ -8925,7 +8925,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AnimCompress_BitwiseCompressOnly"));
+		static auto ptr = UObject::FindClass("Class Engine.AnimCompress_BitwiseCompressOnly");
 		return ptr;
 	}
 
@@ -8940,7 +8940,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AnimCompress_LeastDestructive"));
+		static auto ptr = UObject::FindClass("Class Engine.AnimCompress_LeastDestructive");
 		return ptr;
 	}
 
@@ -8958,7 +8958,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AnimCompress_RemoveEverySecondKey"));
+		static auto ptr = UObject::FindClass("Class Engine.AnimCompress_RemoveEverySecondKey");
 		return ptr;
 	}
 
@@ -8983,7 +8983,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AnimCompress_RemoveLinearKeys"));
+		static auto ptr = UObject::FindClass("Class Engine.AnimCompress_RemoveLinearKeys");
 		return ptr;
 	}
 
@@ -9023,7 +9023,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AnimCompress_PerTrackCompression"));
+		static auto ptr = UObject::FindClass("Class Engine.AnimCompress_PerTrackCompression");
 		return ptr;
 	}
 
@@ -9042,7 +9042,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AnimCompress_RemoveTrivialKeys"));
+		static auto ptr = UObject::FindClass("Class Engine.AnimCompress_RemoveTrivialKeys");
 		return ptr;
 	}
 
@@ -9070,7 +9070,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AnimSingleNodeInstance"));
+		static auto ptr = UObject::FindClass("Class Engine.AnimSingleNodeInstance");
 		return ptr;
 	}
 
@@ -9097,7 +9097,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AnimMetaData"));
+		static auto ptr = UObject::FindClass("Class Engine.AnimMetaData");
 		return ptr;
 	}
 
@@ -9120,7 +9120,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AnimNotifyState_TimedParticleEffect"));
+		static auto ptr = UObject::FindClass("Class Engine.AnimNotifyState_TimedParticleEffect");
 		return ptr;
 	}
 
@@ -9142,7 +9142,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AnimNotifyState_Trail"));
+		static auto ptr = UObject::FindClass("Class Engine.AnimNotifyState_Trail");
 		return ptr;
 	}
 
@@ -9170,7 +9170,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AnimSet"));
+		static auto ptr = UObject::FindClass("Class Engine.AnimSet");
 		return ptr;
 	}
 
@@ -9185,7 +9185,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AssetImportData"));
+		static auto ptr = UObject::FindClass("Class Engine.AssetImportData");
 		return ptr;
 	}
 
@@ -9200,7 +9200,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AssetUserData"));
+		static auto ptr = UObject::FindClass("Class Engine.AssetUserData");
 		return ptr;
 	}
 
@@ -9217,9 +9217,9 @@ public:
 	struct FBuildPromotionTestSettings                 BuildPromotionTest;                                       // 0x0048(0x0210) (Edit, Config)
 	struct FMaterialEditorPromotionSettings            MaterialEditorPromotionTest;                              // 0x0258(0x0030) (Edit, Config)
 	struct FParticleEditorPromotionSettings            ParticleEditorPromotionTest;                              // 0x0288(0x0010) (Edit, Config)
-	TArray<class FString>                              EngineTestModules;                                        // 0x0298(0x0010) (Edit, ZeroConstructor, Config)
-	TArray<class FString>                              EditorTestModules;                                        // 0x02A8(0x0010) (Edit, ZeroConstructor, Config)
-	TArray<class FString>                              TestLevelFolders;                                         // 0x02B8(0x0010) (Edit, ZeroConstructor, Config)
+	TArray<struct FString>                             EngineTestModules;                                        // 0x0298(0x0010) (Edit, ZeroConstructor, Config)
+	TArray<struct FString>                             EditorTestModules;                                        // 0x02A8(0x0010) (Edit, ZeroConstructor, Config)
+	TArray<struct FString>                             TestLevelFolders;                                         // 0x02B8(0x0010) (Edit, ZeroConstructor, Config)
 	TArray<struct FOpenTestAsset>                      TestAssetsToOpen;                                         // 0x02C8(0x0010) (Edit, ZeroConstructor, Config)
 	TArray<struct FExternalToolDefinition>             ExternalTools;                                            // 0x02D8(0x0010) (Edit, ZeroConstructor, Config)
 	TArray<struct FEditorImportExportTestDefinition>   ImportExportTestDefinitions;                              // 0x02E8(0x0010) (Edit, ZeroConstructor, Config)
@@ -9227,7 +9227,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AutomationTestSettings"));
+		static auto ptr = UObject::FindClass("Class Engine.AutomationTestSettings");
 		return ptr;
 	}
 
@@ -9241,14 +9241,14 @@ class UAutomationTestUserSettings : public UObject
 public:
 	bool                                               FilterTests;                                              // 0x0028(0x0001) (Edit, ZeroConstructor, Config, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x7];                                       // 0x0029(0x0007) MISSED OFFSET
-	TArray<class FString>                              IncludedTestsPrefix;                                      // 0x0030(0x0010) (Edit, ZeroConstructor, Config)
-	TArray<class FString>                              ExcludedTestsPrefix;                                      // 0x0040(0x0010) (Edit, ZeroConstructor, Config)
+	TArray<struct FString>                             IncludedTestsPrefix;                                      // 0x0030(0x0010) (Edit, ZeroConstructor, Config)
+	TArray<struct FString>                             ExcludedTestsPrefix;                                      // 0x0040(0x0010) (Edit, ZeroConstructor, Config)
 	bool                                               IncludeEpicTests;                                         // 0x0050(0x0001) (Edit, ZeroConstructor, Config, IsPlainOldData)
 	unsigned char                                      UnknownData01[0x7];                                       // 0x0051(0x0007) MISSED OFFSET
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AutomationTestUserSettings"));
+		static auto ptr = UObject::FindClass("Class Engine.AutomationTestUserSettings");
 		return ptr;
 	}
 
@@ -9271,7 +9271,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AvoidanceManager"));
+		static auto ptr = UObject::FindClass("Class Engine.AvoidanceManager");
 		return ptr;
 	}
 
@@ -9296,7 +9296,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AnimBlueprint"));
+		static auto ptr = UObject::FindClass("Class Engine.AnimBlueprint");
 		return ptr;
 	}
 
@@ -9311,7 +9311,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.LevelScriptBlueprint"));
+		static auto ptr = UObject::FindClass("Class Engine.LevelScriptBlueprint");
 		return ptr;
 	}
 
@@ -9328,7 +9328,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DataTable"));
+		static auto ptr = UObject::FindClass("Class Engine.DataTable");
 		return ptr;
 	}
 
@@ -9343,14 +9343,14 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DataTableFunctionLibrary"));
+		static auto ptr = UObject::FindClass("Class Engine.DataTableFunctionLibrary");
 		return ptr;
 	}
 
 
-	static void GetDataTableRowNames(class UDataTable* Table, TArray<struct FName>* OutRowNames);
-	static bool GetDataTableRowFromName(class UDataTable* Table, const struct FName& RowName, struct FTableRowBase* OutRow);
-	static void EvaluateCurveTableRow(class UCurveTable* CurveTable, const struct FName& RowName, float InXY, TEnumAsByte<EEvaluateCurveTableResult>* OutResult, float* OutXY);
+	void STATIC_GetDataTableRowNames(class UDataTable* Table, TArray<struct FName>* OutRowNames);
+	bool STATIC_GetDataTableRowFromName(class UDataTable* Table, const struct FName& RowName, struct FTableRowBase* OutRow);
+	void STATIC_EvaluateCurveTableRow(class UCurveTable* CurveTable, const struct FName& RowName, float InXY, TEnumAsByte<EEvaluateCurveTableResult>* OutResult, float* OutXY);
 };
 
 
@@ -9362,7 +9362,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DebugDrawService"));
+		static auto ptr = UObject::FindClass("Class Engine.DebugDrawService");
 		return ptr;
 	}
 
@@ -9377,12 +9377,12 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DeformablesBlueprintFunctionLibrary"));
+		static auto ptr = UObject::FindClass("Class Engine.DeformablesBlueprintFunctionLibrary");
 		return ptr;
 	}
 
 
-	static void ApplyWorldForceToDeformables(class USkinnedMeshComponent* SkinnedMeshComp, const struct FVector& WorldSpaceForce);
+	void STATIC_ApplyWorldForceToDeformables(class USkinnedMeshComponent* SkinnedMeshComp, const struct FVector& WorldSpaceForce);
 };
 
 
@@ -9394,12 +9394,12 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.FeatureConfigBlueprintFunctionLibrary"));
+		static auto ptr = UObject::FindClass("Class Engine.FeatureConfigBlueprintFunctionLibrary");
 		return ptr;
 	}
 
 
-	static bool IsFeatureEnabled(const struct FName& FeatureName);
+	bool STATIC_IsFeatureEnabled(const struct FName& FeatureName);
 };
 
 
@@ -9411,7 +9411,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DialogueTypes"));
+		static auto ptr = UObject::FindClass("Class Engine.DialogueTypes");
 		return ptr;
 	}
 
@@ -9426,90 +9426,90 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.GameplayStatics"));
+		static auto ptr = UObject::FindClass("Class Engine.GameplayStatics");
 		return ptr;
 	}
 
 
-	static void UnloadStreamLevel(class UObject* WorldContextObject, const struct FName& LevelName, const struct FLatentActionInfo& LatentInfo);
-	static class UAudioComponent* SpawnSoundAttached(class USoundBase* Sound, class USceneComponent* AttachToComponent, const struct FName& AttachPointName, const struct FVector& Location, const struct FRotator& Rotation, TEnumAsByte<EAttachLocation> LocationType, bool bStopWhenAttachedToDestroyed, float VolumeMultiplier, float PitchMultiplier, float StartTime, class USoundAttenuation* AttenuationSettings);
-	static class UAudioComponent* SpawnSoundAtLocation(class UObject* WorldContextObject, class USoundBase* Sound, const struct FVector& Location, const struct FRotator& Rotation, float VolumeMultiplier, float PitchMultiplier, float StartTime, class USoundAttenuation* AttenuationSettings);
-	static class UAudioComponent* SpawnSound2D(class UObject* WorldContextObject, class USoundBase* Sound, float VolumeMultiplier, float PitchMultiplier, float StartTime);
-	static class UObject* SpawnObject(class UClass* ObjectClass, class UObject* Outer);
-	static class UParticleSystemComponent* SpawnEmitterAttached(class UParticleSystem* EmitterTemplate, class USceneComponent* AttachToComponent, const struct FName& AttachPointName, const struct FVector& Location, const struct FRotator& Rotation, TEnumAsByte<EAttachLocation> LocationType, bool bAutoDestroy);
-	static class UParticleSystemComponent* SpawnEmitterAtLocation(class UObject* WorldContextObject, class UParticleSystem* EmitterTemplate, const struct FVector& Location, const struct FRotator& Rotation, bool bAutoDestroy);
-	static class UAudioComponent* SpawnDialogueAttached(class UDialogueWave* Dialogue, const struct FDialogueContext& Context, class USceneComponent* AttachToComponent, const struct FName& AttachPointName, const struct FVector& Location, const struct FRotator& Rotation, TEnumAsByte<EAttachLocation> LocationType, bool bStopWhenAttachedToDestroyed, float VolumeMultiplier, float PitchMultiplier, float StartTime, class USoundAttenuation* AttenuationSettings);
-	static class UAudioComponent* SpawnDialogueAtLocation(class UObject* WorldContextObject, class UDialogueWave* Dialogue, const struct FDialogueContext& Context, const struct FVector& Location, const struct FRotator& Rotation, float VolumeMultiplier, float PitchMultiplier, float StartTime, class USoundAttenuation* AttenuationSettings);
-	static class UAudioComponent* SpawnDialogue2D(class UObject* WorldContextObject, class UDialogueWave* Dialogue, const struct FDialogueContext& Context, float VolumeMultiplier, float PitchMultiplier, float StartTime);
-	static class UDecalComponent* SpawnDecalAttached(class UMaterialInterface* DecalMaterial, const struct FVector& DecalSize, class USceneComponent* AttachToComponent, const struct FName& AttachPointName, const struct FVector& Location, const struct FRotator& Rotation, TEnumAsByte<EAttachLocation> LocationType, float LifeSpan);
-	static class UDecalComponent* SpawnDecalAtLocation(class UObject* WorldContextObject, class UMaterialInterface* DecalMaterial, const struct FVector& DecalSize, const struct FVector& Location, const struct FRotator& Rotation, float LifeSpan);
-	static void SetWorldOriginLocation(class UObject* WorldContextObject, const struct FIntVector& NewLocation);
-	static void SetGlobalTimeDilation(class UObject* WorldContextObject, float TimeDilation);
-	static bool SetGamePaused(class UObject* WorldContextObject, bool bPaused);
-	static void SetBaseSoundMix(class UObject* WorldContextObject, class USoundMix* InSoundMix);
-	static bool SaveGameToSlot(class USaveGame* SaveGameObject, const class FString& SlotName, int UserIndex);
-	static void RemovePlayer(class APlayerController* Player, bool bDestroyPawn);
-	static void PushSoundMixModifier(class UObject* WorldContextObject, class USoundMix* InSoundMixModifier);
-	static bool ProjectWorldToScreen(class APlayerController* Player, const struct FVector& WorldPosition, struct FVector2D* ScreenPosition);
-	static void PopSoundMixModifier(class UObject* WorldContextObject, class USoundMix* InSoundMixModifier);
-	static void PlayWorldCameraShake(class UObject* WorldContextObject, class UClass* Shake, const struct FVector& Epicenter, float InnerRadius, float OuterRadius, float Falloff, bool bOrientShakeTowardsEpicenter);
-	static void PlaySoundAtLocation(class UObject* WorldContextObject, class USoundBase* Sound, const struct FVector& Location, const struct FRotator& Rotation, float VolumeMultiplier, float PitchMultiplier, float StartTime, class USoundAttenuation* AttenuationSettings);
-	static void PlaySound2D(class UObject* WorldContextObject, class USoundBase* Sound, float VolumeMultiplier, float PitchMultiplier, float StartTime);
-	static void PlayDialogueAtLocation(class UObject* WorldContextObject, class UDialogueWave* Dialogue, const struct FDialogueContext& Context, const struct FVector& Location, const struct FRotator& Rotation, float VolumeMultiplier, float PitchMultiplier, float StartTime, class USoundAttenuation* AttenuationSettings);
-	static void PlayDialogue2D(class UObject* WorldContextObject, class UDialogueWave* Dialogue, const struct FDialogueContext& Context, float VolumeMultiplier, float PitchMultiplier, float StartTime);
-	static class FString ParseOption(const class FString& Options, const class FString& Key);
-	static void OpenLevel(class UObject* WorldContextObject, const struct FName& LevelName, bool bAbsolute, const class FString& Options);
-	static void LoadStreamLevel(class UObject* WorldContextObject, const struct FName& LevelName, bool bMakeVisibleAfterLoad, bool bShouldBlockOnLoad, const struct FLatentActionInfo& LatentInfo);
-	static class USaveGame* LoadGameFromSlot(const class FString& SlotName, int UserIndex);
-	static bool IsGamePaused(class UObject* WorldContextObject);
-	static bool HasOption(const class FString& Options, const class FString& InKey);
-	static int GrassOverlappingSphereCount(class UObject* WorldContextObject, class UStaticMesh* StaticMesh, const struct FVector& CenterPosition, float Radius);
-	static struct FIntVector GetWorldOriginLocation(class UObject* WorldContextObject);
-	static float GetWorldDeltaSeconds(class UObject* WorldContextObject);
-	static TEnumAsByte<EPhysicalSurface> GetSurfaceType(const struct FHitResult& Hit);
-	static class ULevelStreaming* GetStreamingLevel(class UObject* WorldContextObject, const struct FName& PackageName);
-	static float GetRealTimeSeconds(class UObject* WorldContextObject);
-	static class APawn* GetPlayerPawn(class UObject* WorldContextObject, int PlayerIndex);
-	static class APlayerController* GetPlayerController(class UObject* WorldContextObject, int PlayerIndex);
-	static class ACharacter* GetPlayerCharacter(class UObject* WorldContextObject, int PlayerIndex);
-	static class APlayerCameraManager* GetPlayerCameraManager(class UObject* WorldContextObject, int PlayerIndex);
-	static class FString GetPlatformName();
-	static class UClass* GetObjectClass(class UObject* Object);
-	static void GetKeyValue(const class FString& Pair, class FString* Key, class FString* Value);
-	static int GetIntOption(const class FString& Options, const class FString& Key, int DefaultValue);
-	static float GetGlobalTimeDilation(class UObject* WorldContextObject);
-	static class AGameState* GetGameState(class UObject* WorldContextObject);
-	static class AGameMode* GetGameMode(class UObject* WorldContextObject);
-	static class UGameInstance* GetGameInstance(class UObject* WorldContextObject);
-	static class FString GetCurrentLevelName(class UObject* WorldContextObject, bool bRemovePrefixString);
-	static float GetAudioTimeSeconds(class UObject* WorldContextObject);
-	static void GetAllActorsWithInterface(class UObject* WorldContextObject, class UClass* Interface, TArray<class AActor*>* OutActors);
-	static void GetAllActorsOfClass(class UObject* WorldContextObject, class UClass* ActorClass, TArray<class AActor*>* OutActors);
-	static void GetActorArrayBounds(TArray<class AActor*> Actors, bool bOnlyCollidingComponents, struct FVector* Center, struct FVector* BoxExtent);
-	static struct FVector GetActorArrayAverageLocation(TArray<class AActor*> Actors);
-	static void GetAccurateRealTime(class UObject* WorldContextObject, int* Seconds, float* PartialSeconds);
-	static void FlushLevelStreaming(class UObject* WorldContextObject);
-	static class AActor* FinishSpawningActor(class AActor* Actor, const struct FTransform& SpawnTransform);
-	static void EnableLiveStreaming(bool Enable);
-	static bool DoesSaveGameExist(const class FString& SlotName, int UserIndex);
-	static bool DeprojectScreenToWorld(class APlayerController* Player, const struct FVector2D& ScreenPosition, struct FVector* WorldPosition, struct FVector* WorldDirection);
-	static bool DeleteGameInSlot(const class FString& SlotName, int UserIndex);
-	static void DeactivateReverbEffect(class UObject* WorldContextObject, const struct FName& TagName);
-	static class USaveGame* CreateSaveGameObjectFromBlueprint(class UBlueprint* SaveGameBlueprint);
-	static class USaveGame* CreateSaveGameObject(class UClass* SaveGameClass);
-	static class APlayerController* CreatePlayer(class UObject* WorldContextObject, int ControllerId, bool bSpawnPawn);
-	static void ClearSoundMixModifiers(class UObject* WorldContextObject);
-	static void BreakHitResult(const struct FHitResult& Hit, bool* bBlockingHit, bool* bInitialOverlap, float* Time, struct FVector* Location, struct FVector* ImpactPoint, struct FVector* Normal, struct FVector* ImpactNormal, class UPhysicalMaterial** PhysMat, class AActor** HitActor, class UPrimitiveComponent** HitComponent, struct FName* HitBoneName, int* HitItem, struct FVector* TraceStart, struct FVector* TraceEnd);
-	static bool BlueprintSuggestProjectileVelocity(class UObject* WorldContextObject, const struct FVector& StartLocation, const struct FVector& EndLocation, float LaunchSpeed, float OverrideGravityZ, TEnumAsByte<ESuggestProjVelocityTraceOption> TraceOption, float CollisionRadius, bool bFavorHighArc, bool bDrawDebug, struct FVector* TossVelocity);
-	static class AActor* BeginSpawningActorFromClass(class UObject* WorldContextObject, class UClass* ActorClass, const struct FTransform& SpawnTransform, bool bNoCollisionFail, class AActor* Owner);
-	static class AActor* BeginSpawningActorFromBlueprint(class UObject* WorldContextObject, class UBlueprint* Blueprint, const struct FTransform& SpawnTransform, bool bNoCollisionFail);
-	static class AActor* BeginDeferredActorSpawnFromClass(class UObject* WorldContextObject, class UClass* ActorClass, const struct FTransform& SpawnTransform, TEnumAsByte<ESpawnActorCollisionHandlingMethod> CollisionHandlingOverride, class AActor* Owner);
-	static bool AreAnyListenersWithinRange(class UObject* WorldContextObject, const struct FVector& Location, float MaximumRange);
-	static bool ApplyRadialDamageWithFalloff(class UObject* WorldContextObject, float BaseDamage, float MinimumDamage, const struct FVector& Origin, float DamageInnerRadius, float DamageOuterRadius, float DamageFalloff, class UClass* DamageTypeClass, TArray<class AActor*> IgnoreActors, class AActor* DamageCauser, class AController* InstigatedByController, TEnumAsByte<ECollisionChannel> DamagePreventionChannel);
-	static bool ApplyRadialDamage(class UObject* WorldContextObject, float BaseDamage, const struct FVector& Origin, float DamageRadius, class UClass* DamageTypeClass, TArray<class AActor*> IgnoreActors, class AActor* DamageCauser, class AController* InstigatedByController, bool bDoFullDamage, TEnumAsByte<ECollisionChannel> DamagePreventionChannel);
-	static void ApplyPointDamage(class AActor* DamagedActor, float BaseDamage, const struct FVector& HitFromDirection, const struct FHitResult& HitInfo, class AController* EventInstigator, class AActor* DamageCauser, class UClass* DamageTypeClass);
-	static void ApplyDamage(class AActor* DamagedActor, float BaseDamage, class AController* EventInstigator, class AActor* DamageCauser, class UClass* DamageTypeClass);
-	static void ActivateReverbEffect(class UObject* WorldContextObject, class UReverbEffect* ReverbEffect, const struct FName& TagName, float Priority, float Volume, float FadeTime);
+	void STATIC_UnloadStreamLevel(class UObject* WorldContextObject, const struct FName& LevelName, const struct FLatentActionInfo& LatentInfo);
+	class UAudioComponent* STATIC_SpawnSoundAttached(class USoundBase* Sound, class USceneComponent* AttachToComponent, const struct FName& AttachPointName, const struct FVector& Location, const struct FRotator& Rotation, TEnumAsByte<EAttachLocation> LocationType, bool bStopWhenAttachedToDestroyed, float VolumeMultiplier, float PitchMultiplier, float StartTime, class USoundAttenuation* AttenuationSettings);
+	class UAudioComponent* STATIC_SpawnSoundAtLocation(class UObject* WorldContextObject, class USoundBase* Sound, const struct FVector& Location, const struct FRotator& Rotation, float VolumeMultiplier, float PitchMultiplier, float StartTime, class USoundAttenuation* AttenuationSettings);
+	class UAudioComponent* STATIC_SpawnSound2D(class UObject* WorldContextObject, class USoundBase* Sound, float VolumeMultiplier, float PitchMultiplier, float StartTime);
+	class UObject* STATIC_SpawnObject(class UClass* ObjectClass, class UObject* Outer);
+	class UParticleSystemComponent* STATIC_SpawnEmitterAttached(class UParticleSystem* EmitterTemplate, class USceneComponent* AttachToComponent, const struct FName& AttachPointName, const struct FVector& Location, const struct FRotator& Rotation, TEnumAsByte<EAttachLocation> LocationType, bool bAutoDestroy);
+	class UParticleSystemComponent* STATIC_SpawnEmitterAtLocation(class UObject* WorldContextObject, class UParticleSystem* EmitterTemplate, const struct FVector& Location, const struct FRotator& Rotation, bool bAutoDestroy);
+	class UAudioComponent* STATIC_SpawnDialogueAttached(class UDialogueWave* Dialogue, const struct FDialogueContext& Context, class USceneComponent* AttachToComponent, const struct FName& AttachPointName, const struct FVector& Location, const struct FRotator& Rotation, TEnumAsByte<EAttachLocation> LocationType, bool bStopWhenAttachedToDestroyed, float VolumeMultiplier, float PitchMultiplier, float StartTime, class USoundAttenuation* AttenuationSettings);
+	class UAudioComponent* STATIC_SpawnDialogueAtLocation(class UObject* WorldContextObject, class UDialogueWave* Dialogue, const struct FDialogueContext& Context, const struct FVector& Location, const struct FRotator& Rotation, float VolumeMultiplier, float PitchMultiplier, float StartTime, class USoundAttenuation* AttenuationSettings);
+	class UAudioComponent* STATIC_SpawnDialogue2D(class UObject* WorldContextObject, class UDialogueWave* Dialogue, const struct FDialogueContext& Context, float VolumeMultiplier, float PitchMultiplier, float StartTime);
+	class UDecalComponent* STATIC_SpawnDecalAttached(class UMaterialInterface* DecalMaterial, const struct FVector& DecalSize, class USceneComponent* AttachToComponent, const struct FName& AttachPointName, const struct FVector& Location, const struct FRotator& Rotation, TEnumAsByte<EAttachLocation> LocationType, float LifeSpan);
+	class UDecalComponent* STATIC_SpawnDecalAtLocation(class UObject* WorldContextObject, class UMaterialInterface* DecalMaterial, const struct FVector& DecalSize, const struct FVector& Location, const struct FRotator& Rotation, float LifeSpan);
+	void STATIC_SetWorldOriginLocation(class UObject* WorldContextObject, const struct FIntVector& NewLocation);
+	void STATIC_SetGlobalTimeDilation(class UObject* WorldContextObject, float TimeDilation);
+	bool STATIC_SetGamePaused(class UObject* WorldContextObject, bool bPaused);
+	void STATIC_SetBaseSoundMix(class UObject* WorldContextObject, class USoundMix* InSoundMix);
+	bool STATIC_SaveGameToSlot(class USaveGame* SaveGameObject, const struct FString& SlotName, int UserIndex);
+	void STATIC_RemovePlayer(class APlayerController* Player, bool bDestroyPawn);
+	void STATIC_PushSoundMixModifier(class UObject* WorldContextObject, class USoundMix* InSoundMixModifier);
+	bool STATIC_ProjectWorldToScreen(class APlayerController* Player, const struct FVector& WorldPosition, struct FVector2D* ScreenPosition);
+	void STATIC_PopSoundMixModifier(class UObject* WorldContextObject, class USoundMix* InSoundMixModifier);
+	void STATIC_PlayWorldCameraShake(class UObject* WorldContextObject, class UClass* Shake, const struct FVector& Epicenter, float InnerRadius, float OuterRadius, float Falloff, bool bOrientShakeTowardsEpicenter);
+	void STATIC_PlaySoundAtLocation(class UObject* WorldContextObject, class USoundBase* Sound, const struct FVector& Location, const struct FRotator& Rotation, float VolumeMultiplier, float PitchMultiplier, float StartTime, class USoundAttenuation* AttenuationSettings);
+	void STATIC_PlaySound2D(class UObject* WorldContextObject, class USoundBase* Sound, float VolumeMultiplier, float PitchMultiplier, float StartTime);
+	void STATIC_PlayDialogueAtLocation(class UObject* WorldContextObject, class UDialogueWave* Dialogue, const struct FDialogueContext& Context, const struct FVector& Location, const struct FRotator& Rotation, float VolumeMultiplier, float PitchMultiplier, float StartTime, class USoundAttenuation* AttenuationSettings);
+	void STATIC_PlayDialogue2D(class UObject* WorldContextObject, class UDialogueWave* Dialogue, const struct FDialogueContext& Context, float VolumeMultiplier, float PitchMultiplier, float StartTime);
+	struct FString STATIC_ParseOption(const struct FString& Options, const struct FString& Key);
+	void STATIC_OpenLevel(class UObject* WorldContextObject, const struct FName& LevelName, bool bAbsolute, const struct FString& Options);
+	void STATIC_LoadStreamLevel(class UObject* WorldContextObject, const struct FName& LevelName, bool bMakeVisibleAfterLoad, bool bShouldBlockOnLoad, const struct FLatentActionInfo& LatentInfo);
+	class USaveGame* STATIC_LoadGameFromSlot(const struct FString& SlotName, int UserIndex);
+	bool STATIC_IsGamePaused(class UObject* WorldContextObject);
+	bool STATIC_HasOption(const struct FString& Options, const struct FString& InKey);
+	int STATIC_GrassOverlappingSphereCount(class UObject* WorldContextObject, class UStaticMesh* StaticMesh, const struct FVector& CenterPosition, float Radius);
+	struct FIntVector STATIC_GetWorldOriginLocation(class UObject* WorldContextObject);
+	float STATIC_GetWorldDeltaSeconds(class UObject* WorldContextObject);
+	TEnumAsByte<EPhysicalSurface> STATIC_GetSurfaceType(const struct FHitResult& Hit);
+	class ULevelStreaming* STATIC_GetStreamingLevel(class UObject* WorldContextObject, const struct FName& PackageName);
+	float STATIC_GetRealTimeSeconds(class UObject* WorldContextObject);
+	class APawn* STATIC_GetPlayerPawn(class UObject* WorldContextObject, int PlayerIndex);
+	class APlayerController* STATIC_GetPlayerController(class UObject* WorldContextObject, int PlayerIndex);
+	class ACharacter* STATIC_GetPlayerCharacter(class UObject* WorldContextObject, int PlayerIndex);
+	class APlayerCameraManager* STATIC_GetPlayerCameraManager(class UObject* WorldContextObject, int PlayerIndex);
+	struct FString STATIC_GetPlatformName();
+	class UClass* STATIC_GetObjectClass(class UObject* Object);
+	void STATIC_GetKeyValue(const struct FString& Pair, struct FString* Key, struct FString* Value);
+	int STATIC_GetIntOption(const struct FString& Options, const struct FString& Key, int DefaultValue);
+	float STATIC_GetGlobalTimeDilation(class UObject* WorldContextObject);
+	class AGameState* STATIC_GetGameState(class UObject* WorldContextObject);
+	class AGameMode* STATIC_GetGameMode(class UObject* WorldContextObject);
+	class UGameInstance* STATIC_GetGameInstance(class UObject* WorldContextObject);
+	struct FString STATIC_GetCurrentLevelName(class UObject* WorldContextObject, bool bRemovePrefixString);
+	float STATIC_GetAudioTimeSeconds(class UObject* WorldContextObject);
+	void STATIC_GetAllActorsWithInterface(class UObject* WorldContextObject, class UClass* Interface, TArray<class AActor*>* OutActors);
+	void STATIC_GetAllActorsOfClass(class UObject* WorldContextObject, class UClass* ActorClass, TArray<class AActor*>* OutActors);
+	void STATIC_GetActorArrayBounds(TArray<class AActor*> Actors, bool bOnlyCollidingComponents, struct FVector* Center, struct FVector* BoxExtent);
+	struct FVector STATIC_GetActorArrayAverageLocation(TArray<class AActor*> Actors);
+	void STATIC_GetAccurateRealTime(class UObject* WorldContextObject, int* Seconds, float* PartialSeconds);
+	void STATIC_FlushLevelStreaming(class UObject* WorldContextObject);
+	class AActor* STATIC_FinishSpawningActor(class AActor* Actor, const struct FTransform& SpawnTransform);
+	void STATIC_EnableLiveStreaming(bool Enable);
+	bool STATIC_DoesSaveGameExist(const struct FString& SlotName, int UserIndex);
+	bool STATIC_DeprojectScreenToWorld(class APlayerController* Player, const struct FVector2D& ScreenPosition, struct FVector* WorldPosition, struct FVector* WorldDirection);
+	bool STATIC_DeleteGameInSlot(const struct FString& SlotName, int UserIndex);
+	void STATIC_DeactivateReverbEffect(class UObject* WorldContextObject, const struct FName& TagName);
+	class USaveGame* STATIC_CreateSaveGameObjectFromBlueprint(class UBlueprint* SaveGameBlueprint);
+	class USaveGame* STATIC_CreateSaveGameObject(class UClass* SaveGameClass);
+	class APlayerController* STATIC_CreatePlayer(class UObject* WorldContextObject, int ControllerId, bool bSpawnPawn);
+	void STATIC_ClearSoundMixModifiers(class UObject* WorldContextObject);
+	void STATIC_BreakHitResult(const struct FHitResult& Hit, bool* bBlockingHit, bool* bInitialOverlap, float* Time, struct FVector* Location, struct FVector* ImpactPoint, struct FVector* Normal, struct FVector* ImpactNormal, class UPhysicalMaterial** PhysMat, class AActor** HitActor, class UPrimitiveComponent** HitComponent, struct FName* HitBoneName, int* HitItem, struct FVector* TraceStart, struct FVector* TraceEnd);
+	bool STATIC_BlueprintSuggestProjectileVelocity(class UObject* WorldContextObject, const struct FVector& StartLocation, const struct FVector& EndLocation, float LaunchSpeed, float OverrideGravityZ, TEnumAsByte<ESuggestProjVelocityTraceOption> TraceOption, float CollisionRadius, bool bFavorHighArc, bool bDrawDebug, struct FVector* TossVelocity);
+	class AActor* STATIC_BeginSpawningActorFromClass(class UObject* WorldContextObject, class UClass* ActorClass, const struct FTransform& SpawnTransform, bool bNoCollisionFail, class AActor* Owner);
+	class AActor* STATIC_BeginSpawningActorFromBlueprint(class UObject* WorldContextObject, class UBlueprint* Blueprint, const struct FTransform& SpawnTransform, bool bNoCollisionFail);
+	class AActor* STATIC_BeginDeferredActorSpawnFromClass(class UObject* WorldContextObject, class UClass* ActorClass, const struct FTransform& SpawnTransform, TEnumAsByte<ESpawnActorCollisionHandlingMethod> CollisionHandlingOverride, class AActor* Owner);
+	bool STATIC_AreAnyListenersWithinRange(class UObject* WorldContextObject, const struct FVector& Location, float MaximumRange);
+	bool STATIC_ApplyRadialDamageWithFalloff(class UObject* WorldContextObject, float BaseDamage, float MinimumDamage, const struct FVector& Origin, float DamageInnerRadius, float DamageOuterRadius, float DamageFalloff, class UClass* DamageTypeClass, TArray<class AActor*> IgnoreActors, class AActor* DamageCauser, class AController* InstigatedByController, TEnumAsByte<ECollisionChannel> DamagePreventionChannel);
+	bool STATIC_ApplyRadialDamage(class UObject* WorldContextObject, float BaseDamage, const struct FVector& Origin, float DamageRadius, class UClass* DamageTypeClass, TArray<class AActor*> IgnoreActors, class AActor* DamageCauser, class AController* InstigatedByController, bool bDoFullDamage, TEnumAsByte<ECollisionChannel> DamagePreventionChannel);
+	void STATIC_ApplyPointDamage(class AActor* DamagedActor, float BaseDamage, const struct FVector& HitFromDirection, const struct FHitResult& HitInfo, class AController* EventInstigator, class AActor* DamageCauser, class UClass* DamageTypeClass);
+	void STATIC_ApplyDamage(class AActor* DamagedActor, float BaseDamage, class AController* EventInstigator, class AActor* DamageCauser, class UClass* DamageTypeClass);
+	void STATIC_ActivateReverbEffect(class UObject* WorldContextObject, class UReverbEffect* ReverbEffect, const struct FName& TagName, float Priority, float Volume, float FadeTime);
 };
 
 
@@ -9522,7 +9522,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.GPUSortDestData"));
+		static auto ptr = UObject::FindClass("Class Engine.GPUSortDestData");
 		return ptr;
 	}
 
@@ -9537,15 +9537,15 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.GPUSortTestLibrary"));
+		static auto ptr = UObject::FindClass("Class Engine.GPUSortTestLibrary");
 		return ptr;
 	}
 
 
-	static bool ValidateGPUTransposeForSize(class UObject* WorldContext, class UGPUSortDestData* TestData);
-	static bool ValidateGPUSortForSize(class UObject* WorldContext, class UGPUSortDestData* TestData);
-	static class UGPUSortDestData* TestGPUTransposeForSize(class UObject* WorldContext, int Size);
-	static class UGPUSortDestData* TestGPUSortForSize(class UObject* WorldContext, int Size);
+	bool STATIC_ValidateGPUTransposeForSize(class UObject* WorldContext, class UGPUSortDestData* TestData);
+	bool STATIC_ValidateGPUSortForSize(class UObject* WorldContext, class UGPUSortDestData* TestData);
+	class UGPUSortDestData* STATIC_TestGPUTransposeForSize(class UObject* WorldContext, int Size);
+	class UGPUSortDestData* STATIC_TestGPUSortForSize(class UObject* WorldContext, int Size);
 };
 
 
@@ -9557,28 +9557,28 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.KismetArrayLibrary"));
+		static auto ptr = UObject::FindClass("Class Engine.KismetArrayLibrary");
 		return ptr;
 	}
 
 
-	static void SetArrayPropertyByName(class UObject* Object, const struct FName& PropertyName, TArray<int> Value);
-	static void FilterArray(TArray<class AActor*> TargetArray, class UClass* FilterClass, TArray<class AActor*>* FilteredArray);
-	static void Array_Shuffle(TArray<int> TargetArray);
-	static void Array_Set(TArray<int> TargetArray, int Index, int Item, bool bSizeToFit);
-	static void Array_Resize(TArray<int> TargetArray, int Size);
-	static bool Array_RemoveItem(TArray<int> TargetArray, int Item);
-	static void Array_Remove(TArray<int> TargetArray, int IndexToRemove);
-	static int Array_Length(TArray<int> TargetArray);
-	static int Array_LastIndex(TArray<int> TargetArray);
-	static void Array_Insert(TArray<int> TargetArray, int NewItem, int Index);
-	static void Array_Get(TArray<int> TargetArray, int Index, int* Item);
-	static int Array_Find(TArray<int> TargetArray, int ItemToFind);
-	static bool Array_Contains(TArray<int> TargetArray, int ItemToFind);
-	static void Array_Clear(TArray<int> TargetArray);
-	static void Array_Append(TArray<int> TargetArray, TArray<int> SourceArray);
-	static int Array_AddUnique(TArray<int> TargetArray, int NewItem);
-	static int Array_Add(TArray<int> TargetArray, int NewItem);
+	void STATIC_SetArrayPropertyByName(class UObject* Object, const struct FName& PropertyName, TArray<int> Value);
+	void STATIC_FilterArray(TArray<class AActor*> TargetArray, class UClass* FilterClass, TArray<class AActor*>* FilteredArray);
+	void STATIC_Array_Shuffle(TArray<int> TargetArray);
+	void STATIC_Array_Set(TArray<int> TargetArray, int Index, int Item, bool bSizeToFit);
+	void STATIC_Array_Resize(TArray<int> TargetArray, int Size);
+	bool STATIC_Array_RemoveItem(TArray<int> TargetArray, int Item);
+	void STATIC_Array_Remove(TArray<int> TargetArray, int IndexToRemove);
+	int STATIC_Array_Length(TArray<int> TargetArray);
+	int STATIC_Array_LastIndex(TArray<int> TargetArray);
+	void STATIC_Array_Insert(TArray<int> TargetArray, int NewItem, int Index);
+	void STATIC_Array_Get(TArray<int> TargetArray, int Index, int* Item);
+	int STATIC_Array_Find(TArray<int> TargetArray, int ItemToFind);
+	bool STATIC_Array_Contains(TArray<int> TargetArray, int ItemToFind);
+	void STATIC_Array_Clear(TArray<int> TargetArray);
+	void STATIC_Array_Append(TArray<int> TargetArray, TArray<int> SourceArray);
+	int STATIC_Array_AddUnique(TArray<int> TargetArray, int NewItem);
+	int STATIC_Array_Add(TArray<int> TargetArray, int NewItem);
 };
 
 
@@ -9590,18 +9590,18 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.KismetGuidLibrary"));
+		static auto ptr = UObject::FindClass("Class Engine.KismetGuidLibrary");
 		return ptr;
 	}
 
 
-	static void Parse_StringToGuid(const class FString& GuidString, struct FGuid* OutGuid, bool* Success);
-	static bool NotEqual_GuidGuid(const struct FGuid& A, const struct FGuid& B);
-	static struct FGuid NewGuid();
-	static bool IsValid_Guid(const struct FGuid& InGuid);
-	static void Invalidate_Guid(struct FGuid* InGuid);
-	static bool EqualEqual_GuidGuid(const struct FGuid& A, const struct FGuid& B);
-	static class FString Conv_GuidToString(const struct FGuid& InGuid);
+	void STATIC_Parse_StringToGuid(const struct FString& GuidString, struct FGuid* OutGuid, bool* Success);
+	bool STATIC_NotEqual_GuidGuid(const struct FGuid& A, const struct FGuid& B);
+	struct FGuid STATIC_NewGuid();
+	bool STATIC_IsValid_Guid(const struct FGuid& InGuid);
+	void STATIC_Invalidate_Guid(struct FGuid* InGuid);
+	bool STATIC_EqualEqual_GuidGuid(const struct FGuid& A, const struct FGuid& B);
+	struct FString STATIC_Conv_GuidToString(const struct FGuid& InGuid);
 };
 
 
@@ -9613,50 +9613,50 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.KismetInputLibrary"));
+		static auto ptr = UObject::FindClass("Class Engine.KismetInputLibrary");
 		return ptr;
 	}
 
 
-	static bool PointerEvent_IsTouchEvent(const struct FPointerEvent& Input);
-	static bool PointerEvent_IsMouseButtonDown(const struct FPointerEvent& Input, const struct FKey& MouseButton);
-	static float PointerEvent_GetWheelDelta(const struct FPointerEvent& Input);
-	static int PointerEvent_GetUserIndex(const struct FPointerEvent& Input);
-	static int PointerEvent_GetTouchpadIndex(const struct FPointerEvent& Input);
-	static struct FVector2D PointerEvent_GetScreenSpacePosition(const struct FPointerEvent& Input);
-	static int PointerEvent_GetPointerIndex(const struct FPointerEvent& Input);
-	static struct FVector2D PointerEvent_GetLastScreenSpacePosition(const struct FPointerEvent& Input);
-	static struct FVector2D PointerEvent_GetGestureDelta(const struct FPointerEvent& Input);
-	static struct FKey PointerEvent_GetEffectingButton(const struct FPointerEvent& Input);
-	static struct FVector2D PointerEvent_GetCursorDelta(const struct FPointerEvent& Input);
-	static bool Key_IsVectorAxis(const struct FKey& Key);
-	static bool Key_IsMouseButton(const struct FKey& Key);
-	static bool Key_IsModifierKey(const struct FKey& Key);
-	static bool Key_IsKeyboardKey(const struct FKey& Key);
-	static bool Key_IsGamepadKey(const struct FKey& Key);
-	static bool Key_IsFloatAxis(const struct FKey& Key);
-	static struct FText Key_GetDisplayName(const struct FKey& Key);
-	static bool InputEvent_IsShiftDown(const struct FInputEvent& Input);
-	static bool InputEvent_IsRightShiftDown(const struct FInputEvent& Input);
-	static bool InputEvent_IsRightControlDown(const struct FInputEvent& Input);
-	static bool InputEvent_IsRightCommandDown(const struct FInputEvent& Input);
-	static bool InputEvent_IsRightAltDown(const struct FInputEvent& Input);
-	static bool InputEvent_IsRepeat(const struct FInputEvent& Input);
-	static bool InputEvent_IsLeftShiftDown(const struct FInputEvent& Input);
-	static bool InputEvent_IsLeftControlDown(const struct FInputEvent& Input);
-	static bool InputEvent_IsLeftCommandDown(const struct FInputEvent& Input);
-	static bool InputEvent_IsLeftAltDown(const struct FInputEvent& Input);
-	static bool InputEvent_IsControlDown(const struct FInputEvent& Input);
-	static bool InputEvent_IsCommandDown(const struct FInputEvent& Input);
-	static bool InputEvent_IsAltDown(const struct FInputEvent& Input);
-	static int GetUserIndex(const struct FKeyEvent& Input);
-	static struct FKey GetKey(const struct FKeyEvent& Input);
-	static float GetAnalogValue(const struct FAnalogInputEvent& Input);
-	static bool EqualEqual_KeyKey(const struct FKey& A, const struct FKey& B);
-	static int ControllerEvent_GetUserIndex(const struct FControllerEvent& Input);
-	static struct FKey ControllerEvent_GetEffectingButton(const struct FControllerEvent& Input);
-	static float ControllerEvent_GetAnalogValue(const struct FControllerEvent& Input);
-	static void CalibrateTilt();
+	bool STATIC_PointerEvent_IsTouchEvent(const struct FPointerEvent& Input);
+	bool STATIC_PointerEvent_IsMouseButtonDown(const struct FPointerEvent& Input, const struct FKey& MouseButton);
+	float STATIC_PointerEvent_GetWheelDelta(const struct FPointerEvent& Input);
+	int STATIC_PointerEvent_GetUserIndex(const struct FPointerEvent& Input);
+	int STATIC_PointerEvent_GetTouchpadIndex(const struct FPointerEvent& Input);
+	struct FVector2D STATIC_PointerEvent_GetScreenSpacePosition(const struct FPointerEvent& Input);
+	int STATIC_PointerEvent_GetPointerIndex(const struct FPointerEvent& Input);
+	struct FVector2D STATIC_PointerEvent_GetLastScreenSpacePosition(const struct FPointerEvent& Input);
+	struct FVector2D STATIC_PointerEvent_GetGestureDelta(const struct FPointerEvent& Input);
+	struct FKey STATIC_PointerEvent_GetEffectingButton(const struct FPointerEvent& Input);
+	struct FVector2D STATIC_PointerEvent_GetCursorDelta(const struct FPointerEvent& Input);
+	bool STATIC_Key_IsVectorAxis(const struct FKey& Key);
+	bool STATIC_Key_IsMouseButton(const struct FKey& Key);
+	bool STATIC_Key_IsModifierKey(const struct FKey& Key);
+	bool STATIC_Key_IsKeyboardKey(const struct FKey& Key);
+	bool STATIC_Key_IsGamepadKey(const struct FKey& Key);
+	bool STATIC_Key_IsFloatAxis(const struct FKey& Key);
+	struct FText STATIC_Key_GetDisplayName(const struct FKey& Key);
+	bool STATIC_InputEvent_IsShiftDown(const struct FInputEvent& Input);
+	bool STATIC_InputEvent_IsRightShiftDown(const struct FInputEvent& Input);
+	bool STATIC_InputEvent_IsRightControlDown(const struct FInputEvent& Input);
+	bool STATIC_InputEvent_IsRightCommandDown(const struct FInputEvent& Input);
+	bool STATIC_InputEvent_IsRightAltDown(const struct FInputEvent& Input);
+	bool STATIC_InputEvent_IsRepeat(const struct FInputEvent& Input);
+	bool STATIC_InputEvent_IsLeftShiftDown(const struct FInputEvent& Input);
+	bool STATIC_InputEvent_IsLeftControlDown(const struct FInputEvent& Input);
+	bool STATIC_InputEvent_IsLeftCommandDown(const struct FInputEvent& Input);
+	bool STATIC_InputEvent_IsLeftAltDown(const struct FInputEvent& Input);
+	bool STATIC_InputEvent_IsControlDown(const struct FInputEvent& Input);
+	bool STATIC_InputEvent_IsCommandDown(const struct FInputEvent& Input);
+	bool STATIC_InputEvent_IsAltDown(const struct FInputEvent& Input);
+	int STATIC_GetUserIndex(const struct FKeyEvent& Input);
+	struct FKey STATIC_GetKey(const struct FKeyEvent& Input);
+	float STATIC_GetAnalogValue(const struct FAnalogInputEvent& Input);
+	bool STATIC_EqualEqual_KeyKey(const struct FKey& A, const struct FKey& B);
+	int STATIC_ControllerEvent_GetUserIndex(const struct FControllerEvent& Input);
+	struct FKey STATIC_ControllerEvent_GetEffectingButton(const struct FControllerEvent& Input);
+	float STATIC_ControllerEvent_GetAnalogValue(const struct FControllerEvent& Input);
+	void STATIC_CalibrateTilt();
 };
 
 
@@ -9668,16 +9668,16 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.KismetMaterialLibrary"));
+		static auto ptr = UObject::FindClass("Class Engine.KismetMaterialLibrary");
 		return ptr;
 	}
 
 
-	static void SetVectorParameterValue(class UObject* WorldContextObject, class UMaterialParameterCollection* Collection, const struct FName& ParameterName, const struct FLinearColor& ParameterValue);
-	static void SetScalarParameterValue(class UObject* WorldContextObject, class UMaterialParameterCollection* Collection, const struct FName& ParameterName, float ParameterValue);
-	static struct FLinearColor GetVectorParameterValue(class UObject* WorldContextObject, class UMaterialParameterCollection* Collection, const struct FName& ParameterName);
-	static float GetScalarParameterValue(class UObject* WorldContextObject, class UMaterialParameterCollection* Collection, const struct FName& ParameterName);
-	static class UMaterialInstanceDynamic* CreateDynamicMaterialInstance(class UObject* WorldContextObject, class UMaterialInterface* Parent);
+	void STATIC_SetVectorParameterValue(class UObject* WorldContextObject, class UMaterialParameterCollection* Collection, const struct FName& ParameterName, const struct FLinearColor& ParameterValue);
+	void STATIC_SetScalarParameterValue(class UObject* WorldContextObject, class UMaterialParameterCollection* Collection, const struct FName& ParameterName, float ParameterValue);
+	struct FLinearColor STATIC_GetVectorParameterValue(class UObject* WorldContextObject, class UMaterialParameterCollection* Collection, const struct FName& ParameterName);
+	float STATIC_GetScalarParameterValue(class UObject* WorldContextObject, class UMaterialParameterCollection* Collection, const struct FName& ParameterName);
+	class UMaterialInstanceDynamic* STATIC_CreateDynamicMaterialInstance(class UObject* WorldContextObject, class UMaterialInterface* Parent);
 };
 
 
@@ -9689,357 +9689,357 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.KismetMathLibrary"));
+		static auto ptr = UObject::FindClass("Class Engine.KismetMathLibrary");
 		return ptr;
 	}
 
 
-	static int Xor_IntInt(int A, int B);
-	static float VSizeSquared(const struct FVector& A);
-	static float VSize2DSquared(const struct FVector2D& A);
-	static float VSize2D(const struct FVector2D& A);
-	static float VSize(const struct FVector& A);
-	static struct FVector VLerp(const struct FVector& A, const struct FVector& B, float Alpha);
-	static struct FVector VInterpTo_Constant(const struct FVector& Current, const struct FVector& Target, float DeltaTime, float InterpSpeed);
-	static struct FVector VInterpTo(const struct FVector& Current, const struct FVector& Target, float DeltaTime, float InterpSpeed);
-	static struct FVector2D Vector2DInterpTo_Constant(const struct FVector2D& Current, const struct FVector2D& Target, float DeltaTime, float InterpSpeed);
-	static struct FVector2D Vector2DInterpTo(const struct FVector2D& Current, const struct FVector2D& Target, float DeltaTime, float InterpSpeed);
-	static struct FVector VEase(const struct FVector& A, const struct FVector& B, float Alpha, TEnumAsByte<EEasingFunc> EasingFunc, float BlendExp, int Steps);
-	static struct FDateTime UtcNow();
-	static struct FVector TransformLocation(const struct FTransform& T, const struct FVector& Location);
-	static struct FVector TransformDirection(const struct FTransform& T, const struct FVector& Direction);
-	static struct FDateTime Today();
-	static struct FTransform TLerp(const struct FTransform& A, const struct FTransform& B, float Alpha);
-	static struct FTransform TInterpTo(const struct FTransform& Current, const struct FTransform& Target, float DeltaTime, float InterpSpeed);
-	static struct FTimespan TimespanZeroValue();
-	static float TimespanRatio(const struct FTimespan& A, const struct FTimespan& B);
-	static struct FTimespan TimespanMinValue();
-	static struct FTimespan TimespanMaxValue();
-	static bool TimespanFromString(const class FString& TimespanString, struct FTimespan* Result);
-	static struct FTransform TEase(const struct FTransform& A, const struct FTransform& B, float Alpha, TEnumAsByte<EEasingFunc> EasingFunc, float BlendExp, int Steps);
-	static float Tan(float A);
-	static struct FVector Subtract_VectorVector(const struct FVector& A, const struct FVector& B);
-	static struct FVector Subtract_VectorInt(const struct FVector& A, int B);
-	static struct FVector Subtract_VectorFloat(const struct FVector& A, float B);
-	static struct FVector2D Subtract_Vector2DVector2D(const struct FVector2D& A, const struct FVector2D& B);
-	static struct FVector2D Subtract_Vector2DFloat(const struct FVector2D& A, float B);
-	static struct FTimespan Subtract_TimespanTimespan(const struct FTimespan& A, const struct FTimespan& B);
-	static int Subtract_IntInt(int A, int B);
-	static float Subtract_FloatFloat(float A, float B);
-	static struct FDateTime Subtract_DateTimeTimespan(const struct FDateTime& A, const struct FTimespan& B);
-	static struct FTimespan Subtract_DateTimeDateTime(const struct FDateTime& A, const struct FDateTime& B);
-	static unsigned char Subtract_ByteByte(unsigned char A, unsigned char B);
-	static float Square(float A);
-	static float Sqrt(float A);
-	static float Sin(float A);
-	static int SignOfInteger(int A);
-	static float SignOfFloat(float A);
-	static void SetRandomStreamSeed(int NewSeed, struct FRandomStream* Stream);
-	static struct FVector SelectVector(const struct FVector& A, const struct FVector& B, bool bPickA);
-	static struct FTransform SelectTransform(const struct FTransform& A, const struct FTransform& B, bool bPickA);
-	static class FString SelectString(const class FString& A, const class FString& B, bool bPickA);
-	static struct FRotator SelectRotator(const struct FRotator& A, const struct FRotator& B, bool bPickA);
-	static class UObject* SelectObject(class UObject* A, class UObject* B, bool bSelectA);
-	static int SelectInt(int A, int B, bool bPickA);
-	static float SelectFloat(float A, float B, bool bPickA);
-	static struct FLinearColor SelectColor(const struct FLinearColor& A, const struct FLinearColor& B, bool bPickA);
-	static class UClass* SelectClass(class UClass* A, class UClass* B, bool bSelectA);
-	static void SeedRandomStream(struct FRandomStream* Stream);
-	static int Round(float A);
-	static struct FRotator RotatorFromAxisAndAngle(const struct FVector& Axis, float Angle);
-	static struct FVector RotateAngleAxis(const struct FVector& InVect, float AngleDeg, const struct FVector& Axis);
-	static struct FRotator RLerp(const struct FRotator& A, const struct FRotator& B, float Alpha, bool bShortestPath);
-	static struct FRotator RInterpTo_Constant(const struct FRotator& Current, const struct FRotator& Target, float DeltaTime, float InterpSpeed);
-	static struct FRotator RInterpTo(const struct FRotator& Current, const struct FRotator& Target, float DeltaTime, float InterpSpeed);
-	static void RGBToHSV_Vector(const struct FLinearColor& RGB, struct FLinearColor* HSV);
-	static void RGBToHSV(const struct FLinearColor& InColor, float* H, float* S, float* V, float* A);
-	static void ResetRandomStream(const struct FRandomStream& Stream);
-	static struct FRotator REase(const struct FRotator& A, const struct FRotator& B, float Alpha, bool bShortestPath, TEnumAsByte<EEasingFunc> EasingFunc, float BlendExp, int Steps);
-	static struct FVector RandomUnitVectorInConeWithYawAndPitch(const struct FVector& ConeDir, float MaxYawInDegrees, float MaxPitchInDegrees);
-	static struct FVector RandomUnitVectorInCone(const struct FVector& ConeDir, float ConeHalfAngle);
-	static struct FVector RandomUnitVectorFromStream(const struct FRandomStream& Stream);
-	static struct FVector RandomUnitVector();
-	static struct FRotator RandomRotatorFromStream(bool bRoll, const struct FRandomStream& Stream);
-	static struct FRotator RandomRotator(bool bRoll);
-	static struct FVector RandomPointInBoundingBox(const struct FVector& Origin, const struct FVector& BoxExtent);
-	static int RandomIntegerInRangeFromStream(int Min, int Max, const struct FRandomStream& Stream);
-	static int RandomIntegerInRange(int Min, int Max);
-	static int RandomIntegerFromStream(int Max, const struct FRandomStream& Stream);
-	static int RandomInteger(int Max);
-	static float RandomFloatInRangeFromStream(float Min, float Max, const struct FRandomStream& Stream);
-	static float RandomFloatInRange(float Min, float Max);
-	static float RandomFloatFromStream(const struct FRandomStream& Stream);
-	static float RandomFloat();
-	static bool RandomBoolFromStream(const struct FRandomStream& Stream);
-	static bool RandomBool();
-	static float RadiansToDegrees(float A);
-	static struct FVector ProjectVectorOnToVector(const struct FVector& V, const struct FVector& Target);
-	static struct FVector ProjectVectorOnToPlane(const struct FVector& V, const struct FVector& PlaneNormal);
-	static struct FVector ProjectPointOnToPlane(const struct FVector& Point, const struct FVector& PlaneBase, const struct FVector& PlaneNormal);
-	static bool PointsAreCoplanar(TArray<struct FVector> Points, float Tolerance);
-	static int Percent_IntInt(int A, int B);
-	static float Percent_FloatFloat(float A, float B);
-	static unsigned char Percent_ByteByte(unsigned char A, unsigned char B);
-	static int Or_IntInt(int A, int B);
-	static struct FDateTime Now();
-	static bool NotEqual_VectorVector(const struct FVector& A, const struct FVector& B, float ErrorTolerance);
-	static bool NotEqual_TimespanTimespan(const struct FTimespan& A, const struct FTimespan& B);
-	static bool NotEqual_RotatorRotator(const struct FRotator& A, const struct FRotator& B, float ErrorTolerance);
-	static bool NotEqual_ObjectObject(class UObject* A, class UObject* B);
-	static bool NotEqual_NameName(const struct FName& A, const struct FName& B);
-	static bool NotEqual_IntInt(int A, int B);
-	static bool NotEqual_FloatFloat(float A, float B);
-	static bool NotEqual_DateTimeDateTime(const struct FDateTime& A, const struct FDateTime& B);
-	static bool NotEqual_ClassClass(class UClass* A, class UClass* B);
-	static bool NotEqual_ByteByte(unsigned char A, unsigned char B);
-	static bool NotEqual_BoolBool(bool A, bool B);
-	static bool Not_PreBool(bool A);
-	static float NormalizeToRange(float Value, float RangeMin, float RangeMax);
-	static struct FRotator NormalizedDeltaRotator(const struct FRotator& A, const struct FRotator& B);
-	static float NormalizeAxis(float Angle);
-	static struct FVector2D Normal2D(const struct FVector2D& A);
-	static struct FVector Normal(const struct FVector& A);
-	static struct FVector NegateVector(const struct FVector& A);
-	static struct FRotator NegateRotator(const struct FRotator& A);
-	static bool NearlyEqual_TransformTransform(const struct FTransform& A, const struct FTransform& B, float LocationTolerance, float RotationTolerance, float Scale3DTolerance);
-	static bool NearlyEqual_FloatFloat(float A, float B, float ErrorTolerance);
-	static float MultiplyMultiply_FloatFloat(float Base, float Exp);
-	static float MultiplyByPi(float Value);
-	static struct FVector Multiply_VectorVector(const struct FVector& A, const struct FVector& B);
-	static struct FVector Multiply_VectorInt(const struct FVector& A, int B);
-	static struct FVector Multiply_VectorFloat(const struct FVector& A, float B);
-	static struct FVector2D Multiply_Vector2DFloat(const struct FVector2D& A, float B);
-	static struct FTimespan Multiply_TimespanFloat(const struct FTimespan& A, float Scalar);
-	static struct FRotator Multiply_RotatorInt(const struct FRotator& A, int B);
-	static struct FRotator Multiply_RotatorFloat(const struct FRotator& A, float B);
-	static struct FLinearColor Multiply_LinearColorLinearColor(const struct FLinearColor& A, const struct FLinearColor& B);
-	static struct FLinearColor Multiply_LinearColorFloat(const struct FLinearColor& A, float B);
-	static int Multiply_IntInt(int A, int B);
-	static float Multiply_IntFloat(int A, float B);
-	static float Multiply_FloatFloat(float A, float B);
-	static unsigned char Multiply_ByteByte(unsigned char A, unsigned char B);
-	static struct FVector MirrorVectorByNormal(const struct FVector& InVect, const struct FVector& InNormal);
-	static void MinOfIntArray(TArray<int> IntArray, int* IndexOfMinValue, int* MinValue);
-	static void MinOfFloatArray(TArray<float> FloatArray, int* IndexOfMinValue, float* MinValue);
-	static void MinOfByteArray(TArray<unsigned char> ByteArray, int* IndexOfMinValue, unsigned char* MinValue);
-	static void MinimumAreaRectangle(class UObject* WorldContextObject, TArray<struct FVector> InVerts, const struct FVector& SampleSurfaceNormal, bool bDebugDraw, struct FVector* OutRectCenter, struct FRotator* OutRectRotation, float* OutSideLengthX, float* OutSideLengthY);
-	static int Min(int A, int B);
-	static void MaxOfIntArray(TArray<int> IntArray, int* IndexOfMaxValue, int* MaxValue);
-	static void MaxOfFloatArray(TArray<float> FloatArray, int* IndexOfMaxValue, float* MaxValue);
-	static void MaxOfByteArray(TArray<unsigned char> ByteArray, int* IndexOfMaxValue, unsigned char* MaxValue);
-	static int Max(int A, int B);
-	static float MapRangeUnclamped(float Value, float InRangeA, float InRangeB, float OutRangeA, float OutRangeB);
-	static float MapRangeClamped(float Value, float InRangeA, float InRangeB, float OutRangeA, float OutRangeB);
-	static struct FVector2D MakeVector2D(float X, float Y);
-	static struct FVector MakeVector(float X, float Y, float Z);
-	static struct FTransform MakeTransform(const struct FVector& Location, const struct FRotator& Rotation, const struct FVector& Scale);
-	static struct FTimespan MakeTimespan(int Days, int Hours, int Minutes, int Seconds, int Milliseconds);
-	static struct FRotator MakeRotFromZY(const struct FVector& Z, const struct FVector& Y);
-	static struct FRotator MakeRotFromZX(const struct FVector& Z, const struct FVector& X);
-	static struct FRotator MakeRotFromZ(const struct FVector& Z);
-	static struct FRotator MakeRotFromYZ(const struct FVector& Y, const struct FVector& Z);
-	static struct FRotator MakeRotFromYX(const struct FVector& Y, const struct FVector& X);
-	static struct FRotator MakeRotFromY(const struct FVector& Y);
-	static struct FRotator MakeRotFromXZ(const struct FVector& X, const struct FVector& Z);
-	static struct FRotator MakeRotFromXY(const struct FVector& X, const struct FVector& Y);
-	static struct FRotator MakeRotFromX(const struct FVector& X);
-	static struct FRotator MakeRotator(float Roll, float Pitch, float Yaw);
-	static struct FRotator MakeRotationFromAxes(const struct FVector& Forward, const struct FVector& Right, const struct FVector& Up);
-	static struct FRandomStream MakeRandomStream(int InitialSeed);
-	static float MakePulsatingValue(float InCurrentTime, float InPulsesPerSecond, float InPhase);
-	static struct FDateTime MakeDateTime(int Year, int Month, int Day, int Hour, int Minute, int Second, int Millisecond);
-	static struct FLinearColor MakeColor(float R, float G, float B, float A);
-	static float Loge(float A);
-	static bool LinePlaneIntersection_OriginNormal(const struct FVector& LineStart, const struct FVector& LineEnd, const struct FVector& PlaneOrigin, const struct FVector& PlaneNormal, float* T, struct FVector* Intersection);
-	static bool LinePlaneIntersection(const struct FVector& LineStart, const struct FVector& LineEnd, const struct FPlane& APlane, float* T, struct FVector* Intersection);
-	static struct FLinearColor LinearColorLerpUsingHSV(const struct FLinearColor& A, const struct FLinearColor& B, float Alpha);
-	static struct FLinearColor LinearColorLerp(const struct FLinearColor& A, const struct FLinearColor& B, float Alpha);
-	static struct FVector LessLess_VectorRotator(const struct FVector& A, const struct FRotator& B);
-	static bool LessEqual_TimespanTimespan(const struct FTimespan& A, const struct FTimespan& B);
-	static bool LessEqual_IntInt(int A, int B);
-	static bool LessEqual_FloatFloat(float A, float B);
-	static bool LessEqual_DateTimeDateTime(const struct FDateTime& A, const struct FDateTime& B);
-	static bool LessEqual_ByteByte(unsigned char A, unsigned char B);
-	static bool Less_TimespanTimespan(const struct FTimespan& A, const struct FTimespan& B);
-	static bool Less_IntInt(int A, int B);
-	static bool Less_FloatFloat(float A, float B);
-	static bool Less_DateTimeDateTime(const struct FDateTime& A, const struct FDateTime& B);
-	static bool Less_ByteByte(unsigned char A, unsigned char B);
-	static float Lerp(float A, float B, float Alpha);
-	static bool IsPointInBox(const struct FVector& Point, const struct FBox& Box);
-	static bool IsMorning(const struct FDateTime& A);
-	static bool IsLeapYear(int Year);
-	static bool IsAfternoon(const struct FDateTime& A);
-	static struct FTransform InvertTransform(const struct FTransform& T);
-	static struct FVector InverseTransformLocation(const struct FTransform& T, const struct FVector& Location);
-	static struct FVector InverseTransformDirection(const struct FTransform& T, const struct FVector& Direction);
-	static float InverseLerp(float A, float B, float Value);
-	static bool InRange_FloatFloat(float Value, float Min, float Max, bool InclusiveMin, bool InclusiveMax);
-	static float Hypotenuse(float Width, float Height);
-	static void HSVToRGB_Vector(const struct FLinearColor& HSV, struct FLinearColor* RGB);
-	static struct FLinearColor HSVToRGB(float H, float S, float V, float A);
-	static float GridSnap_Float(float Location, float GridSize);
-	static struct FVector GreaterGreater_VectorRotator(const struct FVector& A, const struct FRotator& B);
-	static bool GreaterEqual_TimespanTimespan(const struct FTimespan& A, const struct FTimespan& B);
-	static bool GreaterEqual_IntInt(int A, int B);
-	static bool GreaterEqual_FloatFloat(float A, float B);
-	static bool GreaterEqual_DateTimeDateTime(const struct FDateTime& A, const struct FDateTime& B);
-	static bool GreaterEqual_ByteByte(unsigned char A, unsigned char B);
-	static bool Greater_TimespanTimespan(const struct FTimespan& A, const struct FTimespan& B);
-	static bool Greater_IntInt(int A, int B);
-	static bool Greater_FloatFloat(float A, float B);
-	static bool Greater_DateTimeDateTime(const struct FDateTime& A, const struct FDateTime& B);
-	static bool Greater_ByteByte(unsigned char A, unsigned char B);
-	static int GetYear(const struct FDateTime& A);
-	static void GetYawPitchFromVector(const struct FVector& InVec, float* Yaw, float* Pitch);
-	static struct FVector GetVectorArrayAverage(TArray<struct FVector> Vectors);
-	static struct FVector GetUpVector(const struct FRotator& InRot);
-	static float GetTotalSeconds(const struct FTimespan& A);
-	static float GetTotalMinutes(const struct FTimespan& A);
-	static float GetTotalMilliseconds(const struct FTimespan& A);
-	static float GetTotalHours(const struct FTimespan& A);
-	static float GetTotalDays(const struct FTimespan& A);
-	static struct FTimespan GetTimeOfDay(const struct FDateTime& A);
-	static int GetSeconds(const struct FTimespan& A);
-	static int GetSecond(const struct FDateTime& A);
-	static struct FVector GetRightVector(const struct FRotator& InRot);
-	static float GetPI();
-	static int GetMonth(const struct FDateTime& A);
-	static int GetMinutes(const struct FTimespan& A);
-	static int GetMinute(const struct FDateTime& A);
-	static float GetMinElement(const struct FVector& A);
-	static int GetMilliseconds(const struct FTimespan& A);
-	static int GetMillisecond(const struct FDateTime& A);
-	static float GetMaxElement(const struct FVector& A);
-	static int GetHours(const struct FTimespan& A);
-	static int GetHour12(const struct FDateTime& A);
-	static int GetHour(const struct FDateTime& A);
-	static struct FVector GetForwardVector(const struct FRotator& InRot);
-	static struct FTimespan GetDuration(const struct FTimespan& A);
-	static struct FVector GetDirectionVector(const struct FVector& From, const struct FVector& To);
-	static int GetDays(const struct FTimespan& A);
-	static int GetDayOfYear(const struct FDateTime& A);
-	static int GetDay(const struct FDateTime& A);
-	static struct FDateTime GetDate(const struct FDateTime& A);
-	static void GetAxes(const struct FRotator& A, struct FVector* X, struct FVector* Y, struct FVector* Z);
-	static int FTrunc(float A);
-	static struct FTimespan FromSeconds(float Seconds);
-	static struct FTimespan FromMinutes(float Minutes);
-	static struct FTimespan FromMilliseconds(float Milliseconds);
-	static struct FTimespan FromHours(float Hours);
-	static struct FTimespan FromDays(float Days);
-	static float Fraction(float A);
-	static int FMod(float Dividend, float Divisor, float* Remainder);
-	static float FMin(float A, float B);
-	static float FMax(float A, float B);
-	static float FixedTurn(float InCurrent, float InDesired, float InDeltaRate);
-	static float FInterpTo_Constant(float Current, float Target, float DeltaTime, float InterpSpeed);
-	static float FInterpTo(float Current, float Target, float DeltaTime, float InterpSpeed);
-	static float FInterpEaseInOut(float A, float B, float Alpha, float Exponent);
-	static struct FRotator FindLookAtRotation(const struct FVector& Start, const struct FVector& Target);
-	static int FFloor(float A);
-	static float FClamp(float Value, float Min, float Max);
-	static int FCeil(float A);
-	static float Exp(float A);
-	static bool EqualEqual_VectorVector(const struct FVector& A, const struct FVector& B, float ErrorTolerance);
-	static bool EqualEqual_TransformTransform(const struct FTransform& A, const struct FTransform& B);
-	static bool EqualEqual_TimespanTimespan(const struct FTimespan& A, const struct FTimespan& B);
-	static bool EqualEqual_RotatorRotator(const struct FRotator& A, const struct FRotator& B, float ErrorTolerance);
-	static bool EqualEqual_ObjectObject(class UObject* A, class UObject* B);
-	static bool EqualEqual_NameName(const struct FName& A, const struct FName& B);
-	static bool EqualEqual_IntInt(int A, int B);
-	static bool EqualEqual_FloatFloat(float A, float B);
-	static bool EqualEqual_DateTimeDateTime(const struct FDateTime& A, const struct FDateTime& B);
-	static bool EqualEqual_ClassClass(class UClass* A, class UClass* B);
-	static bool EqualEqual_ByteByte(unsigned char A, unsigned char B);
-	static bool EqualEqual_BoolBool(bool A, bool B);
-	static float Ease(float A, float B, float Alpha, TEnumAsByte<EEasingFunc> EasingFunc, float BlendExp, int Steps);
-	static float DotProduct2D(const struct FVector2D& A, const struct FVector2D& B);
-	static float Dot_VectorVector(const struct FVector& A, const struct FVector& B);
-	static struct FVector Divide_VectorVector(const struct FVector& A, const struct FVector& B);
-	static struct FVector Divide_VectorInt(const struct FVector& A, int B);
-	static struct FVector Divide_VectorFloat(const struct FVector& A, float B);
-	static struct FVector2D Divide_Vector2DFloat(const struct FVector2D& A, float B);
-	static int Divide_IntInt(int A, int B);
-	static float Divide_FloatFloat(float A, float B);
-	static unsigned char Divide_ByteByte(unsigned char A, unsigned char B);
-	static float DegTan(float A);
-	static float DegSin(float A);
-	static float DegreesToRadians(float A);
-	static float DegCos(float A);
-	static float DegAtan2(float A, float B);
-	static float DegAtan(float A);
-	static float DegAsin(float A);
-	static float DegAcos(float A);
-	static int DaysInYear(int Year);
-	static int DaysInMonth(int Year, int Month);
-	static struct FDateTime DateTimeMinValue();
-	static struct FDateTime DateTimeMaxValue();
-	static bool DateTimeFromString(const class FString& DateTimeString, struct FDateTime* Result);
-	static bool DateTimeFromIsoString(const class FString& IsoString, struct FDateTime* Result);
-	static float CrossProduct2D(const struct FVector2D& A, const struct FVector2D& B);
-	static struct FVector Cross_VectorVector(const struct FVector& A, const struct FVector& B);
-	static struct FVector CreateVectorFromYawPitch(float Yaw, float Pitch, float Length);
-	static float Cos(float A);
-	static struct FTransform ConvertTransformToRelative(const struct FTransform& Transform, const struct FTransform& ParentTransform);
-	static struct FVector2D Conv_VectorToVector2D(const struct FVector& InVector);
-	static struct FTransform Conv_VectorToTransform(const struct FVector& InLocation);
-	static struct FRotator Conv_VectorToRotator(const struct FVector& InVec);
-	static struct FLinearColor Conv_VectorToLinearColor(const struct FVector& InVec);
-	static struct FVector Conv_Vector2DToVector(const struct FVector2D& InVector2D, float Z);
-	static struct FVector Conv_RotatorToVector(const struct FRotator& InRot);
-	static struct FVector Conv_LinearColorToVector(const struct FLinearColor& InLinearColor);
-	static struct FColor Conv_LinearColorToColor(const struct FLinearColor& InLinearColor);
-	static float Conv_IntToFloat(int InInt);
-	static unsigned char Conv_IntToByte(int InInt);
-	static bool Conv_IntToBool(int InInt);
-	static struct FVector Conv_FloatToVector(float InFloat);
-	static struct FLinearColor Conv_FloatToLinearColor(float InFloat);
-	static struct FLinearColor Conv_ColorToLinearColor(const struct FColor& InColor);
-	static int Conv_ByteToInt(unsigned char InByte);
-	static float Conv_ByteToFloat(unsigned char InByte);
-	static int Conv_BoolToInt(bool InBool);
-	static float Conv_BoolToFloat(bool InBool);
-	static unsigned char Conv_BoolToByte(bool InBool);
-	static struct FTransform ComposeTransforms(const struct FTransform& A, const struct FTransform& B);
-	static struct FRotator ComposeRotators(const struct FRotator& A, const struct FRotator& B);
-	static bool ClassIsChildOf(class UClass* TestClass, class UClass* ParentClass);
-	static struct FVector ClampVectorSize(const struct FVector& A, float Min, float Max);
-	static float ClampAxis(float Angle);
-	static float ClampAngle(float AngleDegrees, float MinAngleDegrees, float MaxAngleDegrees);
-	static int Clamp(int Value, int Min, int Max);
-	static struct FLinearColor CInterpTo(const struct FLinearColor& Current, const struct FLinearColor& Target, float DeltaTime, float InterpSpeed);
-	static void BreakVector2D(const struct FVector2D& InVec, float* X, float* Y);
-	static void BreakVector(const struct FVector& InVec, float* X, float* Y, float* Z);
-	static void BreakTransform(const struct FTransform& InTransform, struct FVector* Location, struct FRotator* Rotation, struct FVector* Scale);
-	static void BreakTimespan(const struct FTimespan& InTimespan, int* Days, int* Hours, int* Minutes, int* Seconds, int* Milliseconds);
-	static void BreakRotIntoAxes(const struct FRotator& InRot, struct FVector* X, struct FVector* Y, struct FVector* Z);
-	static void BreakRotator(const struct FRotator& InRot, float* Roll, float* Pitch, float* Yaw);
-	static void BreakRandomStream(const struct FRandomStream& InRandomStream, int* InitialSeed);
-	static void BreakDateTime(const struct FDateTime& InDateTime, int* Year, int* Month, int* Day, int* Hour, int* Minute, int* Second, int* Millisecond);
-	static void BreakColor(const struct FLinearColor& InColor, float* R, float* G, float* B, float* A);
-	static bool BooleanXOR(bool A, bool B);
-	static bool BooleanOR(bool A, bool B);
-	static bool BooleanNOR(bool A, bool B);
-	static bool BooleanNAND(bool A, bool B);
-	static bool BooleanAND(bool A, bool B);
-	static float Atan2(float A, float B);
-	static float Atan(float A);
-	static float Asin(float A);
-	static int And_IntInt(int A, int B);
-	static struct FVector Add_VectorVector(const struct FVector& A, const struct FVector& B);
-	static struct FVector Add_VectorInt(const struct FVector& A, int B);
-	static struct FVector Add_VectorFloat(const struct FVector& A, float B);
-	static struct FVector2D Add_Vector2DVector2D(const struct FVector2D& A, const struct FVector2D& B);
-	static struct FVector2D Add_Vector2DFloat(const struct FVector2D& A, float B);
-	static struct FTimespan Add_TimespanTimespan(const struct FTimespan& A, const struct FTimespan& B);
-	static int Add_IntInt(int A, int B);
-	static float Add_FloatFloat(float A, float B);
-	static struct FDateTime Add_DateTimeTimespan(const struct FDateTime& A, const struct FTimespan& B);
-	static unsigned char Add_ByteByte(unsigned char A, unsigned char B);
-	static float Acos(float A);
-	static int Abs_Int(int A);
-	static float Abs(float A);
+	int STATIC_Xor_IntInt(int A, int B);
+	float STATIC_VSizeSquared(const struct FVector& A);
+	float STATIC_VSize2DSquared(const struct FVector2D& A);
+	float STATIC_VSize2D(const struct FVector2D& A);
+	float STATIC_VSize(const struct FVector& A);
+	struct FVector STATIC_VLerp(const struct FVector& A, const struct FVector& B, float Alpha);
+	struct FVector STATIC_VInterpTo_Constant(const struct FVector& Current, const struct FVector& Target, float DeltaTime, float InterpSpeed);
+	struct FVector STATIC_VInterpTo(const struct FVector& Current, const struct FVector& Target, float DeltaTime, float InterpSpeed);
+	struct FVector2D STATIC_Vector2DInterpTo_Constant(const struct FVector2D& Current, const struct FVector2D& Target, float DeltaTime, float InterpSpeed);
+	struct FVector2D STATIC_Vector2DInterpTo(const struct FVector2D& Current, const struct FVector2D& Target, float DeltaTime, float InterpSpeed);
+	struct FVector STATIC_VEase(const struct FVector& A, const struct FVector& B, float Alpha, TEnumAsByte<EEasingFunc> EasingFunc, float BlendExp, int Steps);
+	struct FDateTime STATIC_UtcNow();
+	struct FVector STATIC_TransformLocation(const struct FTransform& T, const struct FVector& Location);
+	struct FVector STATIC_TransformDirection(const struct FTransform& T, const struct FVector& Direction);
+	struct FDateTime STATIC_Today();
+	struct FTransform STATIC_TLerp(const struct FTransform& A, const struct FTransform& B, float Alpha);
+	struct FTransform STATIC_TInterpTo(const struct FTransform& Current, const struct FTransform& Target, float DeltaTime, float InterpSpeed);
+	struct FTimespan STATIC_TimespanZeroValue();
+	float STATIC_TimespanRatio(const struct FTimespan& A, const struct FTimespan& B);
+	struct FTimespan STATIC_TimespanMinValue();
+	struct FTimespan STATIC_TimespanMaxValue();
+	bool STATIC_TimespanFromString(const struct FString& TimespanString, struct FTimespan* Result);
+	struct FTransform STATIC_TEase(const struct FTransform& A, const struct FTransform& B, float Alpha, TEnumAsByte<EEasingFunc> EasingFunc, float BlendExp, int Steps);
+	float STATIC_Tan(float A);
+	struct FVector STATIC_Subtract_VectorVector(const struct FVector& A, const struct FVector& B);
+	struct FVector STATIC_Subtract_VectorInt(const struct FVector& A, int B);
+	struct FVector STATIC_Subtract_VectorFloat(const struct FVector& A, float B);
+	struct FVector2D STATIC_Subtract_Vector2DVector2D(const struct FVector2D& A, const struct FVector2D& B);
+	struct FVector2D STATIC_Subtract_Vector2DFloat(const struct FVector2D& A, float B);
+	struct FTimespan STATIC_Subtract_TimespanTimespan(const struct FTimespan& A, const struct FTimespan& B);
+	int STATIC_Subtract_IntInt(int A, int B);
+	float STATIC_Subtract_FloatFloat(float A, float B);
+	struct FDateTime STATIC_Subtract_DateTimeTimespan(const struct FDateTime& A, const struct FTimespan& B);
+	struct FTimespan STATIC_Subtract_DateTimeDateTime(const struct FDateTime& A, const struct FDateTime& B);
+	unsigned char STATIC_Subtract_ByteByte(unsigned char A, unsigned char B);
+	float STATIC_Square(float A);
+	float STATIC_Sqrt(float A);
+	float STATIC_Sin(float A);
+	int STATIC_SignOfInteger(int A);
+	float STATIC_SignOfFloat(float A);
+	void STATIC_SetRandomStreamSeed(int NewSeed, struct FRandomStream* Stream);
+	struct FVector STATIC_SelectVector(const struct FVector& A, const struct FVector& B, bool bPickA);
+	struct FTransform STATIC_SelectTransform(const struct FTransform& A, const struct FTransform& B, bool bPickA);
+	struct FString STATIC_SelectString(const struct FString& A, const struct FString& B, bool bPickA);
+	struct FRotator STATIC_SelectRotator(const struct FRotator& A, const struct FRotator& B, bool bPickA);
+	class UObject* STATIC_SelectObject(class UObject* A, class UObject* B, bool bSelectA);
+	int STATIC_SelectInt(int A, int B, bool bPickA);
+	float STATIC_SelectFloat(float A, float B, bool bPickA);
+	struct FLinearColor STATIC_SelectColor(const struct FLinearColor& A, const struct FLinearColor& B, bool bPickA);
+	class UClass* STATIC_SelectClass(class UClass* A, class UClass* B, bool bSelectA);
+	void STATIC_SeedRandomStream(struct FRandomStream* Stream);
+	int STATIC_Round(float A);
+	struct FRotator STATIC_RotatorFromAxisAndAngle(const struct FVector& Axis, float Angle);
+	struct FVector STATIC_RotateAngleAxis(const struct FVector& InVect, float AngleDeg, const struct FVector& Axis);
+	struct FRotator STATIC_RLerp(const struct FRotator& A, const struct FRotator& B, float Alpha, bool bShortestPath);
+	struct FRotator STATIC_RInterpTo_Constant(const struct FRotator& Current, const struct FRotator& Target, float DeltaTime, float InterpSpeed);
+	struct FRotator STATIC_RInterpTo(const struct FRotator& Current, const struct FRotator& Target, float DeltaTime, float InterpSpeed);
+	void STATIC_RGBToHSV_Vector(const struct FLinearColor& RGB, struct FLinearColor* HSV);
+	void STATIC_RGBToHSV(const struct FLinearColor& InColor, float* H, float* S, float* V, float* A);
+	void STATIC_ResetRandomStream(const struct FRandomStream& Stream);
+	struct FRotator STATIC_REase(const struct FRotator& A, const struct FRotator& B, float Alpha, bool bShortestPath, TEnumAsByte<EEasingFunc> EasingFunc, float BlendExp, int Steps);
+	struct FVector STATIC_RandomUnitVectorInConeWithYawAndPitch(const struct FVector& ConeDir, float MaxYawInDegrees, float MaxPitchInDegrees);
+	struct FVector STATIC_RandomUnitVectorInCone(const struct FVector& ConeDir, float ConeHalfAngle);
+	struct FVector STATIC_RandomUnitVectorFromStream(const struct FRandomStream& Stream);
+	struct FVector STATIC_RandomUnitVector();
+	struct FRotator STATIC_RandomRotatorFromStream(bool bRoll, const struct FRandomStream& Stream);
+	struct FRotator STATIC_RandomRotator(bool bRoll);
+	struct FVector STATIC_RandomPointInBoundingBox(const struct FVector& Origin, const struct FVector& BoxExtent);
+	int STATIC_RandomIntegerInRangeFromStream(int Min, int Max, const struct FRandomStream& Stream);
+	int STATIC_RandomIntegerInRange(int Min, int Max);
+	int STATIC_RandomIntegerFromStream(int Max, const struct FRandomStream& Stream);
+	int STATIC_RandomInteger(int Max);
+	float STATIC_RandomFloatInRangeFromStream(float Min, float Max, const struct FRandomStream& Stream);
+	float STATIC_RandomFloatInRange(float Min, float Max);
+	float STATIC_RandomFloatFromStream(const struct FRandomStream& Stream);
+	float STATIC_RandomFloat();
+	bool STATIC_RandomBoolFromStream(const struct FRandomStream& Stream);
+	bool STATIC_RandomBool();
+	float STATIC_RadiansToDegrees(float A);
+	struct FVector STATIC_ProjectVectorOnToVector(const struct FVector& V, const struct FVector& Target);
+	struct FVector STATIC_ProjectVectorOnToPlane(const struct FVector& V, const struct FVector& PlaneNormal);
+	struct FVector STATIC_ProjectPointOnToPlane(const struct FVector& Point, const struct FVector& PlaneBase, const struct FVector& PlaneNormal);
+	bool STATIC_PointsAreCoplanar(TArray<struct FVector> Points, float Tolerance);
+	int STATIC_Percent_IntInt(int A, int B);
+	float STATIC_Percent_FloatFloat(float A, float B);
+	unsigned char STATIC_Percent_ByteByte(unsigned char A, unsigned char B);
+	int STATIC_Or_IntInt(int A, int B);
+	struct FDateTime STATIC_Now();
+	bool STATIC_NotEqual_VectorVector(const struct FVector& A, const struct FVector& B, float ErrorTolerance);
+	bool STATIC_NotEqual_TimespanTimespan(const struct FTimespan& A, const struct FTimespan& B);
+	bool STATIC_NotEqual_RotatorRotator(const struct FRotator& A, const struct FRotator& B, float ErrorTolerance);
+	bool STATIC_NotEqual_ObjectObject(class UObject* A, class UObject* B);
+	bool STATIC_NotEqual_NameName(const struct FName& A, const struct FName& B);
+	bool STATIC_NotEqual_IntInt(int A, int B);
+	bool STATIC_NotEqual_FloatFloat(float A, float B);
+	bool STATIC_NotEqual_DateTimeDateTime(const struct FDateTime& A, const struct FDateTime& B);
+	bool STATIC_NotEqual_ClassClass(class UClass* A, class UClass* B);
+	bool STATIC_NotEqual_ByteByte(unsigned char A, unsigned char B);
+	bool STATIC_NotEqual_BoolBool(bool A, bool B);
+	bool STATIC_Not_PreBool(bool A);
+	float STATIC_NormalizeToRange(float Value, float RangeMin, float RangeMax);
+	struct FRotator STATIC_NormalizedDeltaRotator(const struct FRotator& A, const struct FRotator& B);
+	float STATIC_NormalizeAxis(float Angle);
+	struct FVector2D STATIC_Normal2D(const struct FVector2D& A);
+	struct FVector STATIC_Normal(const struct FVector& A);
+	struct FVector STATIC_NegateVector(const struct FVector& A);
+	struct FRotator STATIC_NegateRotator(const struct FRotator& A);
+	bool STATIC_NearlyEqual_TransformTransform(const struct FTransform& A, const struct FTransform& B, float LocationTolerance, float RotationTolerance, float Scale3DTolerance);
+	bool STATIC_NearlyEqual_FloatFloat(float A, float B, float ErrorTolerance);
+	float STATIC_MultiplyMultiply_FloatFloat(float Base, float Exp);
+	float STATIC_MultiplyByPi(float Value);
+	struct FVector STATIC_Multiply_VectorVector(const struct FVector& A, const struct FVector& B);
+	struct FVector STATIC_Multiply_VectorInt(const struct FVector& A, int B);
+	struct FVector STATIC_Multiply_VectorFloat(const struct FVector& A, float B);
+	struct FVector2D STATIC_Multiply_Vector2DFloat(const struct FVector2D& A, float B);
+	struct FTimespan STATIC_Multiply_TimespanFloat(const struct FTimespan& A, float Scalar);
+	struct FRotator STATIC_Multiply_RotatorInt(const struct FRotator& A, int B);
+	struct FRotator STATIC_Multiply_RotatorFloat(const struct FRotator& A, float B);
+	struct FLinearColor STATIC_Multiply_LinearColorLinearColor(const struct FLinearColor& A, const struct FLinearColor& B);
+	struct FLinearColor STATIC_Multiply_LinearColorFloat(const struct FLinearColor& A, float B);
+	int STATIC_Multiply_IntInt(int A, int B);
+	float STATIC_Multiply_IntFloat(int A, float B);
+	float STATIC_Multiply_FloatFloat(float A, float B);
+	unsigned char STATIC_Multiply_ByteByte(unsigned char A, unsigned char B);
+	struct FVector STATIC_MirrorVectorByNormal(const struct FVector& InVect, const struct FVector& InNormal);
+	void STATIC_MinOfIntArray(TArray<int> IntArray, int* IndexOfMinValue, int* MinValue);
+	void STATIC_MinOfFloatArray(TArray<float> FloatArray, int* IndexOfMinValue, float* MinValue);
+	void STATIC_MinOfByteArray(TArray<unsigned char> ByteArray, int* IndexOfMinValue, unsigned char* MinValue);
+	void STATIC_MinimumAreaRectangle(class UObject* WorldContextObject, TArray<struct FVector> InVerts, const struct FVector& SampleSurfaceNormal, bool bDebugDraw, struct FVector* OutRectCenter, struct FRotator* OutRectRotation, float* OutSideLengthX, float* OutSideLengthY);
+	int STATIC_Min(int A, int B);
+	void STATIC_MaxOfIntArray(TArray<int> IntArray, int* IndexOfMaxValue, int* MaxValue);
+	void STATIC_MaxOfFloatArray(TArray<float> FloatArray, int* IndexOfMaxValue, float* MaxValue);
+	void STATIC_MaxOfByteArray(TArray<unsigned char> ByteArray, int* IndexOfMaxValue, unsigned char* MaxValue);
+	int STATIC_Max(int A, int B);
+	float STATIC_MapRangeUnclamped(float Value, float InRangeA, float InRangeB, float OutRangeA, float OutRangeB);
+	float STATIC_MapRangeClamped(float Value, float InRangeA, float InRangeB, float OutRangeA, float OutRangeB);
+	struct FVector2D STATIC_MakeVector2D(float X, float Y);
+	struct FVector STATIC_MakeVector(float X, float Y, float Z);
+	struct FTransform STATIC_MakeTransform(const struct FVector& Location, const struct FRotator& Rotation, const struct FVector& Scale);
+	struct FTimespan STATIC_MakeTimespan(int Days, int Hours, int Minutes, int Seconds, int Milliseconds);
+	struct FRotator STATIC_MakeRotFromZY(const struct FVector& Z, const struct FVector& Y);
+	struct FRotator STATIC_MakeRotFromZX(const struct FVector& Z, const struct FVector& X);
+	struct FRotator STATIC_MakeRotFromZ(const struct FVector& Z);
+	struct FRotator STATIC_MakeRotFromYZ(const struct FVector& Y, const struct FVector& Z);
+	struct FRotator STATIC_MakeRotFromYX(const struct FVector& Y, const struct FVector& X);
+	struct FRotator STATIC_MakeRotFromY(const struct FVector& Y);
+	struct FRotator STATIC_MakeRotFromXZ(const struct FVector& X, const struct FVector& Z);
+	struct FRotator STATIC_MakeRotFromXY(const struct FVector& X, const struct FVector& Y);
+	struct FRotator STATIC_MakeRotFromX(const struct FVector& X);
+	struct FRotator STATIC_MakeRotator(float Roll, float Pitch, float Yaw);
+	struct FRotator STATIC_MakeRotationFromAxes(const struct FVector& Forward, const struct FVector& Right, const struct FVector& Up);
+	struct FRandomStream STATIC_MakeRandomStream(int InitialSeed);
+	float STATIC_MakePulsatingValue(float InCurrentTime, float InPulsesPerSecond, float InPhase);
+	struct FDateTime STATIC_MakeDateTime(int Year, int Month, int Day, int Hour, int Minute, int Second, int Millisecond);
+	struct FLinearColor STATIC_MakeColor(float R, float G, float B, float A);
+	float STATIC_Loge(float A);
+	bool STATIC_LinePlaneIntersection_OriginNormal(const struct FVector& LineStart, const struct FVector& LineEnd, const struct FVector& PlaneOrigin, const struct FVector& PlaneNormal, float* T, struct FVector* Intersection);
+	bool STATIC_LinePlaneIntersection(const struct FVector& LineStart, const struct FVector& LineEnd, const struct FPlane& APlane, float* T, struct FVector* Intersection);
+	struct FLinearColor STATIC_LinearColorLerpUsingHSV(const struct FLinearColor& A, const struct FLinearColor& B, float Alpha);
+	struct FLinearColor STATIC_LinearColorLerp(const struct FLinearColor& A, const struct FLinearColor& B, float Alpha);
+	struct FVector STATIC_LessLess_VectorRotator(const struct FVector& A, const struct FRotator& B);
+	bool STATIC_LessEqual_TimespanTimespan(const struct FTimespan& A, const struct FTimespan& B);
+	bool STATIC_LessEqual_IntInt(int A, int B);
+	bool STATIC_LessEqual_FloatFloat(float A, float B);
+	bool STATIC_LessEqual_DateTimeDateTime(const struct FDateTime& A, const struct FDateTime& B);
+	bool STATIC_LessEqual_ByteByte(unsigned char A, unsigned char B);
+	bool STATIC_Less_TimespanTimespan(const struct FTimespan& A, const struct FTimespan& B);
+	bool STATIC_Less_IntInt(int A, int B);
+	bool STATIC_Less_FloatFloat(float A, float B);
+	bool STATIC_Less_DateTimeDateTime(const struct FDateTime& A, const struct FDateTime& B);
+	bool STATIC_Less_ByteByte(unsigned char A, unsigned char B);
+	float STATIC_Lerp(float A, float B, float Alpha);
+	bool STATIC_IsPointInBox(const struct FVector& Point, const struct FBox& Box);
+	bool STATIC_IsMorning(const struct FDateTime& A);
+	bool STATIC_IsLeapYear(int Year);
+	bool STATIC_IsAfternoon(const struct FDateTime& A);
+	struct FTransform STATIC_InvertTransform(const struct FTransform& T);
+	struct FVector STATIC_InverseTransformLocation(const struct FTransform& T, const struct FVector& Location);
+	struct FVector STATIC_InverseTransformDirection(const struct FTransform& T, const struct FVector& Direction);
+	float STATIC_InverseLerp(float A, float B, float Value);
+	bool STATIC_InRange_FloatFloat(float Value, float Min, float Max, bool InclusiveMin, bool InclusiveMax);
+	float STATIC_Hypotenuse(float Width, float Height);
+	void STATIC_HSVToRGB_Vector(const struct FLinearColor& HSV, struct FLinearColor* RGB);
+	struct FLinearColor STATIC_HSVToRGB(float H, float S, float V, float A);
+	float STATIC_GridSnap_Float(float Location, float GridSize);
+	struct FVector STATIC_GreaterGreater_VectorRotator(const struct FVector& A, const struct FRotator& B);
+	bool STATIC_GreaterEqual_TimespanTimespan(const struct FTimespan& A, const struct FTimespan& B);
+	bool STATIC_GreaterEqual_IntInt(int A, int B);
+	bool STATIC_GreaterEqual_FloatFloat(float A, float B);
+	bool STATIC_GreaterEqual_DateTimeDateTime(const struct FDateTime& A, const struct FDateTime& B);
+	bool STATIC_GreaterEqual_ByteByte(unsigned char A, unsigned char B);
+	bool STATIC_Greater_TimespanTimespan(const struct FTimespan& A, const struct FTimespan& B);
+	bool STATIC_Greater_IntInt(int A, int B);
+	bool STATIC_Greater_FloatFloat(float A, float B);
+	bool STATIC_Greater_DateTimeDateTime(const struct FDateTime& A, const struct FDateTime& B);
+	bool STATIC_Greater_ByteByte(unsigned char A, unsigned char B);
+	int STATIC_GetYear(const struct FDateTime& A);
+	void STATIC_GetYawPitchFromVector(const struct FVector& InVec, float* Yaw, float* Pitch);
+	struct FVector STATIC_GetVectorArrayAverage(TArray<struct FVector> Vectors);
+	struct FVector STATIC_GetUpVector(const struct FRotator& InRot);
+	float STATIC_GetTotalSeconds(const struct FTimespan& A);
+	float STATIC_GetTotalMinutes(const struct FTimespan& A);
+	float STATIC_GetTotalMilliseconds(const struct FTimespan& A);
+	float STATIC_GetTotalHours(const struct FTimespan& A);
+	float STATIC_GetTotalDays(const struct FTimespan& A);
+	struct FTimespan STATIC_GetTimeOfDay(const struct FDateTime& A);
+	int STATIC_GetSeconds(const struct FTimespan& A);
+	int STATIC_GetSecond(const struct FDateTime& A);
+	struct FVector STATIC_GetRightVector(const struct FRotator& InRot);
+	float STATIC_GetPI();
+	int STATIC_GetMonth(const struct FDateTime& A);
+	int STATIC_GetMinutes(const struct FTimespan& A);
+	int STATIC_GetMinute(const struct FDateTime& A);
+	float STATIC_GetMinElement(const struct FVector& A);
+	int STATIC_GetMilliseconds(const struct FTimespan& A);
+	int STATIC_GetMillisecond(const struct FDateTime& A);
+	float STATIC_GetMaxElement(const struct FVector& A);
+	int STATIC_GetHours(const struct FTimespan& A);
+	int STATIC_GetHour12(const struct FDateTime& A);
+	int STATIC_GetHour(const struct FDateTime& A);
+	struct FVector STATIC_GetForwardVector(const struct FRotator& InRot);
+	struct FTimespan STATIC_GetDuration(const struct FTimespan& A);
+	struct FVector STATIC_GetDirectionVector(const struct FVector& From, const struct FVector& To);
+	int STATIC_GetDays(const struct FTimespan& A);
+	int STATIC_GetDayOfYear(const struct FDateTime& A);
+	int STATIC_GetDay(const struct FDateTime& A);
+	struct FDateTime STATIC_GetDate(const struct FDateTime& A);
+	void STATIC_GetAxes(const struct FRotator& A, struct FVector* X, struct FVector* Y, struct FVector* Z);
+	int STATIC_FTrunc(float A);
+	struct FTimespan STATIC_FromSeconds(float Seconds);
+	struct FTimespan STATIC_FromMinutes(float Minutes);
+	struct FTimespan STATIC_FromMilliseconds(float Milliseconds);
+	struct FTimespan STATIC_FromHours(float Hours);
+	struct FTimespan STATIC_FromDays(float Days);
+	float STATIC_Fraction(float A);
+	int STATIC_FMod(float Dividend, float Divisor, float* Remainder);
+	float STATIC_FMin(float A, float B);
+	float STATIC_FMax(float A, float B);
+	float STATIC_FixedTurn(float InCurrent, float InDesired, float InDeltaRate);
+	float STATIC_FInterpTo_Constant(float Current, float Target, float DeltaTime, float InterpSpeed);
+	float STATIC_FInterpTo(float Current, float Target, float DeltaTime, float InterpSpeed);
+	float STATIC_FInterpEaseInOut(float A, float B, float Alpha, float Exponent);
+	struct FRotator STATIC_FindLookAtRotation(const struct FVector& Start, const struct FVector& Target);
+	int STATIC_FFloor(float A);
+	float STATIC_FClamp(float Value, float Min, float Max);
+	int STATIC_FCeil(float A);
+	float STATIC_Exp(float A);
+	bool STATIC_EqualEqual_VectorVector(const struct FVector& A, const struct FVector& B, float ErrorTolerance);
+	bool STATIC_EqualEqual_TransformTransform(const struct FTransform& A, const struct FTransform& B);
+	bool STATIC_EqualEqual_TimespanTimespan(const struct FTimespan& A, const struct FTimespan& B);
+	bool STATIC_EqualEqual_RotatorRotator(const struct FRotator& A, const struct FRotator& B, float ErrorTolerance);
+	bool STATIC_EqualEqual_ObjectObject(class UObject* A, class UObject* B);
+	bool STATIC_EqualEqual_NameName(const struct FName& A, const struct FName& B);
+	bool STATIC_EqualEqual_IntInt(int A, int B);
+	bool STATIC_EqualEqual_FloatFloat(float A, float B);
+	bool STATIC_EqualEqual_DateTimeDateTime(const struct FDateTime& A, const struct FDateTime& B);
+	bool STATIC_EqualEqual_ClassClass(class UClass* A, class UClass* B);
+	bool STATIC_EqualEqual_ByteByte(unsigned char A, unsigned char B);
+	bool STATIC_EqualEqual_BoolBool(bool A, bool B);
+	float STATIC_Ease(float A, float B, float Alpha, TEnumAsByte<EEasingFunc> EasingFunc, float BlendExp, int Steps);
+	float STATIC_DotProduct2D(const struct FVector2D& A, const struct FVector2D& B);
+	float STATIC_Dot_VectorVector(const struct FVector& A, const struct FVector& B);
+	struct FVector STATIC_Divide_VectorVector(const struct FVector& A, const struct FVector& B);
+	struct FVector STATIC_Divide_VectorInt(const struct FVector& A, int B);
+	struct FVector STATIC_Divide_VectorFloat(const struct FVector& A, float B);
+	struct FVector2D STATIC_Divide_Vector2DFloat(const struct FVector2D& A, float B);
+	int STATIC_Divide_IntInt(int A, int B);
+	float STATIC_Divide_FloatFloat(float A, float B);
+	unsigned char STATIC_Divide_ByteByte(unsigned char A, unsigned char B);
+	float STATIC_DegTan(float A);
+	float STATIC_DegSin(float A);
+	float STATIC_DegreesToRadians(float A);
+	float STATIC_DegCos(float A);
+	float STATIC_DegAtan2(float A, float B);
+	float STATIC_DegAtan(float A);
+	float STATIC_DegAsin(float A);
+	float STATIC_DegAcos(float A);
+	int STATIC_DaysInYear(int Year);
+	int STATIC_DaysInMonth(int Year, int Month);
+	struct FDateTime STATIC_DateTimeMinValue();
+	struct FDateTime STATIC_DateTimeMaxValue();
+	bool STATIC_DateTimeFromString(const struct FString& DateTimeString, struct FDateTime* Result);
+	bool STATIC_DateTimeFromIsoString(const struct FString& IsoString, struct FDateTime* Result);
+	float STATIC_CrossProduct2D(const struct FVector2D& A, const struct FVector2D& B);
+	struct FVector STATIC_Cross_VectorVector(const struct FVector& A, const struct FVector& B);
+	struct FVector STATIC_CreateVectorFromYawPitch(float Yaw, float Pitch, float Length);
+	float STATIC_Cos(float A);
+	struct FTransform STATIC_ConvertTransformToRelative(const struct FTransform& Transform, const struct FTransform& ParentTransform);
+	struct FVector2D STATIC_Conv_VectorToVector2D(const struct FVector& InVector);
+	struct FTransform STATIC_Conv_VectorToTransform(const struct FVector& InLocation);
+	struct FRotator STATIC_Conv_VectorToRotator(const struct FVector& InVec);
+	struct FLinearColor STATIC_Conv_VectorToLinearColor(const struct FVector& InVec);
+	struct FVector STATIC_Conv_Vector2DToVector(const struct FVector2D& InVector2D, float Z);
+	struct FVector STATIC_Conv_RotatorToVector(const struct FRotator& InRot);
+	struct FVector STATIC_Conv_LinearColorToVector(const struct FLinearColor& InLinearColor);
+	struct FColor STATIC_Conv_LinearColorToColor(const struct FLinearColor& InLinearColor);
+	float STATIC_Conv_IntToFloat(int InInt);
+	unsigned char STATIC_Conv_IntToByte(int InInt);
+	bool STATIC_Conv_IntToBool(int InInt);
+	struct FVector STATIC_Conv_FloatToVector(float InFloat);
+	struct FLinearColor STATIC_Conv_FloatToLinearColor(float InFloat);
+	struct FLinearColor STATIC_Conv_ColorToLinearColor(const struct FColor& InColor);
+	int STATIC_Conv_ByteToInt(unsigned char InByte);
+	float STATIC_Conv_ByteToFloat(unsigned char InByte);
+	int STATIC_Conv_BoolToInt(bool InBool);
+	float STATIC_Conv_BoolToFloat(bool InBool);
+	unsigned char STATIC_Conv_BoolToByte(bool InBool);
+	struct FTransform STATIC_ComposeTransforms(const struct FTransform& A, const struct FTransform& B);
+	struct FRotator STATIC_ComposeRotators(const struct FRotator& A, const struct FRotator& B);
+	bool STATIC_ClassIsChildOf(class UClass* TestClass, class UClass* ParentClass);
+	struct FVector STATIC_ClampVectorSize(const struct FVector& A, float Min, float Max);
+	float STATIC_ClampAxis(float Angle);
+	float STATIC_ClampAngle(float AngleDegrees, float MinAngleDegrees, float MaxAngleDegrees);
+	int STATIC_Clamp(int Value, int Min, int Max);
+	struct FLinearColor STATIC_CInterpTo(const struct FLinearColor& Current, const struct FLinearColor& Target, float DeltaTime, float InterpSpeed);
+	void STATIC_BreakVector2D(const struct FVector2D& InVec, float* X, float* Y);
+	void STATIC_BreakVector(const struct FVector& InVec, float* X, float* Y, float* Z);
+	void STATIC_BreakTransform(const struct FTransform& InTransform, struct FVector* Location, struct FRotator* Rotation, struct FVector* Scale);
+	void STATIC_BreakTimespan(const struct FTimespan& InTimespan, int* Days, int* Hours, int* Minutes, int* Seconds, int* Milliseconds);
+	void STATIC_BreakRotIntoAxes(const struct FRotator& InRot, struct FVector* X, struct FVector* Y, struct FVector* Z);
+	void STATIC_BreakRotator(const struct FRotator& InRot, float* Roll, float* Pitch, float* Yaw);
+	void STATIC_BreakRandomStream(const struct FRandomStream& InRandomStream, int* InitialSeed);
+	void STATIC_BreakDateTime(const struct FDateTime& InDateTime, int* Year, int* Month, int* Day, int* Hour, int* Minute, int* Second, int* Millisecond);
+	void STATIC_BreakColor(const struct FLinearColor& InColor, float* R, float* G, float* B, float* A);
+	bool STATIC_BooleanXOR(bool A, bool B);
+	bool STATIC_BooleanOR(bool A, bool B);
+	bool STATIC_BooleanNOR(bool A, bool B);
+	bool STATIC_BooleanNAND(bool A, bool B);
+	bool STATIC_BooleanAND(bool A, bool B);
+	float STATIC_Atan2(float A, float B);
+	float STATIC_Atan(float A);
+	float STATIC_Asin(float A);
+	int STATIC_And_IntInt(int A, int B);
+	struct FVector STATIC_Add_VectorVector(const struct FVector& A, const struct FVector& B);
+	struct FVector STATIC_Add_VectorInt(const struct FVector& A, int B);
+	struct FVector STATIC_Add_VectorFloat(const struct FVector& A, float B);
+	struct FVector2D STATIC_Add_Vector2DVector2D(const struct FVector2D& A, const struct FVector2D& B);
+	struct FVector2D STATIC_Add_Vector2DFloat(const struct FVector2D& A, float B);
+	struct FTimespan STATIC_Add_TimespanTimespan(const struct FTimespan& A, const struct FTimespan& B);
+	int STATIC_Add_IntInt(int A, int B);
+	float STATIC_Add_FloatFloat(float A, float B);
+	struct FDateTime STATIC_Add_DateTimeTimespan(const struct FDateTime& A, const struct FTimespan& B);
+	unsigned char STATIC_Add_ByteByte(unsigned char A, unsigned char B);
+	float STATIC_Acos(float A);
+	int STATIC_Abs_Int(int A);
+	float STATIC_Abs(float A);
 };
 
 
@@ -10051,23 +10051,23 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.KismetNodeHelperLibrary"));
+		static auto ptr = UObject::FindClass("Class Engine.KismetNodeHelperLibrary");
 		return ptr;
 	}
 
 
-	static void MarkBit(int Index, int* Data);
-	static bool HasUnmarkedBit(int Data, int NumBits);
-	static bool HasMarkedBit(int Data, int NumBits);
-	static unsigned char GetValidIndex(class UEnum* Enum, unsigned char EnumeratorIndex);
-	static int GetUnmarkedBit(int Data, int StartIdx, int NumBits, bool bRandom);
-	static int GetRandomUnmarkedBit(int Data, int StartIdx, int NumBits);
-	static int GetFirstUnmarkedBit(int Data, int StartIdx, int NumBits);
-	static class FString GetEnumeratorUserFriendlyName(class UEnum* Enum, unsigned char EnumeratorValue);
-	static struct FName GetEnumeratorName(class UEnum* Enum, unsigned char EnumeratorValue);
-	static void ClearBit(int Index, int* Data);
-	static void ClearAllBits(int* Data);
-	static bool BitIsMarked(int Data, int Index);
+	void STATIC_MarkBit(int Index, int* Data);
+	bool STATIC_HasUnmarkedBit(int Data, int NumBits);
+	bool STATIC_HasMarkedBit(int Data, int NumBits);
+	unsigned char STATIC_GetValidIndex(class UEnum* Enum, unsigned char EnumeratorIndex);
+	int STATIC_GetUnmarkedBit(int Data, int StartIdx, int NumBits, bool bRandom);
+	int STATIC_GetRandomUnmarkedBit(int Data, int StartIdx, int NumBits);
+	int STATIC_GetFirstUnmarkedBit(int Data, int StartIdx, int NumBits);
+	struct FString STATIC_GetEnumeratorUserFriendlyName(class UEnum* Enum, unsigned char EnumeratorValue);
+	struct FName STATIC_GetEnumeratorName(class UEnum* Enum, unsigned char EnumeratorValue);
+	void STATIC_ClearBit(int Index, int* Data);
+	void STATIC_ClearAllBits(int* Data);
+	bool STATIC_BitIsMarked(int Data, int Index);
 };
 
 
@@ -10079,67 +10079,67 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.KismetStringLibrary"));
+		static auto ptr = UObject::FindClass("Class Engine.KismetStringLibrary");
 		return ptr;
 	}
 
 
-	static class FString TrimTrailing(const class FString& SourceString);
-	static class FString Trim(const class FString& SourceString);
-	static class FString ToUpper(const class FString& SourceString);
-	static class FString ToLower(const class FString& SourceString);
-	static class FString TimeSecondsToString(float InSeconds);
-	static bool StartsWith(const class FString& SourceString, const class FString& InPrefix, TEnumAsByte<ESearchCase> SearchCase);
-	static bool Split(const class FString& SourceString, const class FString& InStr, TEnumAsByte<ESearchCase> SearchCase, TEnumAsByte<ESearchDir> SearchDir, class FString* LeftS, class FString* RightS);
-	static class FString RightPad(const class FString& SourceString, int ChCount);
-	static class FString RightChop(const class FString& SourceString, int Count);
-	static class FString Right(const class FString& SourceString, int Count);
-	static class FString Reverse(const class FString& SourceString);
-	static int ReplaceInline(const class FString& SearchText, const class FString& ReplacementText, TEnumAsByte<ESearchCase> SearchCase, class FString* SourceString);
-	static class FString Replace(const class FString& SourceString, const class FString& From, const class FString& To, TEnumAsByte<ESearchCase> SearchCase);
-	static TArray<class FString> ParseIntoArray(const class FString& SourceString, const class FString& Delimiter, bool CullEmptyStrings);
-	static bool NotEqual_StrStr(const class FString& A, const class FString& B);
-	static bool NotEqual_StriStri(const class FString& A, const class FString& B);
-	static class FString Mid(const class FString& SourceString, int Start, int Count);
-	static bool MatchesWildcard(const class FString& SourceString, const class FString& Wildcard, TEnumAsByte<ESearchCase> SearchCase);
-	static int Len(const class FString& S);
-	static class FString LeftPad(const class FString& SourceString, int ChCount);
-	static class FString LeftChop(const class FString& SourceString, int Count);
-	static class FString Left(const class FString& SourceString, int Count);
-	static class FString JoinStringArray(TArray<class FString> SourceArray, const class FString& Separator);
-	static bool IsNumeric(const class FString& SourceString);
-	static class FString GetSubstring(const class FString& SourceString, int StartIndex, int Length);
-	static int GetCharacterAsNumber(const class FString& SourceString, int Index);
-	static TArray<class FString> GetCharacterArrayFromString(const class FString& SourceString);
-	static int FindSubstring(const class FString& SearchIn, const class FString& Substring, bool bUseCase, bool bSearchFromEnd, int StartPosition);
-	static bool EqualEqual_StrStr(const class FString& A, const class FString& B);
-	static bool EqualEqual_StriStri(const class FString& A, const class FString& B);
-	static bool EndsWith(const class FString& SourceString, const class FString& InSuffix, TEnumAsByte<ESearchCase> SearchCase);
-	static int CullArray(const class FString& SourceString, TArray<class FString>* InArray);
-	static class FString Conv_VectorToString(const struct FVector& InVec);
-	static class FString Conv_Vector2dToString(const struct FVector2D& InVec);
-	static class FString Conv_TransformToString(const struct FTransform& InTrans);
-	static struct FName Conv_StringToName(const class FString& InString);
-	static int Conv_StringToInt(const class FString& InString);
-	static float Conv_StringToFloat(const class FString& InString);
-	static class FString Conv_RotatorToString(const struct FRotator& InRot);
-	static class FString Conv_ObjectToString(class UObject* InObj);
-	static class FString Conv_NameToString(const struct FName& InName);
-	static class FString Conv_IntToString(int InInt);
-	static class FString Conv_FloatToString(float InFloat);
-	static class FString Conv_ColorToString(const struct FLinearColor& InColor);
-	static class FString Conv_ByteToString(unsigned char InByte);
-	static class FString Conv_BoolToString(bool InBool);
-	static class FString Concat_StrStr(const class FString& A, const class FString& B);
-	static class FString BuildString_Vector2d(const class FString& AppendTo, const class FString& Prefix, const struct FVector2D& InVector2D, const class FString& Suffix);
-	static class FString BuildString_Vector(const class FString& AppendTo, const class FString& Prefix, const struct FVector& InVector, const class FString& Suffix);
-	static class FString BuildString_Rotator(const class FString& AppendTo, const class FString& Prefix, const struct FRotator& InRot, const class FString& Suffix);
-	static class FString BuildString_Object(const class FString& AppendTo, const class FString& Prefix, class UObject* InObj, const class FString& Suffix);
-	static class FString BuildString_Name(const class FString& AppendTo, const class FString& Prefix, const struct FName& InName, const class FString& Suffix);
-	static class FString BuildString_Int(const class FString& AppendTo, const class FString& Prefix, int InInt, const class FString& Suffix);
-	static class FString BuildString_Float(const class FString& AppendTo, const class FString& Prefix, float InFloat, const class FString& Suffix);
-	static class FString BuildString_Color(const class FString& AppendTo, const class FString& Prefix, const struct FLinearColor& InColor, const class FString& Suffix);
-	static class FString BuildString_Bool(const class FString& AppendTo, const class FString& Prefix, bool InBool, const class FString& Suffix);
+	struct FString STATIC_TrimTrailing(const struct FString& SourceString);
+	struct FString STATIC_Trim(const struct FString& SourceString);
+	struct FString STATIC_ToUpper(const struct FString& SourceString);
+	struct FString STATIC_ToLower(const struct FString& SourceString);
+	struct FString STATIC_TimeSecondsToString(float InSeconds);
+	bool STATIC_StartsWith(const struct FString& SourceString, const struct FString& InPrefix, TEnumAsByte<ESearchCase> SearchCase);
+	bool STATIC_Split(const struct FString& SourceString, const struct FString& InStr, TEnumAsByte<ESearchCase> SearchCase, TEnumAsByte<ESearchDir> SearchDir, struct FString* LeftS, struct FString* RightS);
+	struct FString STATIC_RightPad(const struct FString& SourceString, int ChCount);
+	struct FString STATIC_RightChop(const struct FString& SourceString, int Count);
+	struct FString STATIC_Right(const struct FString& SourceString, int Count);
+	struct FString STATIC_Reverse(const struct FString& SourceString);
+	int STATIC_ReplaceInline(const struct FString& SearchText, const struct FString& ReplacementText, TEnumAsByte<ESearchCase> SearchCase, struct FString* SourceString);
+	struct FString STATIC_Replace(const struct FString& SourceString, const struct FString& From, const struct FString& To, TEnumAsByte<ESearchCase> SearchCase);
+	TArray<struct FString> STATIC_ParseIntoArray(const struct FString& SourceString, const struct FString& Delimiter, bool CullEmptyStrings);
+	bool STATIC_NotEqual_StrStr(const struct FString& A, const struct FString& B);
+	bool STATIC_NotEqual_StriStri(const struct FString& A, const struct FString& B);
+	struct FString STATIC_Mid(const struct FString& SourceString, int Start, int Count);
+	bool STATIC_MatchesWildcard(const struct FString& SourceString, const struct FString& Wildcard, TEnumAsByte<ESearchCase> SearchCase);
+	int STATIC_Len(const struct FString& S);
+	struct FString STATIC_LeftPad(const struct FString& SourceString, int ChCount);
+	struct FString STATIC_LeftChop(const struct FString& SourceString, int Count);
+	struct FString STATIC_Left(const struct FString& SourceString, int Count);
+	struct FString STATIC_JoinStringArray(TArray<struct FString> SourceArray, const struct FString& Separator);
+	bool STATIC_IsNumeric(const struct FString& SourceString);
+	struct FString STATIC_GetSubstring(const struct FString& SourceString, int StartIndex, int Length);
+	int STATIC_GetCharacterAsNumber(const struct FString& SourceString, int Index);
+	TArray<struct FString> STATIC_GetCharacterArrayFromString(const struct FString& SourceString);
+	int STATIC_FindSubstring(const struct FString& SearchIn, const struct FString& Substring, bool bUseCase, bool bSearchFromEnd, int StartPosition);
+	bool STATIC_EqualEqual_StrStr(const struct FString& A, const struct FString& B);
+	bool STATIC_EqualEqual_StriStri(const struct FString& A, const struct FString& B);
+	bool STATIC_EndsWith(const struct FString& SourceString, const struct FString& InSuffix, TEnumAsByte<ESearchCase> SearchCase);
+	int STATIC_CullArray(const struct FString& SourceString, TArray<struct FString>* InArray);
+	struct FString STATIC_Conv_VectorToString(const struct FVector& InVec);
+	struct FString STATIC_Conv_Vector2dToString(const struct FVector2D& InVec);
+	struct FString STATIC_Conv_TransformToString(const struct FTransform& InTrans);
+	struct FName STATIC_Conv_StringToName(const struct FString& InString);
+	int STATIC_Conv_StringToInt(const struct FString& InString);
+	float STATIC_Conv_StringToFloat(const struct FString& InString);
+	struct FString STATIC_Conv_RotatorToString(const struct FRotator& InRot);
+	struct FString STATIC_Conv_ObjectToString(class UObject* InObj);
+	struct FString STATIC_Conv_NameToString(const struct FName& InName);
+	struct FString STATIC_Conv_IntToString(int InInt);
+	struct FString STATIC_Conv_FloatToString(float InFloat);
+	struct FString STATIC_Conv_ColorToString(const struct FLinearColor& InColor);
+	struct FString STATIC_Conv_ByteToString(unsigned char InByte);
+	struct FString STATIC_Conv_BoolToString(bool InBool);
+	struct FString STATIC_Concat_StrStr(const struct FString& A, const struct FString& B);
+	struct FString STATIC_BuildString_Vector2d(const struct FString& AppendTo, const struct FString& Prefix, const struct FVector2D& InVector2D, const struct FString& Suffix);
+	struct FString STATIC_BuildString_Vector(const struct FString& AppendTo, const struct FString& Prefix, const struct FVector& InVector, const struct FString& Suffix);
+	struct FString STATIC_BuildString_Rotator(const struct FString& AppendTo, const struct FString& Prefix, const struct FRotator& InRot, const struct FString& Suffix);
+	struct FString STATIC_BuildString_Object(const struct FString& AppendTo, const struct FString& Prefix, class UObject* InObj, const struct FString& Suffix);
+	struct FString STATIC_BuildString_Name(const struct FString& AppendTo, const struct FString& Prefix, const struct FName& InName, const struct FString& Suffix);
+	struct FString STATIC_BuildString_Int(const struct FString& AppendTo, const struct FString& Prefix, int InInt, const struct FString& Suffix);
+	struct FString STATIC_BuildString_Float(const struct FString& AppendTo, const struct FString& Prefix, float InFloat, const struct FString& Suffix);
+	struct FString STATIC_BuildString_Color(const struct FString& AppendTo, const struct FString& Prefix, const struct FLinearColor& InColor, const struct FString& Suffix);
+	struct FString STATIC_BuildString_Bool(const struct FString& AppendTo, const struct FString& Prefix, bool InBool, const struct FString& Suffix);
 };
 
 
@@ -10151,187 +10151,187 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.KismetSystemLibrary"));
+		static auto ptr = UObject::FindClass("Class Engine.KismetSystemLibrary");
 		return ptr;
 	}
 
 
-	static void StackTrace();
-	static bool SphereTraceSingleForObjects(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, struct FHitResult* OutHit);
-	static bool SphereTraceSingleByObject_DEPRECATED(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, TArray<TEnumAsByte<ECollisionChannel>> ObjectsToTrace, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, struct FHitResult* OutHit);
-	static bool SphereTraceSingle_NEW(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, TEnumAsByte<ETraceTypeQuery> TraceChannel, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, struct FHitResult* OutHit);
-	static bool SphereTraceSingle_DEPRECATED(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, TEnumAsByte<ECollisionChannel> TraceChannel, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, struct FHitResult* OutHit);
-	static bool SphereTraceMultiForObjects(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, TArray<struct FHitResult>* OutHits);
-	static bool SphereTraceMultiByObject_DEPRECATED(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, TArray<TEnumAsByte<ECollisionChannel>> ObjectsToTrace, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, TArray<struct FHitResult>* OutHits);
-	static bool SphereTraceMulti_NEW(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, TEnumAsByte<ETraceTypeQuery> TraceChannel, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, TArray<struct FHitResult>* OutHits);
-	static bool SphereTraceMulti_DEPRECATED(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, TEnumAsByte<ECollisionChannel> TraceChannel, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, TArray<struct FHitResult>* OutHits);
-	static bool SphereOverlapComponents_NEW(class UObject* WorldContextObject, const struct FVector& SpherePos, float SphereRadius, TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes, class UClass* ComponentClassFilter, TArray<class AActor*> ActorsToIgnore, TArray<class UPrimitiveComponent*>* OutComponents);
-	static bool SphereOverlapComponents_DEPRECATED(class UObject* WorldContextObject, const struct FVector& SpherePos, float SphereRadius, TEnumAsByte<EOverlapFilterOption> Filter, class UClass* ComponentClassFilter, TArray<class AActor*> ActorsToIgnore, TArray<class UPrimitiveComponent*>* OutComponents);
-	static bool SphereOverlapActors_NEW(class UObject* WorldContextObject, const struct FVector& SpherePos, float SphereRadius, TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes, class UClass* ActorClassFilter, TArray<class AActor*> ActorsToIgnore, TArray<class AActor*>* OutActors);
-	static bool SphereOverlapActors_DEPRECATED(class UObject* WorldContextObject, const struct FVector& SpherePos, float SphereRadius, TEnumAsByte<EOverlapFilterOption> Filter, class UClass* ActorClassFilter, TArray<class AActor*> ActorsToIgnore, TArray<class AActor*>* OutActors);
-	static void ShowPlatformSpecificLeaderboardScreen(const class FString& CategoryName);
-	static void ShowPlatformSpecificAchievementsScreen(class APlayerController* SpecificPlayer);
-	static void ShowAdBanner(int AdIdIndex, bool bShowOnBottomOfScreen);
-	static void SetWindowTitle(const struct FText& Title);
-	static void SetVolumeButtonsHandledBySystem(bool bEnabled);
-	static void SetVectorPropertyByName(class UObject* Object, const struct FName& PropertyName, const struct FVector& Value);
-	static void SetTransformPropertyByName(class UObject* Object, const struct FName& PropertyName, const struct FTransform& Value);
-	static void SetTextPropertyByName(class UObject* Object, const struct FName& PropertyName, const struct FText& Value);
-	static void SetSupressViewportTransitionMessage(class UObject* WorldContextObject, bool bState);
-	static void SetStructurePropertyByName(class UObject* Object, const struct FName& PropertyName, const struct FGenericStruct& Value);
-	static void SetStringPropertyByName(class UObject* Object, const struct FName& PropertyName, const class FString& Value);
-	static void SetRotatorPropertyByName(class UObject* Object, const struct FName& PropertyName, const struct FRotator& Value);
-	static void SetObjectPropertyByName(class UObject* Object, const struct FName& PropertyName, class UObject* Value);
-	static void SetNamePropertyByName(class UObject* Object, const struct FName& PropertyName, const struct FName& Value);
-	static void SetLinearColorPropertyByName(class UObject* Object, const struct FName& PropertyName, const struct FLinearColor& Value);
-	static void SetIntPropertyByName(class UObject* Object, const struct FName& PropertyName, int Value);
-	static void SetFloatPropertyByName(class UObject* Object, const struct FName& PropertyName, float Value);
-	static void SetCollisionProfileNameProperty(class UObject* Object, const struct FName& PropertyName, const struct FCollisionProfileName& Value);
-	static void SetClassPropertyByName(class UObject* Object, const struct FName& PropertyName, class UClass* Value);
-	static void SetBytePropertyByName(class UObject* Object, const struct FName& PropertyName, unsigned char Value);
-	static void SetBoolPropertyByName(class UObject* Object, const struct FName& PropertyName, bool Value);
-	static void SetAssetPropertyByName(class UObject* Object, const struct FName& PropertyName, TAssetPtr<class UObject> Value);
-	static void SetAssetClassPropertyByName(class UObject* Object, const struct FName& PropertyName, TAssetPtr<class UClass> Value);
-	static void RetriggerableDelay(class UObject* WorldContextObject, float Duration, const struct FLatentActionInfo& LatentInfo);
-	static void ResetGamepadAssignmentToController(int ControllerId);
-	static void ResetGamepadAssignments();
-	static void RegisterForRemoteNotifications();
-	static void QuitGame(class UObject* WorldContextObject, class APlayerController* SpecificPlayer, TEnumAsByte<EQuitPreference> QuitPreference);
-	static void PrintWarning(const class FString& InString);
-	static void PrintText(class UObject* WorldContextObject, const struct FText& InText, bool bPrintToScreen, bool bPrintToLog, const struct FLinearColor& TextColor, float Duration);
-	static void PrintString(class UObject* WorldContextObject, const class FString& InString, bool bPrintToScreen, bool bPrintToLog, const struct FLinearColor& TextColor, float Duration);
+	void STATIC_StackTrace();
+	bool STATIC_SphereTraceSingleForObjects(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, struct FHitResult* OutHit);
+	bool STATIC_SphereTraceSingleByObject_DEPRECATED(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, TArray<TEnumAsByte<ECollisionChannel>> ObjectsToTrace, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, struct FHitResult* OutHit);
+	bool STATIC_SphereTraceSingle_NEW(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, TEnumAsByte<ETraceTypeQuery> TraceChannel, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, struct FHitResult* OutHit);
+	bool STATIC_SphereTraceSingle_DEPRECATED(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, TEnumAsByte<ECollisionChannel> TraceChannel, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, struct FHitResult* OutHit);
+	bool STATIC_SphereTraceMultiForObjects(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, TArray<struct FHitResult>* OutHits);
+	bool STATIC_SphereTraceMultiByObject_DEPRECATED(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, TArray<TEnumAsByte<ECollisionChannel>> ObjectsToTrace, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, TArray<struct FHitResult>* OutHits);
+	bool STATIC_SphereTraceMulti_NEW(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, TEnumAsByte<ETraceTypeQuery> TraceChannel, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, TArray<struct FHitResult>* OutHits);
+	bool STATIC_SphereTraceMulti_DEPRECATED(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, TEnumAsByte<ECollisionChannel> TraceChannel, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, TArray<struct FHitResult>* OutHits);
+	bool STATIC_SphereOverlapComponents_NEW(class UObject* WorldContextObject, const struct FVector& SpherePos, float SphereRadius, TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes, class UClass* ComponentClassFilter, TArray<class AActor*> ActorsToIgnore, TArray<class UPrimitiveComponent*>* OutComponents);
+	bool STATIC_SphereOverlapComponents_DEPRECATED(class UObject* WorldContextObject, const struct FVector& SpherePos, float SphereRadius, TEnumAsByte<EOverlapFilterOption> Filter, class UClass* ComponentClassFilter, TArray<class AActor*> ActorsToIgnore, TArray<class UPrimitiveComponent*>* OutComponents);
+	bool STATIC_SphereOverlapActors_NEW(class UObject* WorldContextObject, const struct FVector& SpherePos, float SphereRadius, TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes, class UClass* ActorClassFilter, TArray<class AActor*> ActorsToIgnore, TArray<class AActor*>* OutActors);
+	bool STATIC_SphereOverlapActors_DEPRECATED(class UObject* WorldContextObject, const struct FVector& SpherePos, float SphereRadius, TEnumAsByte<EOverlapFilterOption> Filter, class UClass* ActorClassFilter, TArray<class AActor*> ActorsToIgnore, TArray<class AActor*>* OutActors);
+	void STATIC_ShowPlatformSpecificLeaderboardScreen(const struct FString& CategoryName);
+	void STATIC_ShowPlatformSpecificAchievementsScreen(class APlayerController* SpecificPlayer);
+	void STATIC_ShowAdBanner(int AdIdIndex, bool bShowOnBottomOfScreen);
+	void STATIC_SetWindowTitle(const struct FText& Title);
+	void STATIC_SetVolumeButtonsHandledBySystem(bool bEnabled);
+	void STATIC_SetVectorPropertyByName(class UObject* Object, const struct FName& PropertyName, const struct FVector& Value);
+	void STATIC_SetTransformPropertyByName(class UObject* Object, const struct FName& PropertyName, const struct FTransform& Value);
+	void STATIC_SetTextPropertyByName(class UObject* Object, const struct FName& PropertyName, const struct FText& Value);
+	void STATIC_SetSupressViewportTransitionMessage(class UObject* WorldContextObject, bool bState);
+	void STATIC_SetStructurePropertyByName(class UObject* Object, const struct FName& PropertyName, const struct FGenericStruct& Value);
+	void STATIC_SetStringPropertyByName(class UObject* Object, const struct FName& PropertyName, const struct FString& Value);
+	void STATIC_SetRotatorPropertyByName(class UObject* Object, const struct FName& PropertyName, const struct FRotator& Value);
+	void STATIC_SetObjectPropertyByName(class UObject* Object, const struct FName& PropertyName, class UObject* Value);
+	void STATIC_SetNamePropertyByName(class UObject* Object, const struct FName& PropertyName, const struct FName& Value);
+	void STATIC_SetLinearColorPropertyByName(class UObject* Object, const struct FName& PropertyName, const struct FLinearColor& Value);
+	void STATIC_SetIntPropertyByName(class UObject* Object, const struct FName& PropertyName, int Value);
+	void STATIC_SetFloatPropertyByName(class UObject* Object, const struct FName& PropertyName, float Value);
+	void STATIC_SetCollisionProfileNameProperty(class UObject* Object, const struct FName& PropertyName, const struct FCollisionProfileName& Value);
+	void STATIC_SetClassPropertyByName(class UObject* Object, const struct FName& PropertyName, class UClass* Value);
+	void STATIC_SetBytePropertyByName(class UObject* Object, const struct FName& PropertyName, unsigned char Value);
+	void STATIC_SetBoolPropertyByName(class UObject* Object, const struct FName& PropertyName, bool Value);
+	void STATIC_SetAssetPropertyByName(class UObject* Object, const struct FName& PropertyName, TAssetPtr<class UObject> Value);
+	void STATIC_SetAssetClassPropertyByName(class UObject* Object, const struct FName& PropertyName, TAssetPtr<class UClass> Value);
+	void STATIC_RetriggerableDelay(class UObject* WorldContextObject, float Duration, const struct FLatentActionInfo& LatentInfo);
+	void STATIC_ResetGamepadAssignmentToController(int ControllerId);
+	void STATIC_ResetGamepadAssignments();
+	void STATIC_RegisterForRemoteNotifications();
+	void STATIC_QuitGame(class UObject* WorldContextObject, class APlayerController* SpecificPlayer, TEnumAsByte<EQuitPreference> QuitPreference);
+	void STATIC_PrintWarning(const struct FString& InString);
+	void STATIC_PrintText(class UObject* WorldContextObject, const struct FText& InText, bool bPrintToScreen, bool bPrintToLog, const struct FLinearColor& TextColor, float Duration);
+	void STATIC_PrintString(class UObject* WorldContextObject, const struct FString& InString, bool bPrintToScreen, bool bPrintToLog, const struct FLinearColor& TextColor, float Duration);
 	void OnAssetLoaded__DelegateSignature(class UObject* Loaded);
 	void OnAssetClassLoaded__DelegateSignature(class UClass* Loaded);
-	static void MoveComponentTo(class USceneComponent* Component, const struct FVector& TargetRelativeLocation, const struct FRotator& TargetRelativeRotation, bool bEaseOut, bool bEaseIn, float OverTime, TEnumAsByte<EMoveComponentAction> MoveAction, const struct FLatentActionInfo& LatentInfo);
-	static struct FText MakeLiteralText(const struct FText& Value);
-	static class FString MakeLiteralString(const class FString& Value);
-	static struct FName MakeLiteralName(const struct FName& Value);
-	static int MakeLiteralInt(int Value);
-	static float MakeLiteralFloat(float Value);
-	static unsigned char MakeLiteralByte(unsigned char Value);
-	static bool MakeLiteralBool(bool Value);
-	static void LoadAssetClass(class UObject* WorldContextObject, TAssetPtr<class UClass> AssetClass, const struct FScriptDelegate& OnLoaded, const struct FLatentActionInfo& LatentInfo);
-	static void LoadAsset(class UObject* WorldContextObject, TAssetPtr<class UObject> Asset, const struct FScriptDelegate& OnLoaded, const struct FLatentActionInfo& LatentInfo);
-	static bool LineTraceSingleForObjects(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, struct FHitResult* OutHit);
-	static bool LineTraceSingleByObject_DEPRECATED(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, TArray<TEnumAsByte<ECollisionChannel>> ObjectsToTrace, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, struct FHitResult* OutHit);
-	static bool LineTraceSingle_NEW(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, TEnumAsByte<ETraceTypeQuery> TraceChannel, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, struct FHitResult* OutHit);
-	static bool LineTraceSingle_DEPRECATED(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, TEnumAsByte<ECollisionChannel> TraceChannel, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, struct FHitResult* OutHit);
-	static bool LineTraceMultiForObjects(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, TArray<struct FHitResult>* OutHits);
-	static bool LineTraceMultiByObject_DEPRECATED(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, TArray<TEnumAsByte<ECollisionChannel>> ObjectsToTrace, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, TArray<struct FHitResult>* OutHits);
-	static bool LineTraceMulti_NEW(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, TEnumAsByte<ETraceTypeQuery> TraceChannel, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, TArray<struct FHitResult>* OutHits);
-	static bool LineTraceMulti_DEPRECATED(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, TEnumAsByte<ECollisionChannel> TraceChannel, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, TArray<struct FHitResult>* OutHits);
-	static void LaunchURL(const class FString& URL);
-	static void K2_UnPauseTimerHandle(class UObject* WorldContextObject, const struct FTimerHandle& Handle);
-	static void K2_UnPauseTimerDelegate(const struct FScriptDelegate& Delegate);
-	static void K2_UnPauseTimer(class UObject* Object, const class FString& FunctionName);
-	static bool K2_TimerExistsHandle(class UObject* WorldContextObject, const struct FTimerHandle& Handle);
-	static bool K2_TimerExistsDelegate(const struct FScriptDelegate& Delegate);
-	static bool K2_TimerExists(class UObject* Object, const class FString& FunctionName);
-	static struct FTimerHandle K2_SetTimerDelegate(const struct FScriptDelegate& Delegate, float Time, bool bLooping);
-	static struct FTimerHandle K2_SetTimer(class UObject* Object, const class FString& FunctionName, float Time, bool bLooping);
-	static void K2_PauseTimerHandle(class UObject* WorldContextObject, const struct FTimerHandle& Handle);
-	static void K2_PauseTimerDelegate(const struct FScriptDelegate& Delegate);
-	static void K2_PauseTimer(class UObject* Object, const class FString& FunctionName);
-	static bool K2_IsValidTimerHandle(const struct FTimerHandle& Handle);
-	static bool K2_IsTimerPausedHandle(class UObject* WorldContextObject, const struct FTimerHandle& Handle);
-	static bool K2_IsTimerPausedDelegate(const struct FScriptDelegate& Delegate);
-	static bool K2_IsTimerPaused(class UObject* Object, const class FString& FunctionName);
-	static bool K2_IsTimerActiveHandle(class UObject* WorldContextObject, const struct FTimerHandle& Handle);
-	static bool K2_IsTimerActiveDelegate(const struct FScriptDelegate& Delegate);
-	static bool K2_IsTimerActive(class UObject* Object, const class FString& FunctionName);
-	static struct FTimerHandle K2_InvalidateTimerHandle(struct FTimerHandle* Handle);
-	static float K2_GetTimerRemainingTimeHandle(class UObject* WorldContextObject, const struct FTimerHandle& Handle);
-	static float K2_GetTimerRemainingTimeDelegate(const struct FScriptDelegate& Delegate);
-	static float K2_GetTimerRemainingTime(class UObject* Object, const class FString& FunctionName);
-	static float K2_GetTimerElapsedTimeHandle(class UObject* WorldContextObject, const struct FTimerHandle& Handle);
-	static float K2_GetTimerElapsedTimeDelegate(const struct FScriptDelegate& Delegate);
-	static float K2_GetTimerElapsedTime(class UObject* Object, const class FString& FunctionName);
-	static void K2_ClearTimerHandle(class UObject* WorldContextObject, const struct FTimerHandle& Handle);
-	static void K2_ClearTimerDelegate(const struct FScriptDelegate& Delegate);
-	static void K2_ClearTimer(class UObject* Object, const class FString& FunctionName);
-	static bool IsValidClass(class UClass* Class);
-	static bool IsValid(class UObject* Object);
-	static bool IsServer(class UObject* WorldContextObject);
-	static bool IsPackagedForDistribution();
-	static bool IsLoggedIn(class APlayerController* SpecificPlayer);
-	static bool IsDedicatedServer(class UObject* WorldContextObject);
-	static bool IsControllerAssignedToGamepad(int ControllerId);
-	static void HideAdBanner();
-	static bool GetVolumeButtonsHandledBySystem();
-	static class FString GetUniqueDeviceId();
-	static bool GetSupportedFullscreenResolutions(TArray<struct FIntPoint>* Resolutions);
-	static int GetRenderingMaterialQualityLevel();
-	static int GetRenderingDetailMode();
-	static TArray<class FString> GetPreferredLanguages();
-	static class FString GetPlatformUserName();
-	static int GetObjectNameAsCrc32(class UObject* Object);
-	static class FString GetObjectName(class UObject* Object);
-	static int GetMaxShadowCascades();
-	static class FString GetLocalCurrencySymbol();
-	static class FString GetLocalCurrencyCode();
-	static float GetGameTimeInSeconds(class UObject* WorldContextObject);
-	static class FString GetGameName();
-	static class FString GetEngineVersion();
-	static class FString GetDisplayName(class UObject* Object);
-	static void GetComponentBounds(class USceneComponent* Component, struct FVector* Origin, struct FVector* BoxExtent, float* SphereRadius);
-	static class FString GetClassDisplayName(class UClass* Class);
-	static int GetAdIDCount();
-	static void GetActorListFromComponentList(TArray<class UPrimitiveComponent*> ComponentList, class UClass* ActorClassFilter, TArray<class AActor*>* OutActorList);
-	static void GetActorBounds(class AActor* Actor, struct FVector* Origin, struct FVector* BoxExtent);
-	static void ForceCloseAdBanner();
-	static void FlushPersistentDebugLines(class UObject* WorldContextObject);
-	static void FlushDebugStrings(class UObject* WorldContextObject);
-	static void ExecuteConsoleCommand(class UObject* WorldContextObject, const class FString& Command, class APlayerController* SpecificPlayer);
-	static void DrawDebugString(class UObject* WorldContextObject, const struct FVector& TextLocation, const class FString& Text, class AActor* TestBaseActor, const struct FLinearColor& TextColor, float Duration);
-	static void DrawDebugSphere(class UObject* WorldContextObject, const struct FVector& Center, float Radius, int Segments, const struct FLinearColor& LineColor, float Duration);
-	static void DrawDebugPoint(class UObject* WorldContextObject, const struct FVector& Position, float Size, const struct FLinearColor& PointColor, float Duration);
-	static void DrawDebugPlane(class UObject* WorldContextObject, const struct FPlane& PlaneCoordinates, const struct FVector& Location, float Size, const struct FLinearColor& PlaneColor, float Duration);
-	static void DrawDebugLine(class UObject* WorldContextObject, const struct FVector& LineStart, const struct FVector& LineEnd, const struct FLinearColor& LineColor, float Duration, float Thickness);
-	static void DrawDebugFrustum(class UObject* WorldContextObject, const struct FTransform& FrustumTransform, const struct FLinearColor& FrustumColor, float Duration);
-	static void DrawDebugFloatHistoryTransform(class UObject* WorldContextObject, const struct FDebugFloatHistory& FloatHistory, const struct FTransform& DrawTransform, const struct FVector2D& DrawSize, const struct FLinearColor& DrawColor, float Duration);
-	static void DrawDebugFloatHistoryLocation(class UObject* WorldContextObject, const struct FDebugFloatHistory& FloatHistory, const struct FVector& DrawLocation, const struct FVector2D& DrawSize, const struct FLinearColor& DrawColor, float Duration);
-	static void DrawDebugCylinder(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, int Segments, const struct FLinearColor& LineColor, float Duration);
-	static void DrawDebugCoordinateSystem(class UObject* WorldContextObject, const struct FVector& AxisLoc, const struct FRotator& AxisRot, float Scale, float Duration);
-	static void DrawDebugConeInDegrees(class UObject* WorldContextObject, const struct FVector& Origin, const struct FVector& Direction, float Length, float AngleWidth, float AngleHeight, int NumSides, const struct FLinearColor& LineColor, float Duration);
-	static void DrawDebugCone(class UObject* WorldContextObject, const struct FVector& Origin, const struct FVector& Direction, float Length, float AngleWidth, float AngleHeight, int NumSides, const struct FLinearColor& LineColor);
-	static void DrawDebugCircle(class UObject* WorldContextObject, const struct FVector& Center, float Radius, int NumSegments, const struct FLinearColor& LineColor, float Duration, float Thickness, const struct FVector& YAxis, const struct FVector& ZAxis, bool bDrawAxis);
-	static void DrawDebugCapsule(class UObject* WorldContextObject, const struct FVector& Center, float HalfHeight, float Radius, const struct FRotator& Rotation, const struct FLinearColor& LineColor, float Duration);
-	static void DrawDebugCamera(class ACameraActor* CameraActor, const struct FLinearColor& CameraColor, float Duration);
-	static void DrawDebugBox(class UObject* WorldContextObject, const struct FVector& Center, const struct FVector& Extent, const struct FLinearColor& LineColor, const struct FRotator& Rotation, float Duration);
-	static void DrawDebugArrow(class UObject* WorldContextObject, const struct FVector& LineStart, const struct FVector& LineEnd, float ArrowSize, const struct FLinearColor& LineColor, float Duration);
-	static bool DoesImplementInterface(class UObject* TestObject, class UClass* Interface);
-	static void Delay(class UObject* WorldContextObject, float Duration, const struct FLatentActionInfo& LatentInfo);
-	static void CreateCopyForUndoBuffer(class UObject* ObjectToModify);
-	static class UObject* Conv_InterfaceToObject(const TScriptInterface<class UInterface>& Interface);
-	static class UObject* Conv_AssetToObject(TAssetPtr<class UObject> Asset);
-	static class UClass* Conv_AssetClassToClass(TAssetPtr<class UClass> AssetClass);
-	static void ControlScreensaver(bool bAllowScreenSaver);
-	static bool ComponentOverlapComponents_NEW(class UPrimitiveComponent* Component, const struct FTransform& ComponentTransform, TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes, class UClass* ComponentClassFilter, TArray<class AActor*> ActorsToIgnore, TArray<class UPrimitiveComponent*>* OutComponents);
-	static bool ComponentOverlapComponents_DEPRECATED(class UPrimitiveComponent* Component, const struct FTransform& ComponentTransform, TEnumAsByte<EOverlapFilterOption> Filter, class UClass* ComponentClassFilter, TArray<class AActor*> ActorsToIgnore, TArray<class UPrimitiveComponent*>* OutComponents);
-	static bool ComponentOverlapActors_NEW(class UPrimitiveComponent* Component, const struct FTransform& ComponentTransform, TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes, class UClass* ActorClassFilter, TArray<class AActor*> ActorsToIgnore, TArray<class AActor*>* OutActors);
-	static bool ComponentOverlapActors_DEPRECATED(class UPrimitiveComponent* Component, const struct FTransform& ComponentTransform, TEnumAsByte<EOverlapFilterOption> Filter, class UClass* ActorClassFilter, TArray<class AActor*> ActorsToIgnore, TArray<class AActor*>* OutActors);
-	static void CollectGarbage();
-	static bool CapsuleTraceSingleForObjects(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, float HalfHeight, TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, struct FHitResult* OutHit);
-	static bool CapsuleTraceSingleByObject_DEPRECATED(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, float HalfHeight, TArray<TEnumAsByte<ECollisionChannel>> ObjectsToTrace, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, struct FHitResult* OutHit);
-	static bool CapsuleTraceSingle_NEW(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, float HalfHeight, TEnumAsByte<ETraceTypeQuery> TraceChannel, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, struct FHitResult* OutHit);
-	static bool CapsuleTraceSingle_DEPRECATED(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, float HalfHeight, TEnumAsByte<ECollisionChannel> TraceChannel, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, struct FHitResult* OutHit);
-	static bool CapsuleTraceMultiForObjects(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, float HalfHeight, TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, TArray<struct FHitResult>* OutHits);
-	static bool CapsuleTraceMultiByObject_DEPRECATED(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, float HalfHeight, TArray<TEnumAsByte<ECollisionChannel>> ObjectsToTrace, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, TArray<struct FHitResult>* OutHits);
-	static bool CapsuleTraceMulti_NEW(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, float HalfHeight, TEnumAsByte<ETraceTypeQuery> TraceChannel, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, TArray<struct FHitResult>* OutHits);
-	static bool CapsuleTraceMulti_DEPRECATED(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, float HalfHeight, TEnumAsByte<ECollisionChannel> TraceChannel, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, TArray<struct FHitResult>* OutHits);
-	static bool CapsuleOverlapComponents_NEW(class UObject* WorldContextObject, const struct FVector& CapsulePos, float Radius, float HalfHeight, TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes, class UClass* ComponentClassFilter, TArray<class AActor*> ActorsToIgnore, TArray<class UPrimitiveComponent*>* OutComponents);
-	static bool CapsuleOverlapComponents_DEPRECATED(class UObject* WorldContextObject, const struct FVector& CapsulePos, float Radius, float HalfHeight, TEnumAsByte<EOverlapFilterOption> Filter, class UClass* ComponentClassFilter, TArray<class AActor*> ActorsToIgnore, TArray<class UPrimitiveComponent*>* OutComponents);
-	static bool CapsuleOverlapActors_NEW(class UObject* WorldContextObject, const struct FVector& CapsulePos, float Radius, float HalfHeight, TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes, class UClass* ActorClassFilter, TArray<class AActor*> ActorsToIgnore, TArray<class AActor*>* OutActors);
-	static bool CapsuleOverlapActors_DEPRECATED(class UObject* WorldContextObject, const struct FVector& CapsulePos, float Radius, float HalfHeight, TEnumAsByte<EOverlapFilterOption> Filter, class UClass* ActorClassFilter, TArray<class AActor*> ActorsToIgnore, TArray<class AActor*>* OutActors);
-	static bool BoxTraceSingleForObjects(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, const struct FVector& HalfSize, const struct FRotator& Orientation, TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, struct FHitResult* OutHit);
-	static bool BoxTraceSingle(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, const struct FVector& HalfSize, const struct FRotator& Orientation, TEnumAsByte<ETraceTypeQuery> TraceChannel, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, struct FHitResult* OutHit);
-	static bool BoxTraceMultiForObjects(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, const struct FVector& HalfSize, const struct FRotator& Orientation, TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, TArray<struct FHitResult>* OutHits);
-	static bool BoxTraceMulti(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, const struct FVector& HalfSize, const struct FRotator& Orientation, TEnumAsByte<ETraceTypeQuery> TraceChannel, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, TArray<struct FHitResult>* OutHits);
-	static bool BoxOverlapComponents_NEW(class UObject* WorldContextObject, const struct FVector& BoxPos, const struct FVector& Extent, TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes, class UClass* ComponentClassFilter, TArray<class AActor*> ActorsToIgnore, TArray<class UPrimitiveComponent*>* OutComponents);
-	static bool BoxOverlapComponents_DEPRECATED(class UObject* WorldContextObject, const struct FVector& BoxPos, const struct FVector& Extent, TEnumAsByte<EOverlapFilterOption> Filter, class UClass* ComponentClassFilter, TArray<class AActor*> ActorsToIgnore, TArray<class UPrimitiveComponent*>* OutComponents);
-	static bool BoxOverlapActors_NEW(class UObject* WorldContextObject, const struct FVector& BoxPos, const struct FVector& BoxExtent, TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes, class UClass* ActorClassFilter, TArray<class AActor*> ActorsToIgnore, TArray<class AActor*>* OutActors);
-	static bool BoxOverlapActors_DEPRECATED(class UObject* WorldContextObject, const struct FVector& BoxPos, const struct FVector& BoxExtent, TEnumAsByte<EOverlapFilterOption> Filter, class UClass* ActorClassFilter, TArray<class AActor*> ActorsToIgnore, TArray<class AActor*>* OutActors);
-	static struct FDebugFloatHistory AddFloatHistorySample(float Value, const struct FDebugFloatHistory& FloatHistory);
+	void STATIC_MoveComponentTo(class USceneComponent* Component, const struct FVector& TargetRelativeLocation, const struct FRotator& TargetRelativeRotation, bool bEaseOut, bool bEaseIn, float OverTime, TEnumAsByte<EMoveComponentAction> MoveAction, const struct FLatentActionInfo& LatentInfo);
+	struct FText STATIC_MakeLiteralText(const struct FText& Value);
+	struct FString STATIC_MakeLiteralString(const struct FString& Value);
+	struct FName STATIC_MakeLiteralName(const struct FName& Value);
+	int STATIC_MakeLiteralInt(int Value);
+	float STATIC_MakeLiteralFloat(float Value);
+	unsigned char STATIC_MakeLiteralByte(unsigned char Value);
+	bool STATIC_MakeLiteralBool(bool Value);
+	void STATIC_LoadAssetClass(class UObject* WorldContextObject, TAssetPtr<class UClass> AssetClass, const struct FScriptDelegate& OnLoaded, const struct FLatentActionInfo& LatentInfo);
+	void STATIC_LoadAsset(class UObject* WorldContextObject, TAssetPtr<class UObject> Asset, const struct FScriptDelegate& OnLoaded, const struct FLatentActionInfo& LatentInfo);
+	bool STATIC_LineTraceSingleForObjects(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, struct FHitResult* OutHit);
+	bool STATIC_LineTraceSingleByObject_DEPRECATED(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, TArray<TEnumAsByte<ECollisionChannel>> ObjectsToTrace, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, struct FHitResult* OutHit);
+	bool STATIC_LineTraceSingle_NEW(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, TEnumAsByte<ETraceTypeQuery> TraceChannel, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, struct FHitResult* OutHit);
+	bool STATIC_LineTraceSingle_DEPRECATED(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, TEnumAsByte<ECollisionChannel> TraceChannel, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, struct FHitResult* OutHit);
+	bool STATIC_LineTraceMultiForObjects(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, TArray<struct FHitResult>* OutHits);
+	bool STATIC_LineTraceMultiByObject_DEPRECATED(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, TArray<TEnumAsByte<ECollisionChannel>> ObjectsToTrace, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, TArray<struct FHitResult>* OutHits);
+	bool STATIC_LineTraceMulti_NEW(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, TEnumAsByte<ETraceTypeQuery> TraceChannel, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, TArray<struct FHitResult>* OutHits);
+	bool STATIC_LineTraceMulti_DEPRECATED(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, TEnumAsByte<ECollisionChannel> TraceChannel, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, TArray<struct FHitResult>* OutHits);
+	void STATIC_LaunchURL(const struct FString& URL);
+	void STATIC_K2_UnPauseTimerHandle(class UObject* WorldContextObject, const struct FTimerHandle& Handle);
+	void STATIC_K2_UnPauseTimerDelegate(const struct FScriptDelegate& Delegate);
+	void STATIC_K2_UnPauseTimer(class UObject* Object, const struct FString& FunctionName);
+	bool STATIC_K2_TimerExistsHandle(class UObject* WorldContextObject, const struct FTimerHandle& Handle);
+	bool STATIC_K2_TimerExistsDelegate(const struct FScriptDelegate& Delegate);
+	bool STATIC_K2_TimerExists(class UObject* Object, const struct FString& FunctionName);
+	struct FTimerHandle STATIC_K2_SetTimerDelegate(const struct FScriptDelegate& Delegate, float Time, bool bLooping);
+	struct FTimerHandle STATIC_K2_SetTimer(class UObject* Object, const struct FString& FunctionName, float Time, bool bLooping);
+	void STATIC_K2_PauseTimerHandle(class UObject* WorldContextObject, const struct FTimerHandle& Handle);
+	void STATIC_K2_PauseTimerDelegate(const struct FScriptDelegate& Delegate);
+	void STATIC_K2_PauseTimer(class UObject* Object, const struct FString& FunctionName);
+	bool STATIC_K2_IsValidTimerHandle(const struct FTimerHandle& Handle);
+	bool STATIC_K2_IsTimerPausedHandle(class UObject* WorldContextObject, const struct FTimerHandle& Handle);
+	bool STATIC_K2_IsTimerPausedDelegate(const struct FScriptDelegate& Delegate);
+	bool STATIC_K2_IsTimerPaused(class UObject* Object, const struct FString& FunctionName);
+	bool STATIC_K2_IsTimerActiveHandle(class UObject* WorldContextObject, const struct FTimerHandle& Handle);
+	bool STATIC_K2_IsTimerActiveDelegate(const struct FScriptDelegate& Delegate);
+	bool STATIC_K2_IsTimerActive(class UObject* Object, const struct FString& FunctionName);
+	struct FTimerHandle STATIC_K2_InvalidateTimerHandle(struct FTimerHandle* Handle);
+	float STATIC_K2_GetTimerRemainingTimeHandle(class UObject* WorldContextObject, const struct FTimerHandle& Handle);
+	float STATIC_K2_GetTimerRemainingTimeDelegate(const struct FScriptDelegate& Delegate);
+	float STATIC_K2_GetTimerRemainingTime(class UObject* Object, const struct FString& FunctionName);
+	float STATIC_K2_GetTimerElapsedTimeHandle(class UObject* WorldContextObject, const struct FTimerHandle& Handle);
+	float STATIC_K2_GetTimerElapsedTimeDelegate(const struct FScriptDelegate& Delegate);
+	float STATIC_K2_GetTimerElapsedTime(class UObject* Object, const struct FString& FunctionName);
+	void STATIC_K2_ClearTimerHandle(class UObject* WorldContextObject, const struct FTimerHandle& Handle);
+	void STATIC_K2_ClearTimerDelegate(const struct FScriptDelegate& Delegate);
+	void STATIC_K2_ClearTimer(class UObject* Object, const struct FString& FunctionName);
+	bool STATIC_IsValidClass(class UClass* Class);
+	bool STATIC_IsValid(class UObject* Object);
+	bool STATIC_IsServer(class UObject* WorldContextObject);
+	bool STATIC_IsPackagedForDistribution();
+	bool STATIC_IsLoggedIn(class APlayerController* SpecificPlayer);
+	bool STATIC_IsDedicatedServer(class UObject* WorldContextObject);
+	bool STATIC_IsControllerAssignedToGamepad(int ControllerId);
+	void STATIC_HideAdBanner();
+	bool STATIC_GetVolumeButtonsHandledBySystem();
+	struct FString STATIC_GetUniqueDeviceId();
+	bool STATIC_GetSupportedFullscreenResolutions(TArray<struct FIntPoint>* Resolutions);
+	int STATIC_GetRenderingMaterialQualityLevel();
+	int STATIC_GetRenderingDetailMode();
+	TArray<struct FString> STATIC_GetPreferredLanguages();
+	struct FString STATIC_GetPlatformUserName();
+	int STATIC_GetObjectNameAsCrc32(class UObject* Object);
+	struct FString STATIC_GetObjectName(class UObject* Object);
+	int STATIC_GetMaxShadowCascades();
+	struct FString STATIC_GetLocalCurrencySymbol();
+	struct FString STATIC_GetLocalCurrencyCode();
+	float STATIC_GetGameTimeInSeconds(class UObject* WorldContextObject);
+	struct FString STATIC_GetGameName();
+	struct FString STATIC_GetEngineVersion();
+	struct FString STATIC_GetDisplayName(class UObject* Object);
+	void STATIC_GetComponentBounds(class USceneComponent* Component, struct FVector* Origin, struct FVector* BoxExtent, float* SphereRadius);
+	struct FString STATIC_GetClassDisplayName(class UClass* Class);
+	int STATIC_GetAdIDCount();
+	void STATIC_GetActorListFromComponentList(TArray<class UPrimitiveComponent*> ComponentList, class UClass* ActorClassFilter, TArray<class AActor*>* OutActorList);
+	void STATIC_GetActorBounds(class AActor* Actor, struct FVector* Origin, struct FVector* BoxExtent);
+	void STATIC_ForceCloseAdBanner();
+	void STATIC_FlushPersistentDebugLines(class UObject* WorldContextObject);
+	void STATIC_FlushDebugStrings(class UObject* WorldContextObject);
+	void STATIC_ExecuteConsoleCommand(class UObject* WorldContextObject, const struct FString& Command, class APlayerController* SpecificPlayer);
+	void STATIC_DrawDebugString(class UObject* WorldContextObject, const struct FVector& TextLocation, const struct FString& Text, class AActor* TestBaseActor, const struct FLinearColor& TextColor, float Duration);
+	void STATIC_DrawDebugSphere(class UObject* WorldContextObject, const struct FVector& Center, float Radius, int Segments, const struct FLinearColor& LineColor, float Duration);
+	void STATIC_DrawDebugPoint(class UObject* WorldContextObject, const struct FVector& Position, float Size, const struct FLinearColor& PointColor, float Duration);
+	void STATIC_DrawDebugPlane(class UObject* WorldContextObject, const struct FPlane& PlaneCoordinates, const struct FVector& Location, float Size, const struct FLinearColor& PlaneColor, float Duration);
+	void STATIC_DrawDebugLine(class UObject* WorldContextObject, const struct FVector& LineStart, const struct FVector& LineEnd, const struct FLinearColor& LineColor, float Duration, float Thickness);
+	void STATIC_DrawDebugFrustum(class UObject* WorldContextObject, const struct FTransform& FrustumTransform, const struct FLinearColor& FrustumColor, float Duration);
+	void STATIC_DrawDebugFloatHistoryTransform(class UObject* WorldContextObject, const struct FDebugFloatHistory& FloatHistory, const struct FTransform& DrawTransform, const struct FVector2D& DrawSize, const struct FLinearColor& DrawColor, float Duration);
+	void STATIC_DrawDebugFloatHistoryLocation(class UObject* WorldContextObject, const struct FDebugFloatHistory& FloatHistory, const struct FVector& DrawLocation, const struct FVector2D& DrawSize, const struct FLinearColor& DrawColor, float Duration);
+	void STATIC_DrawDebugCylinder(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, int Segments, const struct FLinearColor& LineColor, float Duration);
+	void STATIC_DrawDebugCoordinateSystem(class UObject* WorldContextObject, const struct FVector& AxisLoc, const struct FRotator& AxisRot, float Scale, float Duration);
+	void STATIC_DrawDebugConeInDegrees(class UObject* WorldContextObject, const struct FVector& Origin, const struct FVector& Direction, float Length, float AngleWidth, float AngleHeight, int NumSides, const struct FLinearColor& LineColor, float Duration);
+	void STATIC_DrawDebugCone(class UObject* WorldContextObject, const struct FVector& Origin, const struct FVector& Direction, float Length, float AngleWidth, float AngleHeight, int NumSides, const struct FLinearColor& LineColor);
+	void STATIC_DrawDebugCircle(class UObject* WorldContextObject, const struct FVector& Center, float Radius, int NumSegments, const struct FLinearColor& LineColor, float Duration, float Thickness, const struct FVector& YAxis, const struct FVector& ZAxis, bool bDrawAxis);
+	void STATIC_DrawDebugCapsule(class UObject* WorldContextObject, const struct FVector& Center, float HalfHeight, float Radius, const struct FRotator& Rotation, const struct FLinearColor& LineColor, float Duration);
+	void STATIC_DrawDebugCamera(class ACameraActor* CameraActor, const struct FLinearColor& CameraColor, float Duration);
+	void STATIC_DrawDebugBox(class UObject* WorldContextObject, const struct FVector& Center, const struct FVector& Extent, const struct FLinearColor& LineColor, const struct FRotator& Rotation, float Duration);
+	void STATIC_DrawDebugArrow(class UObject* WorldContextObject, const struct FVector& LineStart, const struct FVector& LineEnd, float ArrowSize, const struct FLinearColor& LineColor, float Duration);
+	bool STATIC_DoesImplementInterface(class UObject* TestObject, class UClass* Interface);
+	void STATIC_Delay(class UObject* WorldContextObject, float Duration, const struct FLatentActionInfo& LatentInfo);
+	void STATIC_CreateCopyForUndoBuffer(class UObject* ObjectToModify);
+	class UObject* STATIC_Conv_InterfaceToObject(const TScriptInterface<class UInterface>& Interface);
+	class UObject* STATIC_Conv_AssetToObject(TAssetPtr<class UObject> Asset);
+	class UClass* STATIC_Conv_AssetClassToClass(TAssetPtr<class UClass> AssetClass);
+	void STATIC_ControlScreensaver(bool bAllowScreenSaver);
+	bool STATIC_ComponentOverlapComponents_NEW(class UPrimitiveComponent* Component, const struct FTransform& ComponentTransform, TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes, class UClass* ComponentClassFilter, TArray<class AActor*> ActorsToIgnore, TArray<class UPrimitiveComponent*>* OutComponents);
+	bool STATIC_ComponentOverlapComponents_DEPRECATED(class UPrimitiveComponent* Component, const struct FTransform& ComponentTransform, TEnumAsByte<EOverlapFilterOption> Filter, class UClass* ComponentClassFilter, TArray<class AActor*> ActorsToIgnore, TArray<class UPrimitiveComponent*>* OutComponents);
+	bool STATIC_ComponentOverlapActors_NEW(class UPrimitiveComponent* Component, const struct FTransform& ComponentTransform, TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes, class UClass* ActorClassFilter, TArray<class AActor*> ActorsToIgnore, TArray<class AActor*>* OutActors);
+	bool STATIC_ComponentOverlapActors_DEPRECATED(class UPrimitiveComponent* Component, const struct FTransform& ComponentTransform, TEnumAsByte<EOverlapFilterOption> Filter, class UClass* ActorClassFilter, TArray<class AActor*> ActorsToIgnore, TArray<class AActor*>* OutActors);
+	void STATIC_CollectGarbage();
+	bool STATIC_CapsuleTraceSingleForObjects(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, float HalfHeight, TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, struct FHitResult* OutHit);
+	bool STATIC_CapsuleTraceSingleByObject_DEPRECATED(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, float HalfHeight, TArray<TEnumAsByte<ECollisionChannel>> ObjectsToTrace, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, struct FHitResult* OutHit);
+	bool STATIC_CapsuleTraceSingle_NEW(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, float HalfHeight, TEnumAsByte<ETraceTypeQuery> TraceChannel, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, struct FHitResult* OutHit);
+	bool STATIC_CapsuleTraceSingle_DEPRECATED(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, float HalfHeight, TEnumAsByte<ECollisionChannel> TraceChannel, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, struct FHitResult* OutHit);
+	bool STATIC_CapsuleTraceMultiForObjects(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, float HalfHeight, TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, TArray<struct FHitResult>* OutHits);
+	bool STATIC_CapsuleTraceMultiByObject_DEPRECATED(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, float HalfHeight, TArray<TEnumAsByte<ECollisionChannel>> ObjectsToTrace, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, TArray<struct FHitResult>* OutHits);
+	bool STATIC_CapsuleTraceMulti_NEW(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, float HalfHeight, TEnumAsByte<ETraceTypeQuery> TraceChannel, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, TArray<struct FHitResult>* OutHits);
+	bool STATIC_CapsuleTraceMulti_DEPRECATED(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, float Radius, float HalfHeight, TEnumAsByte<ECollisionChannel> TraceChannel, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, TArray<struct FHitResult>* OutHits);
+	bool STATIC_CapsuleOverlapComponents_NEW(class UObject* WorldContextObject, const struct FVector& CapsulePos, float Radius, float HalfHeight, TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes, class UClass* ComponentClassFilter, TArray<class AActor*> ActorsToIgnore, TArray<class UPrimitiveComponent*>* OutComponents);
+	bool STATIC_CapsuleOverlapComponents_DEPRECATED(class UObject* WorldContextObject, const struct FVector& CapsulePos, float Radius, float HalfHeight, TEnumAsByte<EOverlapFilterOption> Filter, class UClass* ComponentClassFilter, TArray<class AActor*> ActorsToIgnore, TArray<class UPrimitiveComponent*>* OutComponents);
+	bool STATIC_CapsuleOverlapActors_NEW(class UObject* WorldContextObject, const struct FVector& CapsulePos, float Radius, float HalfHeight, TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes, class UClass* ActorClassFilter, TArray<class AActor*> ActorsToIgnore, TArray<class AActor*>* OutActors);
+	bool STATIC_CapsuleOverlapActors_DEPRECATED(class UObject* WorldContextObject, const struct FVector& CapsulePos, float Radius, float HalfHeight, TEnumAsByte<EOverlapFilterOption> Filter, class UClass* ActorClassFilter, TArray<class AActor*> ActorsToIgnore, TArray<class AActor*>* OutActors);
+	bool STATIC_BoxTraceSingleForObjects(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, const struct FVector& HalfSize, const struct FRotator& Orientation, TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, struct FHitResult* OutHit);
+	bool STATIC_BoxTraceSingle(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, const struct FVector& HalfSize, const struct FRotator& Orientation, TEnumAsByte<ETraceTypeQuery> TraceChannel, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, struct FHitResult* OutHit);
+	bool STATIC_BoxTraceMultiForObjects(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, const struct FVector& HalfSize, const struct FRotator& Orientation, TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, TArray<struct FHitResult>* OutHits);
+	bool STATIC_BoxTraceMulti(class UObject* WorldContextObject, const struct FVector& Start, const struct FVector& End, const struct FVector& HalfSize, const struct FRotator& Orientation, TEnumAsByte<ETraceTypeQuery> TraceChannel, bool bTraceComplex, TArray<class AActor*> ActorsToIgnore, TEnumAsByte<EDrawDebugTrace> DrawDebugType, bool bIgnoreSelf, TArray<struct FHitResult>* OutHits);
+	bool STATIC_BoxOverlapComponents_NEW(class UObject* WorldContextObject, const struct FVector& BoxPos, const struct FVector& Extent, TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes, class UClass* ComponentClassFilter, TArray<class AActor*> ActorsToIgnore, TArray<class UPrimitiveComponent*>* OutComponents);
+	bool STATIC_BoxOverlapComponents_DEPRECATED(class UObject* WorldContextObject, const struct FVector& BoxPos, const struct FVector& Extent, TEnumAsByte<EOverlapFilterOption> Filter, class UClass* ComponentClassFilter, TArray<class AActor*> ActorsToIgnore, TArray<class UPrimitiveComponent*>* OutComponents);
+	bool STATIC_BoxOverlapActors_NEW(class UObject* WorldContextObject, const struct FVector& BoxPos, const struct FVector& BoxExtent, TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes, class UClass* ActorClassFilter, TArray<class AActor*> ActorsToIgnore, TArray<class AActor*>* OutActors);
+	bool STATIC_BoxOverlapActors_DEPRECATED(class UObject* WorldContextObject, const struct FVector& BoxPos, const struct FVector& BoxExtent, TEnumAsByte<EOverlapFilterOption> Filter, class UClass* ActorClassFilter, TArray<class AActor*> ActorsToIgnore, TArray<class AActor*>* OutActors);
+	struct FDebugFloatHistory STATIC_AddFloatHistorySample(float Value, const struct FDebugFloatHistory& FloatHistory);
 };
 
 
@@ -10343,38 +10343,38 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.KismetTextLibrary"));
+		static auto ptr = UObject::FindClass("Class Engine.KismetTextLibrary");
 		return ptr;
 	}
 
 
-	static struct FText TextTrimTrailing(const struct FText& InText);
-	static struct FText TextTrimPrecedingAndTrailing(const struct FText& InText);
-	static struct FText TextTrimPreceding(const struct FText& InText);
-	static bool TextIsTransient(const struct FText& InText);
-	static bool TextIsEmpty(const struct FText& InText);
-	static bool TextIsCultureInvariant(const struct FText& InText);
-	static bool NotEqual_TextText(const struct FText& A, const struct FText& B);
-	static bool NotEqual_IgnoreCase_TextText(const struct FText& A, const struct FText& B);
-	static struct FText GetEmptyText();
-	static struct FText Format(const struct FText& InPattern, TArray<struct FFormatTextArgument> InArgs);
-	static bool FindTextInLocalizationTable(const class FString& Namespace, const class FString& Key, struct FText* OutText);
-	static bool EqualEqual_TextText(const struct FText& A, const struct FText& B);
-	static bool EqualEqual_IgnoreCase_TextText(const struct FText& A, const struct FText& B);
-	static class FString Conv_TextToString(const struct FText& InText);
-	static struct FText Conv_StringToText(const class FString& InString);
-	static struct FText Conv_NameToText(const struct FName& InName);
-	static struct FText Conv_IntToText(int Value, bool bUseGrouping, int MinimumIntegralDigits, int MaximumIntegralDigits);
-	static struct FText Conv_FloatToText(float Value, TEnumAsByte<ERoundingMode> RoundingMode, bool bUseGrouping, int MinimumIntegralDigits, int MaximumIntegralDigits, int MinimumFractionalDigits, int MaximumFractionalDigits);
-	static struct FText Conv_ByteToText(unsigned char Value);
-	static struct FText Conv_BoolToText(bool InBool);
-	static struct FText AsTimespan_Timespan(const struct FTimespan& InTimespan);
-	static struct FText AsTime_DateTime(const struct FDateTime& In);
-	static struct FText AsPercent_Float(float Value, TEnumAsByte<ERoundingMode> RoundingMode, bool bUseGrouping, int MinimumIntegralDigits, int MaximumIntegralDigits, int MinimumFractionalDigits, int MaximumFractionalDigits);
-	static struct FText AsDateTime_DateTime(const struct FDateTime& In);
-	static struct FText AsDate_DateTime(const struct FDateTime& InDateTime);
-	static struct FText AsCurrency_Integer(int Value, TEnumAsByte<ERoundingMode> RoundingMode, bool bUseGrouping, int MinimumIntegralDigits, int MaximumIntegralDigits, int MinimumFractionalDigits, int MaximumFractionalDigits, const class FString& CurrencyCode);
-	static struct FText AsCurrency_Float(float Value, TEnumAsByte<ERoundingMode> RoundingMode, bool bUseGrouping, int MinimumIntegralDigits, int MaximumIntegralDigits, int MinimumFractionalDigits, int MaximumFractionalDigits, const class FString& CurrencyCode);
+	struct FText STATIC_TextTrimTrailing(const struct FText& InText);
+	struct FText STATIC_TextTrimPrecedingAndTrailing(const struct FText& InText);
+	struct FText STATIC_TextTrimPreceding(const struct FText& InText);
+	bool STATIC_TextIsTransient(const struct FText& InText);
+	bool STATIC_TextIsEmpty(const struct FText& InText);
+	bool STATIC_TextIsCultureInvariant(const struct FText& InText);
+	bool STATIC_NotEqual_TextText(const struct FText& A, const struct FText& B);
+	bool STATIC_NotEqual_IgnoreCase_TextText(const struct FText& A, const struct FText& B);
+	struct FText STATIC_GetEmptyText();
+	struct FText STATIC_Format(const struct FText& InPattern, TArray<struct FFormatTextArgument> InArgs);
+	bool STATIC_FindTextInLocalizationTable(const struct FString& Namespace, const struct FString& Key, struct FText* OutText);
+	bool STATIC_EqualEqual_TextText(const struct FText& A, const struct FText& B);
+	bool STATIC_EqualEqual_IgnoreCase_TextText(const struct FText& A, const struct FText& B);
+	struct FString STATIC_Conv_TextToString(const struct FText& InText);
+	struct FText STATIC_Conv_StringToText(const struct FString& InString);
+	struct FText STATIC_Conv_NameToText(const struct FName& InName);
+	struct FText STATIC_Conv_IntToText(int Value, bool bUseGrouping, int MinimumIntegralDigits, int MaximumIntegralDigits);
+	struct FText STATIC_Conv_FloatToText(float Value, TEnumAsByte<ERoundingMode> RoundingMode, bool bUseGrouping, int MinimumIntegralDigits, int MaximumIntegralDigits, int MinimumFractionalDigits, int MaximumFractionalDigits);
+	struct FText STATIC_Conv_ByteToText(unsigned char Value);
+	struct FText STATIC_Conv_BoolToText(bool InBool);
+	struct FText STATIC_AsTimespan_Timespan(const struct FTimespan& InTimespan);
+	struct FText STATIC_AsTime_DateTime(const struct FDateTime& In);
+	struct FText STATIC_AsPercent_Float(float Value, TEnumAsByte<ERoundingMode> RoundingMode, bool bUseGrouping, int MinimumIntegralDigits, int MaximumIntegralDigits, int MinimumFractionalDigits, int MaximumFractionalDigits);
+	struct FText STATIC_AsDateTime_DateTime(const struct FDateTime& In);
+	struct FText STATIC_AsDate_DateTime(const struct FDateTime& InDateTime);
+	struct FText STATIC_AsCurrency_Integer(int Value, TEnumAsByte<ERoundingMode> RoundingMode, bool bUseGrouping, int MinimumIntegralDigits, int MaximumIntegralDigits, int MinimumFractionalDigits, int MaximumFractionalDigits, const struct FString& CurrencyCode);
+	struct FText STATIC_AsCurrency_Float(float Value, TEnumAsByte<ERoundingMode> RoundingMode, bool bUseGrouping, int MinimumIntegralDigits, int MaximumIntegralDigits, int MinimumFractionalDigits, int MaximumFractionalDigits, const struct FString& CurrencyCode);
 };
 
 
@@ -10386,13 +10386,13 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.LoadingPerfBPFuncLib"));
+		static auto ptr = UObject::FindClass("Class Engine.LoadingPerfBPFuncLib");
 		return ptr;
 	}
 
 
-	static void WriteTimings();
-	static void MarkEndStreaming();
+	void STATIC_WriteTimings();
+	void STATIC_MarkEndStreaming();
 };
 
 
@@ -10411,7 +10411,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.WorldComposition"));
+		static auto ptr = UObject::FindClass("Class Engine.WorldComposition");
 		return ptr;
 	}
 
@@ -10427,7 +10427,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NestedWorldComposition"));
+		static auto ptr = UObject::FindClass("Class Engine.NestedWorldComposition");
 		return ptr;
 	}
 
@@ -10442,15 +10442,15 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NestedWorldCompositionFunctionLib"));
+		static auto ptr = UObject::FindClass("Class Engine.NestedWorldCompositionFunctionLib");
 		return ptr;
 	}
 
 
-	static void TriggerManualNestedLevelUnload(class UObject* WorldContextObject, const struct FName& PackageName);
-	static void TriggerManualNestedLevelLoad(class UObject* WorldContextObject, const struct FName& PackageName);
-	static bool IsNestedLevelVisibleRecursive(class UObject* WorldContextObject, const struct FName& PackageName);
-	static bool IsNestedLevelVisible(class UObject* WorldContextObject, const struct FName& PackageName);
+	void STATIC_TriggerManualNestedLevelUnload(class UObject* WorldContextObject, const struct FName& PackageName);
+	void STATIC_TriggerManualNestedLevelLoad(class UObject* WorldContextObject, const struct FName& PackageName);
+	bool STATIC_IsNestedLevelVisibleRecursive(class UObject* WorldContextObject, const struct FName& PackageName);
+	bool STATIC_IsNestedLevelVisible(class UObject* WorldContextObject, const struct FName& PackageName);
 };
 
 
@@ -10462,22 +10462,22 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleWarningFunctions"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleWarningFunctions");
 		return ptr;
 	}
 
 
-	static TArray<class FString> RetrieveInfoOnEmitterWithShortQuarterResArea(class UParticleSystemComponent* Component, float ShortQuarterRes);
-	static TArray<class FString> RetrieveInfoOnEmitterWithLongNearTransition(class UParticleSystemComponent* Component, float LongNearTransition);
-	static TArray<class FString> RetrieveInfoOnEmitterWithLongFarTransition(class UParticleSystemComponent* Component, float LongFarTransition);
-	static TArray<class FString> RetrieveInfoOnEmittersWithoutPerVertexLighting(class UParticleSystemComponent* Component);
-	static TArray<class FString> RetrieveInfoOnEmittersWithLowAlphaThreshold(class UParticleSystemComponent* Component, float LowAlphaThreshold);
-	static TArray<class FString> RetrieveInfoOnEmittersWithLoopZero(class UParticleSystemComponent* Component);
-	static TArray<class FString> RetrieveInfoOnEmittersWithKillOnCompleteUnticked(class UParticleSystemComponent* Component);
-	static TArray<class FString> RetrieveInfoOnEmittersWithHighSpawnRate(class UParticleSystemComponent* Component, int HighSpawnRate);
-	static TArray<class FString> RetrieveInfoOnEmittersWithDurationZero(class UParticleSystemComponent* Component);
-	static TArray<class FString> RetrieveInfoOnEmittersUsingMaxDrawCount(class UParticleSystemComponent* Component);
-	static TArray<class FString> RetrieveInfoOnEmittersOnCPU(class UParticleSystemComponent* Component);
+	TArray<struct FString> STATIC_RetrieveInfoOnEmitterWithShortQuarterResArea(class UParticleSystemComponent* Component, float ShortQuarterRes);
+	TArray<struct FString> STATIC_RetrieveInfoOnEmitterWithLongNearTransition(class UParticleSystemComponent* Component, float LongNearTransition);
+	TArray<struct FString> STATIC_RetrieveInfoOnEmitterWithLongFarTransition(class UParticleSystemComponent* Component, float LongFarTransition);
+	TArray<struct FString> STATIC_RetrieveInfoOnEmittersWithoutPerVertexLighting(class UParticleSystemComponent* Component);
+	TArray<struct FString> STATIC_RetrieveInfoOnEmittersWithLowAlphaThreshold(class UParticleSystemComponent* Component, float LowAlphaThreshold);
+	TArray<struct FString> STATIC_RetrieveInfoOnEmittersWithLoopZero(class UParticleSystemComponent* Component);
+	TArray<struct FString> STATIC_RetrieveInfoOnEmittersWithKillOnCompleteUnticked(class UParticleSystemComponent* Component);
+	TArray<struct FString> STATIC_RetrieveInfoOnEmittersWithHighSpawnRate(class UParticleSystemComponent* Component, int HighSpawnRate);
+	TArray<struct FString> STATIC_RetrieveInfoOnEmittersWithDurationZero(class UParticleSystemComponent* Component);
+	TArray<struct FString> STATIC_RetrieveInfoOnEmittersUsingMaxDrawCount(class UParticleSystemComponent* Component);
+	TArray<struct FString> STATIC_RetrieveInfoOnEmittersOnCPU(class UParticleSystemComponent* Component);
 };
 
 
@@ -10489,13 +10489,13 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SkeletalMeshMergeBlueprintFunctionLibrary"));
+		static auto ptr = UObject::FindClass("Class Engine.SkeletalMeshMergeBlueprintFunctionLibrary");
 		return ptr;
 	}
 
 
-	static class USkeletalMesh* MergeSkeletalMeshesWithMorphTargets(TArray<class USkeletalMesh*> Meshes, TArray<struct FName> MorphTargetNames, TArray<float> MorphTargetWeights);
-	static class USkeletalMesh* MergeSkeletalMeshes(TArray<class USkeletalMesh*> Meshes);
+	class USkeletalMesh* STATIC_MergeSkeletalMeshesWithMorphTargets(TArray<class USkeletalMesh*> Meshes, TArray<struct FName> MorphTargetNames, TArray<float> MorphTargetWeights);
+	class USkeletalMesh* STATIC_MergeSkeletalMeshes(TArray<class USkeletalMesh*> Meshes);
 };
 
 
@@ -10507,14 +10507,14 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.VisualLoggerKismetLibrary"));
+		static auto ptr = UObject::FindClass("Class Engine.VisualLoggerKismetLibrary");
 		return ptr;
 	}
 
 
-	static void LogText(class UObject* WorldContextObject, const class FString& Text, const struct FName& LogCategory);
-	static void LogLocation(class UObject* WorldContextObject, const struct FVector& Location, const class FString& Text, const struct FLinearColor& ObjectColor, float Radius, const struct FName& LogCategory);
-	static void LogBox(class UObject* WorldContextObject, const struct FBox& BoxShape, const class FString& Text, const struct FLinearColor& ObjectColor, const struct FName& LogCategory);
+	void STATIC_LogText(class UObject* WorldContextObject, const struct FString& Text, const struct FName& LogCategory);
+	void STATIC_LogLocation(class UObject* WorldContextObject, const struct FVector& Location, const struct FString& Text, const struct FLinearColor& ObjectColor, float Radius, const struct FName& LogCategory);
+	void STATIC_LogBox(class UObject* WorldContextObject, const struct FBox& BoxShape, const struct FString& Text, const struct FLinearColor& ObjectColor, const struct FName& LogCategory);
 };
 
 
@@ -10533,7 +10533,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AnimBlueprintGeneratedClass"));
+		static auto ptr = UObject::FindClass("Class Engine.AnimBlueprintGeneratedClass");
 		return ptr;
 	}
 
@@ -10568,7 +10568,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.BodySetup"));
+		static auto ptr = UObject::FindClass("Class Engine.BodySetup");
 		return ptr;
 	}
 
@@ -10584,7 +10584,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.BodySetup2D"));
+		static auto ptr = UObject::FindClass("Class Engine.BodySetup2D");
 		return ptr;
 	}
 
@@ -10600,7 +10600,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.BoneMaskFilter"));
+		static auto ptr = UObject::FindClass("Class Engine.BoneMaskFilter");
 		return ptr;
 	}
 
@@ -10614,11 +10614,11 @@ class UBookMark : public UObject
 public:
 	struct FVector                                     Location;                                                 // 0x0028(0x000C) (Edit, ZeroConstructor, IsPlainOldData)
 	struct FRotator                                    Rotation;                                                 // 0x0034(0x000C) (Edit, ZeroConstructor, IsPlainOldData)
-	TArray<class FString>                              HiddenLevels;                                             // 0x0040(0x0010) (Edit, ZeroConstructor)
+	TArray<struct FString>                             HiddenLevels;                                             // 0x0040(0x0010) (Edit, ZeroConstructor)
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.BookMark"));
+		static auto ptr = UObject::FindClass("Class Engine.BookMark");
 		return ptr;
 	}
 
@@ -10636,7 +10636,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.BookMark2D"));
+		static auto ptr = UObject::FindClass("Class Engine.BookMark2D");
 		return ptr;
 	}
 
@@ -10658,7 +10658,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Breakpoint"));
+		static auto ptr = UObject::FindClass("Class Engine.Breakpoint");
 		return ptr;
 	}
 
@@ -10670,8 +10670,8 @@ public:
 class UBrushBuilder : public UObject
 {
 public:
-	class FString                                      BitmapFilename;                                           // 0x0028(0x0010) (ZeroConstructor)
-	class FString                                      ToolTip;                                                  // 0x0038(0x0010) (ZeroConstructor)
+	struct FString                                     BitmapFilename;                                           // 0x0028(0x0010) (ZeroConstructor)
+	struct FString                                     ToolTip;                                                  // 0x0038(0x0010) (ZeroConstructor)
 	unsigned char                                      NotifyBadParams : 1;                                      // 0x0048(0x0001) (Transient)
 	unsigned char                                      UnknownData00[0x7];                                       // 0x0049(0x0007) MISSED OFFSET
 	TArray<struct FVector>                             Vertices;                                                 // 0x0050(0x0010) (ZeroConstructor)
@@ -10682,7 +10682,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.BrushBuilder"));
+		static auto ptr = UObject::FindClass("Class Engine.BrushBuilder");
 		return ptr;
 	}
 
@@ -10698,7 +10698,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ButtonStyleAsset"));
+		static auto ptr = UObject::FindClass("Class Engine.ButtonStyleAsset");
 		return ptr;
 	}
 
@@ -10723,7 +10723,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.CameraAnim"));
+		static auto ptr = UObject::FindClass("Class Engine.CameraAnim");
 		return ptr;
 	}
 
@@ -10748,7 +10748,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.CameraAnimInst"));
+		static auto ptr = UObject::FindClass("Class Engine.CameraAnimInst");
 		return ptr;
 	}
 
@@ -10770,7 +10770,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.CameraModifier_CameraShake"));
+		static auto ptr = UObject::FindClass("Class Engine.CameraModifier_CameraShake");
 		return ptr;
 	}
 
@@ -10802,17 +10802,17 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Canvas"));
+		static auto ptr = UObject::FindClass("Class Engine.Canvas");
 		return ptr;
 	}
 
 
-	struct FVector2D K2_TextSize(class UFont* RenderFont, const class FString& RenderText, const struct FVector2D& Scale);
-	struct FVector2D K2_StrLen(class UFont* RenderFont, const class FString& RenderText);
+	struct FVector2D K2_TextSize(class UFont* RenderFont, const struct FString& RenderText, const struct FVector2D& Scale);
+	struct FVector2D K2_StrLen(class UFont* RenderFont, const struct FString& RenderText);
 	struct FVector K2_Project(const struct FVector& WorldLocation);
 	void K2_DrawTriangle(class UTexture* RenderTexture, TArray<struct FCanvasUVTri> Triangles);
 	void K2_DrawTexture(class UTexture* RenderTexture, const struct FVector2D& ScreenPosition, const struct FVector2D& ScreenSize, const struct FVector2D& CoordinatePosition, const struct FVector2D& CoordinateSize, const struct FLinearColor& RenderColor, TEnumAsByte<EBlendMode> BlendMode, float Rotation, const struct FVector2D& PivotPoint);
-	void K2_DrawText(class UFont* RenderFont, const class FString& RenderText, const struct FVector2D& ScreenPosition, const struct FLinearColor& RenderColor, float Kerning, const struct FLinearColor& ShadowColor, const struct FVector2D& ShadowOffset, bool bCentreX, bool bCentreY, bool bOutlined, const struct FLinearColor& OutlineColor);
+	void K2_DrawText(class UFont* RenderFont, const struct FString& RenderText, const struct FVector2D& ScreenPosition, const struct FLinearColor& RenderColor, float Kerning, const struct FLinearColor& ShadowColor, const struct FVector2D& ShadowOffset, bool bCentreX, bool bCentreY, bool bOutlined, const struct FLinearColor& OutlineColor);
 	void K2_DrawPolygon(class UTexture* RenderTexture, const struct FVector2D& ScreenPosition, const struct FVector2D& Radius, int NumberOfSides, const struct FLinearColor& RenderColor);
 	void K2_DrawMaterialTriangle(class UMaterialInterface* RenderMaterial, TArray<struct FCanvasUVTri> Triangles);
 	void K2_DrawMaterial(class UMaterialInterface* RenderMaterial, const struct FVector2D& ScreenPosition, const struct FVector2D& ScreenSize, const struct FVector2D& CoordinatePosition, const struct FVector2D& CoordinateSize, float Rotation, const struct FVector2D& PivotPoint);
@@ -10833,7 +10833,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Channel"));
+		static auto ptr = UObject::FindClass("Class Engine.Channel");
 		return ptr;
 	}
 
@@ -10852,7 +10852,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ActorChannel"));
+		static auto ptr = UObject::FindClass("Class Engine.ActorChannel");
 		return ptr;
 	}
 
@@ -10868,7 +10868,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ControlChannel"));
+		static auto ptr = UObject::FindClass("Class Engine.ControlChannel");
 		return ptr;
 	}
 
@@ -10888,7 +10888,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.VoiceChannel"));
+		static auto ptr = UObject::FindClass("Class Engine.VoiceChannel");
 		return ptr;
 	}
 
@@ -10906,7 +10906,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.CheatManager"));
+		static auto ptr = UObject::FindClass("Class Engine.CheatManager");
 		return ptr;
 	}
 
@@ -10914,7 +10914,7 @@ public:
 	void WidgetReflector();
 	void Walk();
 	void ViewSelf();
-	void ViewPlayer(const class FString& S);
+	void ViewPlayer(const struct FString& S);
 	void ViewClass(class UClass* DesiredClass);
 	void ViewActor(const struct FName& ActorName);
 	void ToggleDebugCamera();
@@ -10922,7 +10922,7 @@ public:
 	void TextureAtlasVisualizer();
 	void TestCollisionDistance();
 	void Teleport();
-	void Summon(const class FString& ClassName);
+	void Summon(const struct FString& ClassName);
 	void StreamLevelOut(const struct FName& PackageName);
 	void StreamLevelIn(const struct FName& PackageName);
 	void Slomo(float T);
@@ -10957,9 +10957,9 @@ public:
 	void DebugCapsuleSweep();
 	void DamageTarget(float DamageAmount);
 	void ChangeSize(float F);
-	void BugItStringCreator(const struct FVector& ViewLocation, const struct FRotator& ViewRotation, class FString* GoString, class FString* LocString);
+	void BugItStringCreator(const struct FVector& ViewLocation, const struct FRotator& ViewRotation, struct FString* GoString, struct FString* LocString);
 	void BugItGo(float X, float Y, float Z, float Pitch, float Yaw, float Roll);
-	void BugIt(const class FString& ScreenShotDescription);
+	void BugIt(const struct FString& ScreenShotDescription);
 };
 
 
@@ -10972,7 +10972,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.CheckBoxStyleAsset"));
+		static auto ptr = UObject::FindClass("Class Engine.CheckBoxStyleAsset");
 		return ptr;
 	}
 
@@ -10988,7 +10988,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PluginCommandlet"));
+		static auto ptr = UObject::FindClass("Class Engine.PluginCommandlet");
 		return ptr;
 	}
 
@@ -11003,7 +11003,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SmokeTestCommandlet"));
+		static auto ptr = UObject::FindClass("Class Engine.SmokeTestCommandlet");
 		return ptr;
 	}
 
@@ -11020,12 +11020,12 @@ public:
 	class UTexture2D*                                  DefaultTexture_Black;                                     // 0x0040(0x0008) (ZeroConstructor, IsPlainOldData)
 	class UTexture2D*                                  DefaultTexture_White;                                     // 0x0048(0x0008) (ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData01[0x18];                                      // 0x0050(0x0018) MISSED OFFSET
-	TArray<class FString>                              HistoryBuffer;                                            // 0x0068(0x0010) (ZeroConstructor, Config)
+	TArray<struct FString>                             HistoryBuffer;                                            // 0x0068(0x0010) (ZeroConstructor, Config)
 	unsigned char                                      UnknownData02[0x78];                                      // 0x0078(0x0078) MISSED OFFSET
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Console"));
+		static auto ptr = UObject::FindClass("Class Engine.Console");
 		return ptr;
 	}
 
@@ -11041,7 +11041,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.CurveLinearColor"));
+		static auto ptr = UObject::FindClass("Class Engine.CurveLinearColor");
 		return ptr;
 	}
 
@@ -11059,7 +11059,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.CurveVector"));
+		static auto ptr = UObject::FindClass("Class Engine.CurveVector");
 		return ptr;
 	}
 
@@ -11076,7 +11076,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.CurveEdPresetCurve"));
+		static auto ptr = UObject::FindClass("Class Engine.CurveEdPresetCurve");
 		return ptr;
 	}
 
@@ -11092,7 +11092,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.CurveTable"));
+		static auto ptr = UObject::FindClass("Class Engine.CurveTable");
 		return ptr;
 	}
 
@@ -11107,7 +11107,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.CustomWidgetDrawerInterface"));
+		static auto ptr = UObject::FindClass("Class Engine.CustomWidgetDrawerInterface");
 		return ptr;
 	}
 
@@ -11123,7 +11123,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InstancedNavMeshesDataAsset"));
+		static auto ptr = UObject::FindClass("Class Engine.InstancedNavMeshesDataAsset");
 		return ptr;
 	}
 
@@ -11139,7 +11139,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleComputeShaderData"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleComputeShaderData");
 		return ptr;
 	}
 
@@ -11151,11 +11151,11 @@ public:
 class UStringArrayDataAsset : public UDataAsset
 {
 public:
-	TArray<class FString>                              Array;                                                    // 0x0028(0x0010) (Edit, BlueprintVisible, BlueprintReadOnly, ZeroConstructor)
+	TArray<struct FString>                             Array;                                                    // 0x0028(0x0010) (Edit, BlueprintVisible, BlueprintReadOnly, ZeroConstructor)
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.StringArrayDataAsset"));
+		static auto ptr = UObject::FindClass("Class Engine.StringArrayDataAsset");
 		return ptr;
 	}
 
@@ -11176,11 +11176,11 @@ public:
 	unsigned char                                      UnknownData01[0x4];                                       // 0x006C(0x0004) MISSED OFFSET
 	TArray<class UMaterialInterface*>                  Materials;                                                // 0x0070(0x0010) (ZeroConstructor)
 	TArray<struct FDestructibleChunkParameters>        ChunkParameters;                                          // 0x0080(0x0010) (ZeroConstructor)
-	TArray<class FString>                              MaterialNames;                                            // 0x0090(0x0010) (ZeroConstructor)
+	TArray<struct FString>                             MaterialNames;                                            // 0x0090(0x0010) (ZeroConstructor)
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DestructibleFractureSettings"));
+		static auto ptr = UObject::FindClass("Class Engine.DestructibleFractureSettings");
 		return ptr;
 	}
 
@@ -11195,7 +11195,7 @@ public:
 	TArray<float>                                      DefaultVisibleDistanceFactorThresholds;                   // 0x0038(0x0010) (Edit, ZeroConstructor, Config)
 	int                                                CompressCommandletVersion;                                // 0x0048(0x0004) (Edit, ZeroConstructor, Config, EditConst, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x4];                                       // 0x004C(0x0004) MISSED OFFSET
-	TArray<class FString>                              KeyEndEffectorsMatchNameArray;                            // 0x0050(0x0010) (Edit, ZeroConstructor, Config)
+	TArray<struct FString>                             KeyEndEffectorsMatchNameArray;                            // 0x0050(0x0010) (Edit, ZeroConstructor, Config)
 	class UClass*                                      DefaultCompressionAlgorithm;                              // 0x0060(0x0008) (Edit, ZeroConstructor, Config, IsPlainOldData)
 	TEnumAsByte<EAnimationCompressionFormat>           RotationCompressionFormat;                                // 0x0068(0x0001) (Edit, ZeroConstructor, Config, IsPlainOldData)
 	TEnumAsByte<EAnimationCompressionFormat>           TranslationCompressionFormat;                             // 0x0069(0x0001) (Edit, ZeroConstructor, Config, IsPlainOldData)
@@ -11215,7 +11215,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AnimationSettings"));
+		static auto ptr = UObject::FindClass("Class Engine.AnimationSettings");
 		return ptr;
 	}
 
@@ -11236,7 +11236,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AudioSettings"));
+		static auto ptr = UObject::FindClass("Class Engine.AudioSettings");
 		return ptr;
 	}
 
@@ -11267,7 +11267,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.UserInterfaceSettings"));
+		static auto ptr = UObject::FindClass("Class Engine.UserInterfaceSettings");
 		return ptr;
 	}
 
@@ -11296,7 +11296,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.StreamingSettings"));
+		static auto ptr = UObject::FindClass("Class Engine.StreamingSettings");
 		return ptr;
 	}
 
@@ -11323,7 +11323,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.GarbageCollectionSettings"));
+		static auto ptr = UObject::FindClass("Class Engine.GarbageCollectionSettings");
 		return ptr;
 	}
 
@@ -11340,7 +11340,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NetworkSettings"));
+		static auto ptr = UObject::FindClass("Class Engine.NetworkSettings");
 		return ptr;
 	}
 
@@ -11348,7 +11348,7 @@ public:
 
 
 // Class Engine.PhysicsSettings
-// 0x0090 (0x00C8 - 0x0038)
+// 0x0098 (0x00D0 - 0x0038)
 class UPhysicsSettings : public UDeveloperSettings
 {
 public:
@@ -11393,11 +11393,17 @@ public:
 	unsigned char                                      UnknownData04[0x1];                                       // 0x00BB(0x0001) MISSED OFFSET
 	int                                                MBPSubdivisions;                                          // 0x00BC(0x0004) (Edit, ZeroConstructor, Config, IsPlainOldData)
 	float                                              MBPWorldHalfExtentInCM;                                   // 0x00C0(0x0004) (Edit, ZeroConstructor, Config, IsPlainOldData)
-	unsigned char                                      UnknownData05[0x4];                                       // 0x00C4(0x0004) MISSED OFFSET
+	unsigned char                                      AthenaCharacterPxAggregateCapacity;                       // 0x00C4(0x0001) (Edit, ZeroConstructor, Config, DisableEditOnInstance, IsPlainOldData)
+	unsigned char                                      BuoyantStorageContainerPxAggregateCapacity;               // 0x00C5(0x0001) (Edit, ZeroConstructor, Config, DisableEditOnInstance, IsPlainOldData)
+	unsigned char                                      FaunaPxAggregateCapacity;                                 // 0x00C6(0x0001) (Edit, ZeroConstructor, Config, DisableEditOnInstance, IsPlainOldData)
+	unsigned char                                      FloatingItemProxyPxAggregateCapacity;                     // 0x00C7(0x0001) (Edit, ZeroConstructor, Config, DisableEditOnInstance, IsPlainOldData)
+	unsigned char                                      RowboatPxAggregateCapacity;                               // 0x00C8(0x0001) (Edit, ZeroConstructor, Config, DisableEditOnInstance, IsPlainOldData)
+	unsigned char                                      ShipPxAggregateCapacity;                                  // 0x00C9(0x0001) (Edit, ZeroConstructor, Config, DisableEditOnInstance, IsPlainOldData)
+	unsigned char                                      UnknownData05[0x6];                                       // 0x00CA(0x0006) MISSED OFFSET
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PhysicsSettings"));
+		static auto ptr = UObject::FindClass("Class Engine.PhysicsSettings");
 		return ptr;
 	}
 
@@ -11459,7 +11465,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.RendererSettings"));
+		static auto ptr = UObject::FindClass("Class Engine.RendererSettings");
 		return ptr;
 	}
 
@@ -11475,7 +11481,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.TextureLODSettings"));
+		static auto ptr = UObject::FindClass("Class Engine.TextureLODSettings");
 		return ptr;
 	}
 
@@ -11487,16 +11493,16 @@ public:
 class UDeviceProfile : public UTextureLODSettings
 {
 public:
-	class FString                                      DeviceType;                                               // 0x0038(0x0010) (Edit, ZeroConstructor, Config, EditConst)
-	class FString                                      BaseProfileName;                                          // 0x0048(0x0010) (Edit, ZeroConstructor, Config)
+	struct FString                                     DeviceType;                                               // 0x0038(0x0010) (Edit, ZeroConstructor, Config, EditConst)
+	struct FString                                     BaseProfileName;                                          // 0x0048(0x0010) (Edit, ZeroConstructor, Config)
 	class UObject*                                     Parent;                                                   // 0x0058(0x0008) (ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x8];                                       // 0x0060(0x0008) MISSED OFFSET
-	TArray<class FString>                              CVars;                                                    // 0x0068(0x0010) (Edit, ZeroConstructor, Config)
+	TArray<struct FString>                             CVars;                                                    // 0x0068(0x0010) (Edit, ZeroConstructor, Config)
 	unsigned char                                      UnknownData01[0x8];                                       // 0x0078(0x0008) MISSED OFFSET
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DeviceProfile"));
+		static auto ptr = UObject::FindClass("Class Engine.DeviceProfile");
 		return ptr;
 	}
 
@@ -11513,7 +11519,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DeviceProfileManager"));
+		static auto ptr = UObject::FindClass("Class Engine.DeviceProfileManager");
 		return ptr;
 	}
 
@@ -11533,7 +11539,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DialogueVoice"));
+		static auto ptr = UObject::FindClass("Class Engine.DialogueVoice");
 		return ptr;
 	}
 
@@ -11547,13 +11553,13 @@ class UDialogueWave : public UObject
 public:
 	unsigned char                                      bMature : 1;                                              // 0x0028(0x0001) (Edit)
 	unsigned char                                      UnknownData00[0x7];                                       // 0x0029(0x0007) MISSED OFFSET
-	class FString                                      SpokenText;                                               // 0x0030(0x0010) (Edit, ZeroConstructor)
+	struct FString                                     SpokenText;                                               // 0x0030(0x0010) (Edit, ZeroConstructor)
 	TArray<struct FDialogueContextMapping>             ContextMappings;                                          // 0x0040(0x0010) (Edit, ZeroConstructor)
 	struct FGuid                                       LocalizationGUID;                                         // 0x0050(0x0010) (ZeroConstructor, IsPlainOldData)
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DialogueWave"));
+		static auto ptr = UObject::FindClass("Class Engine.DialogueWave");
 		return ptr;
 	}
 
@@ -11569,7 +11575,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Distribution"));
+		static auto ptr = UObject::FindClass("Class Engine.Distribution");
 		return ptr;
 	}
 
@@ -11586,7 +11592,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DistributionFloat"));
+		static auto ptr = UObject::FindClass("Class Engine.DistributionFloat");
 		return ptr;
 	}
 
@@ -11603,7 +11609,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DistributionFloatConstant"));
+		static auto ptr = UObject::FindClass("Class Engine.DistributionFloatConstant");
 		return ptr;
 	}
 
@@ -11625,7 +11631,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DistributionFloatParameterBase"));
+		static auto ptr = UObject::FindClass("Class Engine.DistributionFloatParameterBase");
 		return ptr;
 	}
 
@@ -11640,7 +11646,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DistributionFloatParticleParameter"));
+		static auto ptr = UObject::FindClass("Class Engine.DistributionFloatParticleParameter");
 		return ptr;
 	}
 
@@ -11656,7 +11662,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DistributionFloatConstantCurve"));
+		static auto ptr = UObject::FindClass("Class Engine.DistributionFloatConstantCurve");
 		return ptr;
 	}
 
@@ -11673,7 +11679,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DistributionFloatUniform"));
+		static auto ptr = UObject::FindClass("Class Engine.DistributionFloatUniform");
 		return ptr;
 	}
 
@@ -11689,7 +11695,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DistributionFloatUniformCurve"));
+		static auto ptr = UObject::FindClass("Class Engine.DistributionFloatUniformCurve");
 		return ptr;
 	}
 
@@ -11707,7 +11713,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DistributionVector"));
+		static auto ptr = UObject::FindClass("Class Engine.DistributionVector");
 		return ptr;
 	}
 
@@ -11727,7 +11733,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DistributionVectorConstant"));
+		static auto ptr = UObject::FindClass("Class Engine.DistributionVectorConstant");
 		return ptr;
 	}
 
@@ -11749,7 +11755,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DistributionVectorParameterBase"));
+		static auto ptr = UObject::FindClass("Class Engine.DistributionVectorParameterBase");
 		return ptr;
 	}
 
@@ -11764,7 +11770,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DistributionVectorParticleParameter"));
+		static auto ptr = UObject::FindClass("Class Engine.DistributionVectorParticleParameter");
 		return ptr;
 	}
 
@@ -11784,7 +11790,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DistributionVectorConstantCurve"));
+		static auto ptr = UObject::FindClass("Class Engine.DistributionVectorConstantCurve");
 		return ptr;
 	}
 
@@ -11807,7 +11813,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DistributionVectorUniform"));
+		static auto ptr = UObject::FindClass("Class Engine.DistributionVectorUniform");
 		return ptr;
 	}
 
@@ -11831,7 +11837,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DistributionVectorUniformCurve"));
+		static auto ptr = UObject::FindClass("Class Engine.DistributionVectorUniformCurve");
 		return ptr;
 	}
 
@@ -11846,7 +11852,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DPICustomScalingRule"));
+		static auto ptr = UObject::FindClass("Class Engine.DPICustomScalingRule");
 		return ptr;
 	}
 
@@ -11861,7 +11867,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DynamicBlueprintBinding"));
+		static auto ptr = UObject::FindClass("Class Engine.DynamicBlueprintBinding");
 		return ptr;
 	}
 
@@ -11877,7 +11883,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ComponentDelegateBinding"));
+		static auto ptr = UObject::FindClass("Class Engine.ComponentDelegateBinding");
 		return ptr;
 	}
 
@@ -11892,7 +11898,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InputDelegateBinding"));
+		static auto ptr = UObject::FindClass("Class Engine.InputDelegateBinding");
 		return ptr;
 	}
 
@@ -11908,7 +11914,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InputActionDelegateBinding"));
+		static auto ptr = UObject::FindClass("Class Engine.InputActionDelegateBinding");
 		return ptr;
 	}
 
@@ -11924,7 +11930,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InputAxisDelegateBinding"));
+		static auto ptr = UObject::FindClass("Class Engine.InputAxisDelegateBinding");
 		return ptr;
 	}
 
@@ -11940,7 +11946,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InputAxisKeyDelegateBinding"));
+		static auto ptr = UObject::FindClass("Class Engine.InputAxisKeyDelegateBinding");
 		return ptr;
 	}
 
@@ -11955,7 +11961,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InputVectorAxisDelegateBinding"));
+		static auto ptr = UObject::FindClass("Class Engine.InputVectorAxisDelegateBinding");
 		return ptr;
 	}
 
@@ -11971,7 +11977,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InputKeyDelegateBinding"));
+		static auto ptr = UObject::FindClass("Class Engine.InputKeyDelegateBinding");
 		return ptr;
 	}
 
@@ -11987,7 +11993,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InputTouchDelegateBinding"));
+		static auto ptr = UObject::FindClass("Class Engine.InputTouchDelegateBinding");
 		return ptr;
 	}
 
@@ -12008,7 +12014,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.EdGraph"));
+		static auto ptr = UObject::FindClass("Class Engine.EdGraph");
 		return ptr;
 	}
 
@@ -12020,12 +12026,12 @@ public:
 class UEdGraphNode_Documentation : public UEdGraphNode
 {
 public:
-	class FString                                      Link;                                                     // 0x0090(0x0010) (ZeroConstructor)
-	class FString                                      Excerpt;                                                  // 0x00A0(0x0010) (ZeroConstructor)
+	struct FString                                     Link;                                                     // 0x0090(0x0010) (ZeroConstructor)
+	struct FString                                     Excerpt;                                                  // 0x00A0(0x0010) (ZeroConstructor)
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.EdGraphNode_Documentation"));
+		static auto ptr = UObject::FindClass("Class Engine.EdGraphNode_Documentation");
 		return ptr;
 	}
 
@@ -12040,7 +12046,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.EdGraphSchema"));
+		static auto ptr = UObject::FindClass("Class Engine.EdGraphSchema");
 		return ptr;
 	}
 
@@ -12055,7 +12061,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ImportantToggleSettingInterface"));
+		static auto ptr = UObject::FindClass("Class Engine.ImportantToggleSettingInterface");
 		return ptr;
 	}
 
@@ -12073,7 +12079,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.EndUserSettings"));
+		static auto ptr = UObject::FindClass("Class Engine.EndUserSettings");
 		return ptr;
 	}
 
@@ -12087,8 +12093,8 @@ class UExporter : public UObject
 public:
 	class UClass*                                      SupportedClass;                                           // 0x0028(0x0008) (ZeroConstructor, IsPlainOldData)
 	class UObject*                                     ExportRootScope;                                          // 0x0030(0x0008) (ZeroConstructor, Transient, IsPlainOldData)
-	TArray<class FString>                              FormatExtension;                                          // 0x0038(0x0010) (ZeroConstructor)
-	TArray<class FString>                              FormatDescription;                                        // 0x0048(0x0010) (ZeroConstructor)
+	TArray<struct FString>                             FormatExtension;                                          // 0x0038(0x0010) (ZeroConstructor)
+	TArray<struct FString>                             FormatDescription;                                        // 0x0048(0x0010) (ZeroConstructor)
 	int                                                PreferredFormatIndex;                                     // 0x0058(0x0004) (ZeroConstructor, IsPlainOldData)
 	int                                                TextIndent;                                               // 0x005C(0x0004) (ZeroConstructor, IsPlainOldData)
 	unsigned char                                      bText : 1;                                                // 0x0060(0x0001)
@@ -12098,7 +12104,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Exporter"));
+		static auto ptr = UObject::FindClass("Class Engine.Exporter");
 		return ptr;
 	}
 
@@ -12117,7 +12123,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.FFTWaterSettings"));
+		static auto ptr = UObject::FindClass("Class Engine.FFTWaterSettings");
 		return ptr;
 	}
 
@@ -12133,7 +12139,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.FontImportOptions"));
+		static auto ptr = UObject::FindClass("Class Engine.FontImportOptions");
 		return ptr;
 	}
 
@@ -12168,7 +12174,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Font"));
+		static auto ptr = UObject::FindClass("Class Engine.Font");
 		return ptr;
 	}
 
@@ -12184,7 +12190,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.HapticFeedbackEffect"));
+		static auto ptr = UObject::FindClass("Class Engine.HapticFeedbackEffect");
 		return ptr;
 	}
 
@@ -12207,7 +12213,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.HighLatencySettings"));
+		static auto ptr = UObject::FindClass("Class Engine.HighLatencySettings");
 		return ptr;
 	}
 
@@ -12267,7 +12273,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.HIKCharacterization"));
+		static auto ptr = UObject::FindClass("Class Engine.HIKCharacterization");
 		return ptr;
 	}
 
@@ -12283,7 +12289,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InheritableComponentHandler"));
+		static auto ptr = UObject::FindClass("Class Engine.InheritableComponentHandler");
 		return ptr;
 	}
 
@@ -12306,7 +12312,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PlayerInput"));
+		static auto ptr = UObject::FindClass("Class Engine.PlayerInput");
 		return ptr;
 	}
 
@@ -12316,7 +12322,7 @@ public:
 	void SetCombinedAxisScale(const struct FName& CombinedAxisName, float Scale);
 	void SetCombinedAxisNonLinearity(const struct FName& CombinedAxisName, float NonLinearity);
 	void SetCombinedAxisLowerDeadzone(const struct FName& CombinedAxisName, float LowerDeadzone);
-	void SetBind(const struct FName& BindName, const class FString& Command);
+	void SetBind(const struct FName& BindName, const struct FString& Command);
 	void InvertMouseAxis(const struct FName& AxisName);
 	void InvertGamepadAxis(const struct FName& AxisName);
 	void InvertCombinedAxisY(const struct FName& CombinedAxisName);
@@ -12352,7 +12358,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InputSettings"));
+		static auto ptr = UObject::FindClass("Class Engine.InputSettings");
 		return ptr;
 	}
 
@@ -12370,7 +12376,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpCurveEdSetup"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpCurveEdSetup");
 		return ptr;
 	}
 
@@ -12395,7 +12401,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpData"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpData");
 		return ptr;
 	}
 
@@ -12407,11 +12413,11 @@ public:
 class UInterpFilter : public UObject
 {
 public:
-	class FString                                      Caption;                                                  // 0x0028(0x0010) (ZeroConstructor)
+	struct FString                                     Caption;                                                  // 0x0028(0x0010) (ZeroConstructor)
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpFilter"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpFilter");
 		return ptr;
 	}
 
@@ -12426,7 +12432,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpFilter_Classes"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpFilter_Classes");
 		return ptr;
 	}
 
@@ -12441,7 +12447,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpFilter_Custom"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpFilter_Custom");
 		return ptr;
 	}
 
@@ -12466,7 +12472,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpGroup"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpGroup");
 		return ptr;
 	}
 
@@ -12484,7 +12490,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpGroupCamera"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpGroupCamera");
 		return ptr;
 	}
 
@@ -12499,7 +12505,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpGroupDirector"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpGroupDirector");
 		return ptr;
 	}
 
@@ -12517,7 +12523,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpGroupInst"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpGroupInst");
 		return ptr;
 	}
 
@@ -12532,7 +12538,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpGroupInstCamera"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpGroupInstCamera");
 		return ptr;
 	}
 
@@ -12547,7 +12553,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpGroupInstDirector"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpGroupInstDirector");
 		return ptr;
 	}
 
@@ -12564,7 +12570,7 @@ public:
 	class UClass*                                      TrackInstClass;                                           // 0x0048(0x0008) (ZeroConstructor, IsPlainOldData)
 	TEnumAsByte<ETrackActiveCondition>                 ActiveCondition;                                          // 0x0050(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData01[0x7];                                       // 0x0051(0x0007) MISSED OFFSET
-	class FString                                      TrackTitle;                                               // 0x0058(0x0010) (ZeroConstructor)
+	struct FString                                     TrackTitle;                                               // 0x0058(0x0010) (ZeroConstructor)
 	unsigned char                                      bOnePerGroup : 1;                                         // 0x0068(0x0001)
 	unsigned char                                      bDirGroupOnly : 1;                                        // 0x0068(0x0001)
 	unsigned char                                      bDisableTrack : 1;                                        // 0x0068(0x0001)
@@ -12577,7 +12583,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrack"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrack");
 		return ptr;
 	}
 
@@ -12594,7 +12600,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackBoolProp"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackBoolProp");
 		return ptr;
 	}
 
@@ -12612,7 +12618,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackDirector"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackDirector");
 		return ptr;
 	}
 
@@ -12633,7 +12639,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackEvent"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackEvent");
 		return ptr;
 	}
 
@@ -12651,7 +12657,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackFloatBase"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackFloatBase");
 		return ptr;
 	}
 
@@ -12670,7 +12676,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackAnimControl"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackAnimControl");
 		return ptr;
 	}
 
@@ -12690,7 +12696,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackFade"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackFade");
 		return ptr;
 	}
 
@@ -12708,7 +12714,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackFloatAnimBPParam"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackFloatAnimBPParam");
 		return ptr;
 	}
 
@@ -12725,7 +12731,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackFloatMaterialParam"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackFloatMaterialParam");
 		return ptr;
 	}
 
@@ -12741,7 +12747,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackFloatParticleParam"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackFloatParticleParam");
 		return ptr;
 	}
 
@@ -12757,7 +12763,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackFloatProp"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackFloatProp");
 		return ptr;
 	}
 
@@ -12787,7 +12793,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackMove"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackMove");
 		return ptr;
 	}
 
@@ -12805,7 +12811,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackMoveAxis"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackMoveAxis");
 		return ptr;
 	}
 
@@ -12823,7 +12829,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackLinearColorBase"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackLinearColorBase");
 		return ptr;
 	}
 
@@ -12839,7 +12845,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackLinearColorProp"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackLinearColorProp");
 		return ptr;
 	}
 
@@ -12855,7 +12861,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackParticleReplay"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackParticleReplay");
 		return ptr;
 	}
 
@@ -12877,7 +12883,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackToggle"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackToggle");
 		return ptr;
 	}
 
@@ -12895,7 +12901,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackVectorBase"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackVectorBase");
 		return ptr;
 	}
 
@@ -12910,7 +12916,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackAudioMaster"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackAudioMaster");
 		return ptr;
 	}
 
@@ -12926,7 +12932,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackColorProp"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackColorProp");
 		return ptr;
 	}
 
@@ -12941,7 +12947,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackColorScale"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackColorScale");
 		return ptr;
 	}
 
@@ -12963,7 +12969,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackSound"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackSound");
 		return ptr;
 	}
 
@@ -12980,7 +12986,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackVectorMaterialParam"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackVectorMaterialParam");
 		return ptr;
 	}
 
@@ -12996,7 +13002,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackVectorProp"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackVectorProp");
 		return ptr;
 	}
 
@@ -13016,7 +13022,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackVisibility"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackVisibility");
 		return ptr;
 	}
 
@@ -13031,7 +13037,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackInst"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackInst");
 		return ptr;
 	}
 
@@ -13048,7 +13054,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackInstAnimControl"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackInstAnimControl");
 		return ptr;
 	}
 
@@ -13063,7 +13069,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackInstAudioMaster"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackInstAudioMaster");
 		return ptr;
 	}
 
@@ -13078,7 +13084,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackInstColorScale"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackInstColorScale");
 		return ptr;
 	}
 
@@ -13094,7 +13100,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackInstDirector"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackInstDirector");
 		return ptr;
 	}
 
@@ -13111,7 +13117,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackInstEvent"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackInstEvent");
 		return ptr;
 	}
 
@@ -13126,7 +13132,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackInstFade"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackInstFade");
 		return ptr;
 	}
 
@@ -13144,7 +13150,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackInstFloatAnimBPParam"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackInstFloatAnimBPParam");
 		return ptr;
 	}
 
@@ -13163,7 +13169,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackInstFloatMaterialParam"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackInstFloatMaterialParam");
 		return ptr;
 	}
 
@@ -13180,7 +13186,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackInstFloatParticleParam"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackInstFloatParticleParam");
 		return ptr;
 	}
 
@@ -13197,7 +13203,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackInstMove"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackInstMove");
 		return ptr;
 	}
 
@@ -13214,7 +13220,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackInstParticleReplay"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackInstParticleReplay");
 		return ptr;
 	}
 
@@ -13231,7 +13237,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackInstProperty"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackInstProperty");
 		return ptr;
 	}
 
@@ -13250,7 +13256,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackInstBoolProp"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackInstBoolProp");
 		return ptr;
 	}
 
@@ -13268,7 +13274,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackInstColorProp"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackInstColorProp");
 		return ptr;
 	}
 
@@ -13286,7 +13292,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackInstFloatProp"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackInstFloatProp");
 		return ptr;
 	}
 
@@ -13303,7 +13309,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackInstLinearColorProp"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackInstLinearColorProp");
 		return ptr;
 	}
 
@@ -13321,7 +13327,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackInstVectorProp"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackInstVectorProp");
 		return ptr;
 	}
 
@@ -13339,7 +13345,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackInstSound"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackInstSound");
 		return ptr;
 	}
 
@@ -13359,7 +13365,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackInstToggle"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackInstToggle");
 		return ptr;
 	}
 
@@ -13378,7 +13384,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackInstVectorMaterialParam"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackInstVectorMaterialParam");
 		return ptr;
 	}
 
@@ -13396,7 +13402,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InterpTrackInstVisibility"));
+		static auto ptr = UObject::FindClass("Class Engine.InterpTrackInstVisibility");
 		return ptr;
 	}
 
@@ -13423,7 +13429,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.IntSerialization"));
+		static auto ptr = UObject::FindClass("Class Engine.IntSerialization");
 		return ptr;
 	}
 
@@ -13442,7 +13448,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Layer"));
+		static auto ptr = UObject::FindClass("Class Engine.Layer");
 		return ptr;
 	}
 
@@ -13458,7 +13464,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.LevelActorContainer"));
+		static auto ptr = UObject::FindClass("Class Engine.LevelActorContainer");
 		return ptr;
 	}
 
@@ -13493,7 +13499,7 @@ public:
 	TArray<class ALevelStreamingVolume*>               EditorStreamingVolumes;                                   // 0x00D8(0x0010) (Edit, ZeroConstructor)
 	float                                              MinTimeBetweenVolumeUnloadRequests;                       // 0x00E8(0x0004) (Edit, ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData07[0x4];                                       // 0x00EC(0x0004) MISSED OFFSET
-	TArray<class FString>                              Keywords;                                                 // 0x00F0(0x0010) (ZeroConstructor)
+	TArray<struct FString>                             Keywords;                                                 // 0x00F0(0x0010) (ZeroConstructor)
 	struct FScriptMulticastDelegate                    OnLevelLoaded;                                            // 0x0100(0x0010) (ZeroConstructor, InstancedReference, BlueprintAssignable)
 	struct FScriptMulticastDelegate                    OnLevelUnloaded;                                          // 0x0110(0x0010) (ZeroConstructor, InstancedReference, BlueprintAssignable)
 	struct FScriptMulticastDelegate                    OnLevelShown;                                             // 0x0120(0x0010) (ZeroConstructor, InstancedReference, BlueprintAssignable)
@@ -13504,7 +13510,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.LevelStreaming"));
+		static auto ptr = UObject::FindClass("Class Engine.LevelStreaming");
 		return ptr;
 	}
 
@@ -13513,7 +13519,7 @@ public:
 	bool IsLevelVisible();
 	bool IsLevelLoaded();
 	class ALevelScriptActor* GetLevelScriptActor();
-	class ULevelStreaming* CreateInstance(const class FString& UniqueInstanceName);
+	class ULevelStreaming* CreateInstance(const struct FString& UniqueInstanceName);
 };
 
 
@@ -13525,7 +13531,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.LevelStreamingAlwaysLoaded"));
+		static auto ptr = UObject::FindClass("Class Engine.LevelStreamingAlwaysLoaded");
 		return ptr;
 	}
 
@@ -13543,7 +13549,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.LevelStreamingKismet"));
+		static auto ptr = UObject::FindClass("Class Engine.LevelStreamingKismet");
 		return ptr;
 	}
 
@@ -13558,7 +13564,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.LevelStreamingPersistent"));
+		static auto ptr = UObject::FindClass("Class Engine.LevelStreamingPersistent");
 		return ptr;
 	}
 
@@ -13575,7 +13581,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.LightmappedSurfaceCollection"));
+		static auto ptr = UObject::FindClass("Class Engine.LightmappedSurfaceCollection");
 		return ptr;
 	}
 
@@ -13591,7 +13597,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.LightmassPrimitiveSettingsObject"));
+		static auto ptr = UObject::FindClass("Class Engine.LightmassPrimitiveSettingsObject");
 		return ptr;
 	}
 
@@ -13606,7 +13612,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.LocalMessage"));
+		static auto ptr = UObject::FindClass("Class Engine.LocalMessage");
 		return ptr;
 	}
 
@@ -13618,18 +13624,18 @@ public:
 class UEngineMessage : public ULocalMessage
 {
 public:
-	class FString                                      FailedPlaceMessage;                                       // 0x0028(0x0010) (ZeroConstructor)
-	class FString                                      MaxedOutMessage;                                          // 0x0038(0x0010) (ZeroConstructor)
-	class FString                                      EnteredMessage;                                           // 0x0048(0x0010) (ZeroConstructor)
-	class FString                                      LeftMessage;                                              // 0x0058(0x0010) (ZeroConstructor)
-	class FString                                      GlobalNameChange;                                         // 0x0068(0x0010) (ZeroConstructor)
-	class FString                                      SpecEnteredMessage;                                       // 0x0078(0x0010) (ZeroConstructor)
-	class FString                                      NewPlayerMessage;                                         // 0x0088(0x0010) (ZeroConstructor)
-	class FString                                      NewSpecMessage;                                           // 0x0098(0x0010) (ZeroConstructor)
+	struct FString                                     FailedPlaceMessage;                                       // 0x0028(0x0010) (ZeroConstructor)
+	struct FString                                     MaxedOutMessage;                                          // 0x0038(0x0010) (ZeroConstructor)
+	struct FString                                     EnteredMessage;                                           // 0x0048(0x0010) (ZeroConstructor)
+	struct FString                                     LeftMessage;                                              // 0x0058(0x0010) (ZeroConstructor)
+	struct FString                                     GlobalNameChange;                                         // 0x0068(0x0010) (ZeroConstructor)
+	struct FString                                     SpecEnteredMessage;                                       // 0x0078(0x0010) (ZeroConstructor)
+	struct FString                                     NewPlayerMessage;                                         // 0x0088(0x0010) (ZeroConstructor)
+	struct FString                                     NewSpecMessage;                                           // 0x0098(0x0010) (ZeroConstructor)
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.EngineMessage"));
+		static auto ptr = UObject::FindClass("Class Engine.EngineMessage");
 		return ptr;
 	}
 
@@ -13645,7 +13651,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionAbs"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionAbs");
 		return ptr;
 	}
 
@@ -13660,7 +13666,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionActorPositionWS"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionActorPositionWS");
 		return ptr;
 	}
 
@@ -13679,7 +13685,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionAdd"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionAdd");
 		return ptr;
 	}
 
@@ -13696,7 +13702,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionAppendVector"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionAppendVector");
 		return ptr;
 	}
 
@@ -13712,7 +13718,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionAtmosphericFogColor"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionAtmosphericFogColor");
 		return ptr;
 	}
 
@@ -13728,7 +13734,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionBlackBody"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionBlackBody");
 		return ptr;
 	}
 
@@ -13747,7 +13753,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionBoneMatrix"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionBoneMatrix");
 		return ptr;
 	}
 
@@ -13765,7 +13771,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionBreakMaterialAttributes"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionBreakMaterialAttributes");
 		return ptr;
 	}
 
@@ -13787,7 +13793,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionBumpOffset"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionBumpOffset");
 		return ptr;
 	}
 
@@ -13802,7 +13808,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionCameraPositionWS"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionCameraPositionWS");
 		return ptr;
 	}
 
@@ -13817,7 +13823,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionCameraVectorWS"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionCameraVectorWS");
 		return ptr;
 	}
 
@@ -13833,7 +13839,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionCausticTexture"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionCausticTexture");
 		return ptr;
 	}
 
@@ -13848,7 +13854,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionCausticTextureCoordinate"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionCausticTextureCoordinate");
 		return ptr;
 	}
 
@@ -13864,7 +13870,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionCeil"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionCeil");
 		return ptr;
 	}
 
@@ -13887,7 +13893,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionClamp"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionClamp");
 		return ptr;
 	}
 
@@ -13905,7 +13911,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionCollectionParameter"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionCollectionParameter");
 		return ptr;
 	}
 
@@ -13919,12 +13925,12 @@ class UMaterialExpressionComment : public UMaterialExpression
 public:
 	int                                                SizeX;                                                    // 0x0070(0x0004) (ZeroConstructor, IsPlainOldData)
 	int                                                SizeY;                                                    // 0x0074(0x0004) (ZeroConstructor, IsPlainOldData)
-	class FString                                      Text;                                                     // 0x0078(0x0010) (Edit, ZeroConstructor)
+	struct FString                                     Text;                                                     // 0x0078(0x0010) (Edit, ZeroConstructor)
 	struct FLinearColor                                CommentColor;                                             // 0x0088(0x0010) (Edit, ZeroConstructor, IsPlainOldData)
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionComment"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionComment");
 		return ptr;
 	}
 
@@ -13945,7 +13951,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionComponentMask"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionComponentMask");
 		return ptr;
 	}
 
@@ -13962,7 +13968,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionConstant"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionConstant");
 		return ptr;
 	}
 
@@ -13979,7 +13985,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionConstant2Vector"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionConstant2Vector");
 		return ptr;
 	}
 
@@ -13995,7 +14001,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionConstant3Vector"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionConstant3Vector");
 		return ptr;
 	}
 
@@ -14011,7 +14017,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionConstant4Vector"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionConstant4Vector");
 		return ptr;
 	}
 
@@ -14029,7 +14035,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionConstantBiasScale"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionConstantBiasScale");
 		return ptr;
 	}
 
@@ -14047,7 +14053,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionCosine"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionCosine");
 		return ptr;
 	}
 
@@ -14064,7 +14070,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionCrossProduct"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionCrossProduct");
 		return ptr;
 	}
 
@@ -14076,16 +14082,16 @@ public:
 class UMaterialExpressionCustom : public UMaterialExpression
 {
 public:
-	class FString                                      Code;                                                     // 0x0070(0x0010) (Edit, ZeroConstructor)
+	struct FString                                     Code;                                                     // 0x0070(0x0010) (Edit, ZeroConstructor)
 	TEnumAsByte<ECustomMaterialOutputType>             OutputType;                                               // 0x0080(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x7];                                       // 0x0081(0x0007) MISSED OFFSET
-	class FString                                      Description;                                              // 0x0088(0x0010) (Edit, ZeroConstructor)
+	struct FString                                     Description;                                              // 0x0088(0x0010) (Edit, ZeroConstructor)
 	TArray<struct FCustomInput>                        Inputs;                                                   // 0x0098(0x0010) (Edit, ZeroConstructor)
-	class FString                                      DeclarationCode;                                          // 0x00A8(0x0010) (Edit, ZeroConstructor)
+	struct FString                                     DeclarationCode;                                          // 0x00A8(0x0010) (Edit, ZeroConstructor)
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionCustom"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionCustom");
 		return ptr;
 	}
 
@@ -14101,7 +14107,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionCustomVelocity"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionCustomVelocity");
 		return ptr;
 	}
 
@@ -14117,7 +14123,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionDDX"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionDDX");
 		return ptr;
 	}
 
@@ -14133,7 +14139,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionDDY"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionDDY");
 		return ptr;
 	}
 
@@ -14151,7 +14157,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionDecalMipmapLevel"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionDecalMipmapLevel");
 		return ptr;
 	}
 
@@ -14170,7 +14176,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionDepthFade"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionDepthFade");
 		return ptr;
 	}
 
@@ -14188,7 +14194,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionDepthOfFieldFunction"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionDepthOfFieldFunction");
 		return ptr;
 	}
 
@@ -14204,7 +14210,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionDeriveNormalZ"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionDeriveNormalZ");
 		return ptr;
 	}
 
@@ -14222,7 +14228,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionDesaturation"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionDesaturation");
 		return ptr;
 	}
 
@@ -14239,7 +14245,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionDistance"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionDistance");
 		return ptr;
 	}
 
@@ -14254,7 +14260,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionDistanceCullFade"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionDistanceCullFade");
 		return ptr;
 	}
 
@@ -14270,7 +14276,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionDistanceFieldGradient"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionDistanceFieldGradient");
 		return ptr;
 	}
 
@@ -14286,7 +14292,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionDistanceToNearestSurface"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionDistanceToNearestSurface");
 		return ptr;
 	}
 
@@ -14305,7 +14311,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionDivide"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionDivide");
 		return ptr;
 	}
 
@@ -14322,7 +14328,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionDotProduct"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionDotProduct");
 		return ptr;
 	}
 
@@ -14334,12 +14340,12 @@ public:
 class UMaterialExpressionDynamicParameter : public UMaterialExpression
 {
 public:
-	TArray<class FString>                              ParamNames;                                               // 0x0070(0x0010) (Edit, EditFixedSize, ZeroConstructor)
+	TArray<struct FString>                             ParamNames;                                               // 0x0070(0x0010) (Edit, EditFixedSize, ZeroConstructor)
 	struct FLinearColor                                DefaultValue;                                             // 0x0080(0x0010) (Edit, ZeroConstructor, IsPlainOldData)
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionDynamicParameter"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionDynamicParameter");
 		return ptr;
 	}
 
@@ -14354,7 +14360,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionEyeAdaptation"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionEyeAdaptation");
 		return ptr;
 	}
 
@@ -14371,7 +14377,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionFeatureLevelSwitch"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionFeatureLevelSwitch");
 		return ptr;
 	}
 
@@ -14387,7 +14393,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionFloor"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionFloor");
 		return ptr;
 	}
 
@@ -14404,7 +14410,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionFmod"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionFmod");
 		return ptr;
 	}
 
@@ -14422,7 +14428,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionFontSample"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionFontSample");
 		return ptr;
 	}
 
@@ -14440,7 +14446,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionFontSampleParameter"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionFontSampleParameter");
 		return ptr;
 	}
 
@@ -14456,7 +14462,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionFrac"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionFrac");
 		return ptr;
 	}
 
@@ -14478,7 +14484,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionFresnel"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionFresnel");
 		return ptr;
 	}
 
@@ -14491,8 +14497,8 @@ class UMaterialExpressionFunctionInput : public UMaterialExpression
 {
 public:
 	struct FExpressionInput                            Preview;                                                  // 0x0070(0x0038) (ZeroConstructor)
-	class FString                                      InputName;                                                // 0x00A8(0x0010) (Edit, ZeroConstructor)
-	class FString                                      Description;                                              // 0x00B8(0x0010) (Edit, ZeroConstructor)
+	struct FString                                     InputName;                                                // 0x00A8(0x0010) (Edit, ZeroConstructor)
+	struct FString                                     Description;                                              // 0x00B8(0x0010) (Edit, ZeroConstructor)
 	struct FGuid                                       Id;                                                       // 0x00C8(0x0010) (ZeroConstructor, IsPlainOldData)
 	TEnumAsByte<EFunctionInputType>                    InputType;                                                // 0x00D8(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x7];                                       // 0x00D9(0x0007) MISSED OFFSET
@@ -14505,7 +14511,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionFunctionInput"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionFunctionInput");
 		return ptr;
 	}
 
@@ -14517,8 +14523,8 @@ public:
 class UMaterialExpressionFunctionOutput : public UMaterialExpression
 {
 public:
-	class FString                                      OutputName;                                               // 0x0070(0x0010) (Edit, ZeroConstructor)
-	class FString                                      Description;                                              // 0x0080(0x0010) (Edit, ZeroConstructor)
+	struct FString                                     OutputName;                                               // 0x0070(0x0010) (Edit, ZeroConstructor)
+	struct FString                                     Description;                                              // 0x0080(0x0010) (Edit, ZeroConstructor)
 	int                                                SortPriority;                                             // 0x0090(0x0004) (Edit, ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x4];                                       // 0x0094(0x0004) MISSED OFFSET
 	struct FExpressionInput                            A;                                                        // 0x0098(0x0038) (ZeroConstructor)
@@ -14529,7 +14535,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionFunctionOutput"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionFunctionOutput");
 		return ptr;
 	}
 
@@ -14547,7 +14553,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionGIReplace"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionGIReplace");
 		return ptr;
 	}
 
@@ -14563,7 +14569,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionHash"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionHash");
 		return ptr;
 	}
 
@@ -14587,7 +14593,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionIf"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionIf");
 		return ptr;
 	}
 
@@ -14604,7 +14610,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionIfShadowPass"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionIfShadowPass");
 		return ptr;
 	}
 
@@ -14619,7 +14625,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionLightmapUVs"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionLightmapUVs");
 		return ptr;
 	}
 
@@ -14636,7 +14642,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionLightmassReplace"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionLightmassReplace");
 		return ptr;
 	}
 
@@ -14651,7 +14657,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionLightVector"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionLightVector");
 		return ptr;
 	}
 
@@ -14673,7 +14679,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionLinearInterpolate"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionLinearInterpolate");
 		return ptr;
 	}
 
@@ -14689,7 +14695,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionLocalDisturbanceTexture"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionLocalDisturbanceTexture");
 		return ptr;
 	}
 
@@ -14705,7 +14711,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionLogarithm2"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionLogarithm2");
 		return ptr;
 	}
 
@@ -14721,7 +14727,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionLowResClouds"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionLowResClouds");
 		return ptr;
 	}
 
@@ -14736,7 +14742,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionLumaAvg"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionLumaAvg");
 		return ptr;
 	}
 
@@ -14769,7 +14775,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionMakeMaterialAttributes"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionMakeMaterialAttributes");
 		return ptr;
 	}
 
@@ -14787,7 +14793,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionMaterialFunctionCall"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionMaterialFunctionCall");
 		return ptr;
 	}
 
@@ -14806,7 +14812,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionMax"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionMax");
 		return ptr;
 	}
 
@@ -14825,7 +14831,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionMin"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionMin");
 		return ptr;
 	}
 
@@ -14844,7 +14850,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionMultiply"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionMultiply");
 		return ptr;
 	}
 
@@ -14871,7 +14877,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionNoise"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionNoise");
 		return ptr;
 	}
 
@@ -14887,7 +14893,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionNormalize"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionNormalize");
 		return ptr;
 	}
 
@@ -14902,7 +14908,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionObjectBounds"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionObjectBounds");
 		return ptr;
 	}
 
@@ -14917,7 +14923,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionObjectOrientation"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionObjectOrientation");
 		return ptr;
 	}
 
@@ -14932,7 +14938,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionObjectPositionWS"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionObjectPositionWS");
 		return ptr;
 	}
 
@@ -14947,7 +14953,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionObjectRadius"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionObjectRadius");
 		return ptr;
 	}
 
@@ -14963,7 +14969,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionOneMinus"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionOneMinus");
 		return ptr;
 	}
 
@@ -14985,7 +14991,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionPanner"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionPanner");
 		return ptr;
 	}
 
@@ -15003,7 +15009,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionParameter"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionParameter");
 		return ptr;
 	}
 
@@ -15022,7 +15028,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionScalarParameter"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionScalarParameter");
 		return ptr;
 	}
 
@@ -15039,7 +15045,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionStaticBoolParameter"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionStaticBoolParameter");
 		return ptr;
 	}
 
@@ -15056,7 +15062,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionStaticSwitchParameter"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionStaticSwitchParameter");
 		return ptr;
 	}
 
@@ -15077,7 +15083,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionStaticComponentMaskParameter"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionStaticComponentMaskParameter");
 		return ptr;
 	}
 
@@ -15093,7 +15099,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionVectorParameter"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionVectorParameter");
 		return ptr;
 	}
 
@@ -15108,7 +15114,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionParticleColor"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionParticleColor");
 		return ptr;
 	}
 
@@ -15123,7 +15129,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionParticleDirection"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionParticleDirection");
 		return ptr;
 	}
 
@@ -15138,7 +15144,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionParticleMacroUV"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionParticleMacroUV");
 		return ptr;
 	}
 
@@ -15153,7 +15159,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionParticleMotionBlurFade"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionParticleMotionBlurFade");
 		return ptr;
 	}
 
@@ -15168,7 +15174,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionParticlePositionWS"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionParticlePositionWS");
 		return ptr;
 	}
 
@@ -15183,7 +15189,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionParticleRadius"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionParticleRadius");
 		return ptr;
 	}
 
@@ -15198,7 +15204,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionParticleRelativeTime"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionParticleRelativeTime");
 		return ptr;
 	}
 
@@ -15213,7 +15219,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionParticleSize"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionParticleSize");
 		return ptr;
 	}
 
@@ -15228,7 +15234,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionParticleSpeed"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionParticleSpeed");
 		return ptr;
 	}
 
@@ -15243,7 +15249,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionPerInstanceFadeAmount"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionPerInstanceFadeAmount");
 		return ptr;
 	}
 
@@ -15258,7 +15264,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionPerInstanceRandom"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionPerInstanceRandom");
 		return ptr;
 	}
 
@@ -15273,7 +15279,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionPixelDepth"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionPixelDepth");
 		return ptr;
 	}
 
@@ -15288,7 +15294,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionPixelNormalWS"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionPixelNormalWS");
 		return ptr;
 	}
 
@@ -15307,7 +15313,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionPower"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionPower");
 		return ptr;
 	}
 
@@ -15322,7 +15328,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionPrecomputedAOMask"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionPrecomputedAOMask");
 		return ptr;
 	}
 
@@ -15339,7 +15345,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionQualitySwitch"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionQualitySwitch");
 		return ptr;
 	}
 
@@ -15357,7 +15363,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionReflectionVectorWS"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionReflectionVectorWS");
 		return ptr;
 	}
 
@@ -15378,7 +15384,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionRotateAboutAxis"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionRotateAboutAxis");
 		return ptr;
 	}
 
@@ -15399,7 +15405,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionRotator"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionRotator");
 		return ptr;
 	}
 
@@ -15419,7 +15425,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionSceneColor"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionSceneColor");
 		return ptr;
 	}
 
@@ -15439,7 +15445,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionSceneDepth"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionSceneDepth");
 		return ptr;
 	}
 
@@ -15454,7 +15460,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionSceneTexelSize"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionSceneTexelSize");
 		return ptr;
 	}
 
@@ -15474,7 +15480,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionSceneTexture"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionSceneTexture");
 		return ptr;
 	}
 
@@ -15489,7 +15495,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionScreenPosition"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionScreenPosition");
 		return ptr;
 	}
 
@@ -15507,7 +15513,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionSine"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionSine");
 		return ptr;
 	}
 
@@ -15529,7 +15535,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionSpeedTree"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionSpeedTree");
 		return ptr;
 	}
 
@@ -15550,7 +15556,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionSphereMask"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionSphereMask");
 		return ptr;
 	}
 
@@ -15568,7 +15574,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionSphericalParticleOpacity"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionSphericalParticleOpacity");
 		return ptr;
 	}
 
@@ -15584,7 +15590,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionSquareRoot"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionSquareRoot");
 		return ptr;
 	}
 
@@ -15601,7 +15607,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionStaticBool"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionStaticBool");
 		return ptr;
 	}
 
@@ -15621,7 +15627,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionStaticSwitch"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionStaticSwitch");
 		return ptr;
 	}
 
@@ -15640,7 +15646,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionSubtract"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionSubtract");
 		return ptr;
 	}
 
@@ -15660,7 +15666,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionTextureBase"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionTextureBase");
 		return ptr;
 	}
 
@@ -15675,7 +15681,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionTextureObject"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionTextureObject");
 		return ptr;
 	}
 
@@ -15701,7 +15707,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionTextureSample"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionTextureSample");
 		return ptr;
 	}
 
@@ -15719,7 +15725,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionParticleSubUV"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionParticleSubUV");
 		return ptr;
 	}
 
@@ -15737,7 +15743,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionPredicatedTextureSample"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionPredicatedTextureSample");
 		return ptr;
 	}
 
@@ -15755,7 +15761,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionTextureSampleParameter"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionTextureSampleParameter");
 		return ptr;
 	}
 
@@ -15770,7 +15776,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionTextureObjectParameter"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionTextureObjectParameter");
 		return ptr;
 	}
 
@@ -15785,7 +15791,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionTextureSampleParameter2D"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionTextureSampleParameter2D");
 		return ptr;
 	}
 
@@ -15803,7 +15809,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionAntialiasedTextureMask"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionAntialiasedTextureMask");
 		return ptr;
 	}
 
@@ -15821,7 +15827,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionPredicatedTextureSampleParameter2D"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionPredicatedTextureSampleParameter2D");
 		return ptr;
 	}
 
@@ -15839,7 +15845,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionTextureSampleParameterSubUV"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionTextureSampleParameterSubUV");
 		return ptr;
 	}
 
@@ -15854,7 +15860,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionTextureSampleParameterCube"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionTextureSampleParameterCube");
 		return ptr;
 	}
 
@@ -15875,7 +15881,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionTextureCoordinate"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionTextureCoordinate");
 		return ptr;
 	}
 
@@ -15894,7 +15900,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionTime"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionTime");
 		return ptr;
 	}
 
@@ -15913,7 +15919,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionTransform"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionTransform");
 		return ptr;
 	}
 
@@ -15932,7 +15938,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionTransformPosition"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionTransformPosition");
 		return ptr;
 	}
 
@@ -15947,7 +15953,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionTwoSidedSign"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionTwoSidedSign");
 		return ptr;
 	}
 
@@ -15963,7 +15969,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionUnderwaterTranslucencyTexture"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionUnderwaterTranslucencyTexture");
 		return ptr;
 	}
 
@@ -15978,7 +15984,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionVertexColor"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionVertexColor");
 		return ptr;
 	}
 
@@ -15993,7 +15999,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionVertexID"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionVertexID");
 		return ptr;
 	}
 
@@ -16008,7 +16014,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionVertexNormalWS"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionVertexNormalWS");
 		return ptr;
 	}
 
@@ -16025,7 +16031,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionViewProperty"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionViewProperty");
 		return ptr;
 	}
 
@@ -16040,7 +16046,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionViewSize"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionViewSize");
 		return ptr;
 	}
 
@@ -16057,7 +16063,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialExpressionWorldPosition"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialExpressionWorldPosition");
 		return ptr;
 	}
 
@@ -16070,7 +16076,7 @@ class UMaterialFunction : public UObject
 {
 public:
 	struct FGuid                                       StateId;                                                  // 0x0028(0x0010) (ZeroConstructor, DuplicateTransient, IsPlainOldData)
-	class FString                                      Description;                                              // 0x0038(0x0010) (Edit, ZeroConstructor)
+	struct FString                                     Description;                                              // 0x0038(0x0010) (Edit, ZeroConstructor)
 	unsigned char                                      bExposeToLibrary : 1;                                     // 0x0048(0x0001) (Edit)
 	unsigned char                                      UnknownData00[0x7];                                       // 0x0049(0x0007) MISSED OFFSET
 	TArray<struct FText>                               LibraryCategoriesText;                                    // 0x0050(0x0010) (Edit, ZeroConstructor)
@@ -16080,7 +16086,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialFunction"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialFunction");
 		return ptr;
 	}
 
@@ -16095,7 +16101,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialInstanceDynamic"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialInstanceDynamic");
 		return ptr;
 	}
 
@@ -16125,7 +16131,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialParameterCollection"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialParameterCollection");
 		return ptr;
 	}
 
@@ -16144,7 +16150,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaterialParameterCollectionInstance"));
+		static auto ptr = UObject::FindClass("Class Engine.MaterialParameterCollectionInstance");
 		return ptr;
 	}
 
@@ -16159,7 +16165,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MatineeInterface"));
+		static auto ptr = UObject::FindClass("Class Engine.MatineeInterface");
 		return ptr;
 	}
 
@@ -16192,7 +16198,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Texture2D"));
+		static auto ptr = UObject::FindClass("Class Engine.Texture2D");
 		return ptr;
 	}
 
@@ -16212,7 +16218,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.CanvasRenderTarget2D"));
+		static auto ptr = UObject::FindClass("Class Engine.CanvasRenderTarget2D");
 		return ptr;
 	}
 
@@ -16221,7 +16227,7 @@ public:
 	void Render();
 	void ReceiveUpdate(class UCanvas* Canvas, int Width, int Height);
 	void GetSize(int* Width, int* Height);
-	static class UCanvasRenderTarget2D* CreateCanvasRenderTarget2D(class UObject* WorldContextObject, class UClass* CanvasRenderTarget2DClass, int Width, int Height, TEnumAsByte<ECanvasRenderTargetMips> Mips, bool HDR, bool CreateTextureResource);
+	class UCanvasRenderTarget2D* STATIC_CreateCanvasRenderTarget2D(class UObject* WorldContextObject, class UClass* CanvasRenderTarget2DClass, int Width, int Height, TEnumAsByte<ECanvasRenderTargetMips> Mips, bool HDR, bool CreateTextureResource);
 };
 
 
@@ -16236,7 +16242,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.CompressedCanvasRenderTarget2D"));
+		static auto ptr = UObject::FindClass("Class Engine.CompressedCanvasRenderTarget2D");
 		return ptr;
 	}
 
@@ -16256,14 +16262,14 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MaybeCompressedCanvasRenderTarget2D"));
+		static auto ptr = UObject::FindClass("Class Engine.MaybeCompressedCanvasRenderTarget2D");
 		return ptr;
 	}
 
 
 	void UpdateResource();
 	class UTexture* GetTexture();
-	static class UMaybeCompressedCanvasRenderTarget2D* CreateMaybeCompressedCanvasRenderTarget2D(class UObject* WorldContextObject, int Width, int Height, TEnumAsByte<ECanvasRenderTargetMips> Mips, bool HDR, bool CreateTextureResource);
+	class UMaybeCompressedCanvasRenderTarget2D* STATIC_CreateMaybeCompressedCanvasRenderTarget2D(class UObject* WorldContextObject, int Width, int Height, TEnumAsByte<ECanvasRenderTargetMips> Mips, bool HDR, bool CreateTextureResource);
 };
 
 
@@ -16275,7 +16281,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavArea_Default"));
+		static auto ptr = UObject::FindClass("Class Engine.NavArea_Default");
 		return ptr;
 	}
 
@@ -16290,7 +16296,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavArea_LowHeight"));
+		static auto ptr = UObject::FindClass("Class Engine.NavArea_LowHeight");
 		return ptr;
 	}
 
@@ -16305,7 +16311,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavArea_Null"));
+		static auto ptr = UObject::FindClass("Class Engine.NavArea_Null");
 		return ptr;
 	}
 
@@ -16320,7 +16326,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavArea_Obstacle"));
+		static auto ptr = UObject::FindClass("Class Engine.NavArea_Obstacle");
 		return ptr;
 	}
 
@@ -16335,7 +16341,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavAreaMeta"));
+		static auto ptr = UObject::FindClass("Class Engine.NavAreaMeta");
 		return ptr;
 	}
 
@@ -16366,7 +16372,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavAreaMeta_SwitchByAgent"));
+		static auto ptr = UObject::FindClass("Class Engine.NavAreaMeta_SwitchByAgent");
 		return ptr;
 	}
 
@@ -16388,7 +16394,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavCollision"));
+		static auto ptr = UObject::FindClass("Class Engine.NavCollision");
 		return ptr;
 	}
 
@@ -16404,7 +16410,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavigationDataChunk"));
+		static auto ptr = UObject::FindClass("Class Engine.NavigationDataChunk");
 		return ptr;
 	}
 
@@ -16420,7 +16426,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.RecastNavMeshDataChunk"));
+		static auto ptr = UObject::FindClass("Class Engine.RecastNavMeshDataChunk");
 		return ptr;
 	}
 
@@ -16439,7 +16445,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavigationPath"));
+		static auto ptr = UObject::FindClass("Class Engine.NavigationPath");
 		return ptr;
 	}
 
@@ -16449,7 +16455,7 @@ public:
 	bool IsPartial();
 	float GetPathLength();
 	float GetPathCost();
-	class FString GetDebugString();
+	struct FString GetDebugString();
 	void EnableRecalculationOnInvalidation(TEnumAsByte<ENavigationOptionFlag> DoRecalculation);
 	void EnableDebugDrawing(bool bShouldDrawDebugData, const struct FLinearColor& PathColor);
 };
@@ -16463,7 +16469,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavigationPathGenerator"));
+		static auto ptr = UObject::FindClass("Class Engine.NavigationPathGenerator");
 		return ptr;
 	}
 
@@ -16478,7 +16484,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.RecastFilter_UseDefaultArea"));
+		static auto ptr = UObject::FindClass("Class Engine.RecastFilter_UseDefaultArea");
 		return ptr;
 	}
 
@@ -16493,7 +16499,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavLinkTrivial"));
+		static auto ptr = UObject::FindClass("Class Engine.NavLinkTrivial");
 		return ptr;
 	}
 
@@ -16508,7 +16514,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.NavNodeInterface"));
+		static auto ptr = UObject::FindClass("Class Engine.NavNodeInterface");
 		return ptr;
 	}
 
@@ -16524,7 +16530,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DemoNetDriver"));
+		static auto ptr = UObject::FindClass("Class Engine.DemoNetDriver");
 		return ptr;
 	}
 
@@ -16547,7 +16553,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ObjectLibrary"));
+		static auto ptr = UObject::FindClass("Class Engine.ObjectLibrary");
 		return ptr;
 	}
 
@@ -16563,7 +16569,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ObjectReferencer"));
+		static auto ptr = UObject::FindClass("Class Engine.ObjectReferencer");
 		return ptr;
 	}
 
@@ -16579,7 +16585,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PackageMapClient"));
+		static auto ptr = UObject::FindClass("Class Engine.PackageMapClient");
 		return ptr;
 	}
 
@@ -16615,7 +16621,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleEmitter"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleEmitter");
 		return ptr;
 	}
 
@@ -16630,7 +16636,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleSpriteEmitter"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleSpriteEmitter");
 		return ptr;
 	}
 
@@ -16661,7 +16667,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleLODLevel"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleLODLevel");
 		return ptr;
 	}
 
@@ -16693,7 +16699,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModule"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModule");
 		return ptr;
 	}
 
@@ -16710,7 +16716,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleAccelerationBase"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleAccelerationBase");
 		return ptr;
 	}
 
@@ -16728,7 +16734,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleAcceleration"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleAcceleration");
 		return ptr;
 	}
 
@@ -16745,7 +16751,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleAccelerationConstant"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleAccelerationConstant");
 		return ptr;
 	}
 
@@ -16762,7 +16768,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleAccelerationDrag"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleAccelerationDrag");
 		return ptr;
 	}
 
@@ -16779,7 +16785,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleAccelerationDragScaleOverLife"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleAccelerationDragScaleOverLife");
 		return ptr;
 	}
 
@@ -16797,7 +16803,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleAccelerationEmitterPoint"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleAccelerationEmitterPoint");
 		return ptr;
 	}
 
@@ -16813,7 +16819,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleAccelerationOverLifetime"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleAccelerationOverLifetime");
 		return ptr;
 	}
 
@@ -16828,7 +16834,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleAttractorBase"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleAttractorBase");
 		return ptr;
 	}
 
@@ -16847,7 +16853,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleAttractorLine"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleAttractorLine");
 		return ptr;
 	}
 
@@ -16875,7 +16881,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleAttractorParticle"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleAttractorParticle");
 		return ptr;
 	}
 
@@ -16904,7 +16910,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleAttractorPoint"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleAttractorPoint");
 		return ptr;
 	}
 
@@ -16922,7 +16928,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleAttractorPointGravity"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleAttractorPointGravity");
 		return ptr;
 	}
 
@@ -16937,7 +16943,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleBeamBase"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleBeamBase");
 		return ptr;
 	}
 
@@ -16963,7 +16969,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleBeamModifier"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleBeamModifier");
 		return ptr;
 	}
 
@@ -17006,7 +17012,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleBeamNoise"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleBeamNoise");
 		return ptr;
 	}
 
@@ -17037,7 +17043,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleBeamSource"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleBeamSource");
 		return ptr;
 	}
 
@@ -17069,7 +17075,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleBeamTarget"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleBeamTarget");
 		return ptr;
 	}
 
@@ -17084,7 +17090,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleCameraBase"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleCameraBase");
 		return ptr;
 	}
 
@@ -17104,7 +17110,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleCameraOffset"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleCameraOffset");
 		return ptr;
 	}
 
@@ -17119,7 +17125,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleCollisionBase"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleCollisionBase");
 		return ptr;
 	}
 
@@ -17156,7 +17162,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleCollision"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleCollision");
 		return ptr;
 	}
 
@@ -17180,7 +17186,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleCollisionGPU"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleCollisionGPU");
 		return ptr;
 	}
 
@@ -17195,7 +17201,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleColorBase"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleColorBase");
 		return ptr;
 	}
 
@@ -17221,7 +17227,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleColor"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleColor");
 		return ptr;
 	}
 
@@ -17237,7 +17243,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleColor_Seeded"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleColor_Seeded");
 		return ptr;
 	}
 
@@ -17256,7 +17262,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleColorOverLife"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleColorOverLife");
 		return ptr;
 	}
 
@@ -17275,7 +17281,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleColorScaleOverLife"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleColorScaleOverLife");
 		return ptr;
 	}
 
@@ -17291,7 +17297,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleMurkyColor"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleMurkyColor");
 		return ptr;
 	}
 
@@ -17306,7 +17312,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleEventBase"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleEventBase");
 		return ptr;
 	}
 
@@ -17322,7 +17328,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleEventGenerator"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleEventGenerator");
 		return ptr;
 	}
 
@@ -17341,7 +17347,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleEventReceiverBase"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleEventReceiverBase");
 		return ptr;
 	}
 
@@ -17358,7 +17364,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleEventReceiverKillParticles"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleEventReceiverKillParticles");
 		return ptr;
 	}
 
@@ -17379,7 +17385,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleEventReceiverSpawn"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleEventReceiverSpawn");
 		return ptr;
 	}
 
@@ -17394,7 +17400,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleKillBase"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleKillBase");
 		return ptr;
 	}
 
@@ -17415,7 +17421,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleKillBox"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleKillBox");
 		return ptr;
 	}
 
@@ -17435,7 +17441,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleKillHeight"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleKillHeight");
 		return ptr;
 	}
 
@@ -17450,7 +17456,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleLifetimeBase"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleLifetimeBase");
 		return ptr;
 	}
 
@@ -17469,7 +17475,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleLifetime"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleLifetime");
 		return ptr;
 	}
 
@@ -17485,7 +17491,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleLifetime_Seeded"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleLifetime_Seeded");
 		return ptr;
 	}
 
@@ -17500,7 +17506,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleLightBase"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleLightBase");
 		return ptr;
 	}
 
@@ -17524,7 +17530,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleLight"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleLight");
 		return ptr;
 	}
 
@@ -17540,7 +17546,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleLight_Seeded"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleLight_Seeded");
 		return ptr;
 	}
 
@@ -17555,7 +17561,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleLocationBase"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleLocationBase");
 		return ptr;
 	}
 
@@ -17577,7 +17583,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleLocation"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleLocation");
 		return ptr;
 	}
 
@@ -17593,7 +17599,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleLocation_Seeded"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleLocation_Seeded");
 		return ptr;
 	}
 
@@ -17608,7 +17614,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleLocationWorldOffset"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleLocationWorldOffset");
 		return ptr;
 	}
 
@@ -17624,7 +17630,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleLocationWorldOffset_Seeded"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleLocationWorldOffset_Seeded");
 		return ptr;
 	}
 
@@ -17652,7 +17658,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleLocationBoneSocket"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleLocationBoneSocket");
 		return ptr;
 	}
 
@@ -17671,7 +17677,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleLocationDirect"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleLocationDirect");
 		return ptr;
 	}
 
@@ -17696,7 +17702,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleLocationEmitter"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleLocationEmitter");
 		return ptr;
 	}
 
@@ -17712,7 +17718,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleLocationEmitterDirect"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleLocationEmitterDirect");
 		return ptr;
 	}
 
@@ -17738,7 +17744,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleLocationPrimitiveBase"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleLocationPrimitiveBase");
 		return ptr;
 	}
 
@@ -17754,7 +17760,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleLocationComputeShaderOutput"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleLocationComputeShaderOutput");
 		return ptr;
 	}
 
@@ -17787,7 +17793,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleLocationPrimitiveCylinder"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleLocationPrimitiveCylinder");
 		return ptr;
 	}
 
@@ -17803,7 +17809,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleLocationPrimitiveCylinder_Seeded"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleLocationPrimitiveCylinder_Seeded");
 		return ptr;
 	}
 
@@ -17829,7 +17835,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleLocationPrimitiveSphere"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleLocationPrimitiveSphere");
 		return ptr;
 	}
 
@@ -17845,7 +17851,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleLocationPrimitiveSphere_Seeded"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleLocationPrimitiveSphere_Seeded");
 		return ptr;
 	}
 
@@ -17867,7 +17873,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleLocationVelocityComputeShaderOutput"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleLocationVelocityComputeShaderOutput");
 		return ptr;
 	}
 
@@ -17893,7 +17899,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleLocationPrimitiveSphereSlice"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleLocationPrimitiveSphereSlice");
 		return ptr;
 	}
 
@@ -17912,7 +17918,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleLocationPrimitiveTriangle"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleLocationPrimitiveTriangle");
 		return ptr;
 	}
 
@@ -17945,7 +17951,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleLocationSkelVertSurface"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleLocationSkelVertSurface");
 		return ptr;
 	}
 
@@ -17961,7 +17967,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModulePivotOffset"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModulePivotOffset");
 		return ptr;
 	}
 
@@ -17977,7 +17983,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleSourceMovement"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleSourceMovement");
 		return ptr;
 	}
 
@@ -17992,7 +17998,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleMaterialBase"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleMaterialBase");
 		return ptr;
 	}
 
@@ -18008,7 +18014,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleMeshMaterial"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleMeshMaterial");
 		return ptr;
 	}
 
@@ -18025,7 +18031,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleOrbitBase"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleOrbitBase");
 		return ptr;
 	}
 
@@ -18051,7 +18057,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleOrbit"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleOrbit");
 		return ptr;
 	}
 
@@ -18066,7 +18072,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleOrientationBase"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleOrientationBase");
 		return ptr;
 	}
 
@@ -18083,7 +18089,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleOrientationAxisLock"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleOrientationAxisLock");
 		return ptr;
 	}
 
@@ -18098,7 +18104,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleParameterBase"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleParameterBase");
 		return ptr;
 	}
 
@@ -18117,7 +18123,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleParameterDynamic"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleParameterDynamic");
 		return ptr;
 	}
 
@@ -18133,7 +18139,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleParameterDynamic_Seeded"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleParameterDynamic_Seeded");
 		return ptr;
 	}
 
@@ -18149,7 +18155,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleParametersOverX"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleParametersOverX");
 		return ptr;
 	}
 
@@ -18171,7 +18177,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleParametersOverCustom"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleParametersOverCustom");
 		return ptr;
 	}
 
@@ -18195,7 +18201,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleParametersOverVelocity"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleParametersOverVelocity");
 		return ptr;
 	}
 
@@ -18219,7 +18225,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SubUVAnimation"));
+		static auto ptr = UObject::FindClass("Class Engine.SubUVAnimation");
 		return ptr;
 	}
 
@@ -18336,7 +18342,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleRequired"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleRequired");
 		return ptr;
 	}
 
@@ -18351,7 +18357,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleRotationBase"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleRotationBase");
 		return ptr;
 	}
 
@@ -18367,7 +18373,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleAlignRotationToVelocity"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleAlignRotationToVelocity");
 		return ptr;
 	}
 
@@ -18385,7 +18391,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleMeshRotation"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleMeshRotation");
 		return ptr;
 	}
 
@@ -18401,7 +18407,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleMeshRotation_Seeded"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleMeshRotation_Seeded");
 		return ptr;
 	}
 
@@ -18417,7 +18423,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleRotation"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleRotation");
 		return ptr;
 	}
 
@@ -18433,7 +18439,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleRotation_Seeded"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleRotation_Seeded");
 		return ptr;
 	}
 
@@ -18451,7 +18457,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleRotationOverLifetime"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleRotationOverLifetime");
 		return ptr;
 	}
 
@@ -18466,7 +18472,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleRotationRateBase"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleRotationRateBase");
 		return ptr;
 	}
 
@@ -18482,7 +18488,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleMeshRotationRate"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleMeshRotationRate");
 		return ptr;
 	}
 
@@ -18498,7 +18504,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleMeshRotationRate_Seeded"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleMeshRotationRate_Seeded");
 		return ptr;
 	}
 
@@ -18514,7 +18520,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleMeshRotationRateMultiplyLife"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleMeshRotationRateMultiplyLife");
 		return ptr;
 	}
 
@@ -18532,7 +18538,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleMeshRotationRateOverLife"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleMeshRotationRateOverLife");
 		return ptr;
 	}
 
@@ -18548,7 +18554,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleRotationRate"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleRotationRate");
 		return ptr;
 	}
 
@@ -18564,7 +18570,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleRotationRate_Seeded"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleRotationRate_Seeded");
 		return ptr;
 	}
 
@@ -18580,7 +18586,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleRotationRateMultiplyLife"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleRotationRateMultiplyLife");
 		return ptr;
 	}
 
@@ -18595,7 +18601,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleSizeBase"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleSizeBase");
 		return ptr;
 	}
 
@@ -18617,7 +18623,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleSize"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleSize");
 		return ptr;
 	}
 
@@ -18633,7 +18639,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleSize_Seeded"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleSize_Seeded");
 		return ptr;
 	}
 
@@ -18653,7 +18659,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleSizeMultiplyLife"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleSizeMultiplyLife");
 		return ptr;
 	}
 
@@ -18669,7 +18675,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleSizeOverVelocity"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleSizeOverVelocity");
 		return ptr;
 	}
 
@@ -18689,7 +18695,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleSizeScale"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleSizeScale");
 		return ptr;
 	}
 
@@ -18706,7 +18712,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleSizeScaleBySpeed"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleSizeScaleBySpeed");
 		return ptr;
 	}
 
@@ -18724,7 +18730,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleSpawnBase"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleSpawnBase");
 		return ptr;
 	}
 
@@ -18752,7 +18758,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleSpawn"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleSpawn");
 		return ptr;
 	}
 
@@ -18784,7 +18790,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleSpawnPerUnit"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleSpawnPerUnit");
 		return ptr;
 	}
 
@@ -18799,7 +18805,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleSpawnRepeatPerPoint"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleSpawnRepeatPerPoint");
 		return ptr;
 	}
 
@@ -18814,7 +18820,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleSubUVBase"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleSubUVBase");
 		return ptr;
 	}
 
@@ -18832,7 +18838,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleSubUV"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleSubUV");
 		return ptr;
 	}
 
@@ -18852,7 +18858,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleSubUVMovie"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleSubUVMovie");
 		return ptr;
 	}
 
@@ -18867,7 +18873,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleTrailBase"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleTrailBase");
 		return ptr;
 	}
 
@@ -18895,7 +18901,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleTrailSource"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleTrailSource");
 		return ptr;
 	}
 
@@ -18910,7 +18916,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleTypeDataBase"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleTypeDataBase");
 		return ptr;
 	}
 
@@ -18934,7 +18940,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleTypeDataAnimTrail"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleTypeDataAnimTrail");
 		return ptr;
 	}
 
@@ -18972,7 +18978,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleTypeDataBeam2"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleTypeDataBeam2");
 		return ptr;
 	}
 
@@ -18999,7 +19005,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleTypeDataGpu"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleTypeDataGpu");
 		return ptr;
 	}
 
@@ -19038,7 +19044,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleTypeDataMesh"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleTypeDataMesh");
 		return ptr;
 	}
 
@@ -19077,7 +19083,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleTypeDataRibbon"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleTypeDataRibbon");
 		return ptr;
 	}
 
@@ -19092,7 +19098,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleVectorFieldBase"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleVectorFieldBase");
 		return ptr;
 	}
 
@@ -19112,7 +19118,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleVectorFieldGlobal"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleVectorFieldGlobal");
 		return ptr;
 	}
 
@@ -19138,7 +19144,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleVectorFieldLocal"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleVectorFieldLocal");
 		return ptr;
 	}
 
@@ -19155,7 +19161,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleVectorFieldRotation"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleVectorFieldRotation");
 		return ptr;
 	}
 
@@ -19172,7 +19178,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleVectorFieldRotationRate"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleVectorFieldRotationRate");
 		return ptr;
 	}
 
@@ -19188,7 +19194,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleVectorFieldScale"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleVectorFieldScale");
 		return ptr;
 	}
 
@@ -19204,7 +19210,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleVectorFieldScaleOverLife"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleVectorFieldScaleOverLife");
 		return ptr;
 	}
 
@@ -19222,7 +19228,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleVelocityBase"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleVelocityBase");
 		return ptr;
 	}
 
@@ -19238,7 +19244,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleEmitterPointVelocity"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleEmitterPointVelocity");
 		return ptr;
 	}
 
@@ -19258,7 +19264,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleVelocity"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleVelocity");
 		return ptr;
 	}
 
@@ -19274,7 +19280,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleVelocity_Seeded"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleVelocity_Seeded");
 		return ptr;
 	}
 
@@ -19304,7 +19310,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleVelocityCone"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleVelocityCone");
 		return ptr;
 	}
 
@@ -19325,7 +19331,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleVelocityConeEmitterPoint"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleVelocityConeEmitterPoint");
 		return ptr;
 	}
 
@@ -19344,7 +19350,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleVelocityInheritParent"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleVelocityInheritParent");
 		return ptr;
 	}
 
@@ -19362,7 +19368,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleVelocityOverLifetime"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleVelocityOverLifetime");
 		return ptr;
 	}
 
@@ -19377,7 +19383,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleWindBase"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleWindBase");
 		return ptr;
 	}
 
@@ -19396,7 +19402,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleWindInfluence"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleWindInfluence");
 		return ptr;
 	}
 
@@ -19411,7 +19417,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleModuleEventSendToGame"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleModuleEventSendToGame");
 		return ptr;
 	}
 
@@ -19428,7 +19434,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ParticleSystemReplay"));
+		static auto ptr = UObject::FindClass("Class Engine.ParticleSystemReplay");
 		return ptr;
 	}
 
@@ -19443,7 +19449,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DemoPendingNetGame"));
+		static auto ptr = UObject::FindClass("Class Engine.DemoPendingNetGame");
 		return ptr;
 	}
 
@@ -19473,7 +19479,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PhysicalMaterial"));
+		static auto ptr = UObject::FindClass("Class Engine.PhysicalMaterial");
 		return ptr;
 	}
 
@@ -19488,7 +19494,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PhysicalMaterialPropertyBase"));
+		static auto ptr = UObject::FindClass("Class Engine.PhysicalMaterialPropertyBase");
 		return ptr;
 	}
 
@@ -19507,7 +19513,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PhysicsAsset"));
+		static auto ptr = UObject::FindClass("Class Engine.PhysicsAsset");
 		return ptr;
 	}
 
@@ -19527,7 +19533,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PhysicsCollisionHandler"));
+		static auto ptr = UObject::FindClass("Class Engine.PhysicsCollisionHandler");
 		return ptr;
 	}
 
@@ -19586,7 +19592,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PhysicsConstraintTemplate"));
+		static auto ptr = UObject::FindClass("Class Engine.PhysicsConstraintTemplate");
 		return ptr;
 	}
 
@@ -19602,7 +19608,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PhysicsSerializer"));
+		static auto ptr = UObject::FindClass("Class Engine.PhysicsSerializer");
 		return ptr;
 	}
 
@@ -19617,7 +19623,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PhysXAggregateProviderInterface"));
+		static auto ptr = UObject::FindClass("Class Engine.PhysXAggregateProviderInterface");
 		return ptr;
 	}
 
@@ -19633,7 +19639,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PlatformInterfaceBase"));
+		static auto ptr = UObject::FindClass("Class Engine.PlatformInterfaceBase");
 		return ptr;
 	}
 
@@ -19645,13 +19651,13 @@ public:
 class UCloudStorageBase : public UPlatformInterfaceBase
 {
 public:
-	TArray<class FString>                              LocalCloudFiles;                                          // 0x0038(0x0010) (ZeroConstructor)
+	TArray<struct FString>                             LocalCloudFiles;                                          // 0x0038(0x0010) (ZeroConstructor)
 	unsigned char                                      bSuppressDelegateCalls : 1;                               // 0x0048(0x0001)
 	unsigned char                                      UnknownData00[0x7];                                       // 0x0049(0x0007) MISSED OFFSET
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.CloudStorageBase"));
+		static auto ptr = UObject::FindClass("Class Engine.CloudStorageBase");
 		return ptr;
 	}
 
@@ -19670,7 +19676,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.InGameAdManager"));
+		static auto ptr = UObject::FindClass("Class Engine.InGameAdManager");
 		return ptr;
 	}
 
@@ -19683,12 +19689,12 @@ class UMicroTransactionBase : public UPlatformInterfaceBase
 {
 public:
 	TArray<struct FPurchaseInfo>                       AvailableProducts;                                        // 0x0038(0x0010) (ZeroConstructor)
-	class FString                                      LastError;                                                // 0x0048(0x0010) (ZeroConstructor)
-	class FString                                      LastErrorSolution;                                        // 0x0058(0x0010) (ZeroConstructor)
+	struct FString                                     LastError;                                                // 0x0048(0x0010) (ZeroConstructor)
+	struct FString                                     LastErrorSolution;                                        // 0x0058(0x0010) (ZeroConstructor)
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MicroTransactionBase"));
+		static auto ptr = UObject::FindClass("Class Engine.MicroTransactionBase");
 		return ptr;
 	}
 
@@ -19703,16 +19709,16 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.TwitterIntegrationBase"));
+		static auto ptr = UObject::FindClass("Class Engine.TwitterIntegrationBase");
 		return ptr;
 	}
 
 
-	bool TwitterRequest(const class FString& URL, TArray<class FString> ParamKeysAndValues, TEnumAsByte<ETwitterRequestMethod> RequestMethod, int AccountIndex);
-	bool ShowTweetUI(const class FString& InitialMessage, const class FString& URL, const class FString& Picture);
+	bool TwitterRequest(const struct FString& URL, TArray<struct FString> ParamKeysAndValues, TEnumAsByte<ETwitterRequestMethod> RequestMethod, int AccountIndex);
+	bool ShowTweetUI(const struct FString& InitialMessage, const struct FString& URL, const struct FString& Picture);
 	void Init();
 	int GetNumAccounts();
-	class FString GetAccountName(int AccountIndex);
+	struct FString GetAccountName(int AccountIndex);
 	bool CanShowTweetUI();
 	bool AuthorizeAccounts();
 };
@@ -19723,23 +19729,23 @@ public:
 class UPlatformInterfaceWebResponse : public UObject
 {
 public:
-	class FString                                      OriginalURL;                                              // 0x0028(0x0010) (ZeroConstructor)
+	struct FString                                     OriginalURL;                                              // 0x0028(0x0010) (ZeroConstructor)
 	int                                                ResponseCode;                                             // 0x0038(0x0004) (ZeroConstructor, IsPlainOldData)
 	int                                                Tag;                                                      // 0x003C(0x0004) (ZeroConstructor, IsPlainOldData)
-	class FString                                      StringResponse;                                           // 0x0040(0x0010) (ZeroConstructor)
+	struct FString                                     StringResponse;                                           // 0x0040(0x0010) (ZeroConstructor)
 	TArray<unsigned char>                              BinaryResponse;                                           // 0x0050(0x0010) (ZeroConstructor)
 	unsigned char                                      UnknownData00[0x50];                                      // 0x0060(0x0050) MISSED OFFSET
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.PlatformInterfaceWebResponse"));
+		static auto ptr = UObject::FindClass("Class Engine.PlatformInterfaceWebResponse");
 		return ptr;
 	}
 
 
 	int GetNumHeaders();
-	class FString GetHeaderValue(const class FString& HeaderName);
-	void GetHeader(int HeaderIndex, class FString* Header, class FString* Value);
+	struct FString GetHeaderValue(const struct FString& HeaderName);
+	void GetHeader(int HeaderIndex, struct FString* Header, struct FString* Value);
 };
 
 
@@ -19761,7 +19767,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.LocalPlayer"));
+		static auto ptr = UObject::FindClass("Class Engine.LocalPlayer");
 		return ptr;
 	}
 
@@ -19777,7 +19783,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ChildConnection"));
+		static auto ptr = UObject::FindClass("Class Engine.ChildConnection");
 		return ptr;
 	}
 
@@ -19793,7 +19799,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DemoNetConnection"));
+		static auto ptr = UObject::FindClass("Class Engine.DemoNetConnection");
 		return ptr;
 	}
 
@@ -19809,7 +19815,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Polys"));
+		static auto ptr = UObject::FindClass("Class Engine.Polys");
 		return ptr;
 	}
 
@@ -19825,7 +19831,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ReporterBase"));
+		static auto ptr = UObject::FindClass("Class Engine.ReporterBase");
 		return ptr;
 	}
 
@@ -19841,7 +19847,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ReporterGraph"));
+		static auto ptr = UObject::FindClass("Class Engine.ReporterGraph");
 		return ptr;
 	}
 
@@ -19868,7 +19874,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ReverbEffect"));
+		static auto ptr = UObject::FindClass("Class Engine.ReverbEffect");
 		return ptr;
 	}
 
@@ -19885,7 +19891,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Rig"));
+		static auto ptr = UObject::FindClass("Class Engine.Rig");
 		return ptr;
 	}
 
@@ -19900,7 +19906,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SaveGame"));
+		static auto ptr = UObject::FindClass("Class Engine.SaveGame");
 		return ptr;
 	}
 
@@ -19917,7 +19923,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SimpleConstructionScript"));
+		static auto ptr = UObject::FindClass("Class Engine.SimpleConstructionScript");
 		return ptr;
 	}
 
@@ -19943,7 +19949,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SCS_Node"));
+		static auto ptr = UObject::FindClass("Class Engine.SCS_Node");
 		return ptr;
 	}
 
@@ -19959,7 +19965,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Selection"));
+		static auto ptr = UObject::FindClass("Class Engine.Selection");
 		return ptr;
 	}
 
@@ -19976,7 +19982,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DestructibleMesh"));
+		static auto ptr = UObject::FindClass("Class Engine.DestructibleMesh");
 		return ptr;
 	}
 
@@ -19998,7 +20004,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SkeletalMeshSocket"));
+		static auto ptr = UObject::FindClass("Class Engine.SkeletalMeshSocket");
 		return ptr;
 	}
 
@@ -20017,7 +20023,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SlateBrushAsset"));
+		static auto ptr = UObject::FindClass("Class Engine.SlateBrushAsset");
 		return ptr;
 	}
 
@@ -20041,7 +20047,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SoundBase"));
+		static auto ptr = UObject::FindClass("Class Engine.SoundBase");
 		return ptr;
 	}
 
@@ -20057,7 +20063,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.DialogueSoundWaveProxy"));
+		static auto ptr = UObject::FindClass("Class Engine.DialogueSoundWaveProxy");
 		return ptr;
 	}
 
@@ -20079,7 +20085,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SoundCue"));
+		static auto ptr = UObject::FindClass("Class Engine.SoundCue");
 		return ptr;
 	}
 
@@ -20096,7 +20102,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SoundGroups"));
+		static auto ptr = UObject::FindClass("Class Engine.SoundGroups");
 		return ptr;
 	}
 
@@ -20120,7 +20126,7 @@ public:
 	unsigned char                                      UnknownData02[0x3];                                       // 0x005D(0x0003) MISSED OFFSET
 	TEnumAsByte<ESoundGroup>                           SoundGroup;                                               // 0x0060(0x0001) (Edit, ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData03[0x7];                                       // 0x0061(0x0007) MISSED OFFSET
-	class FString                                      SpokenText;                                               // 0x0068(0x0010) (Edit, ZeroConstructor)
+	struct FString                                     SpokenText;                                               // 0x0068(0x0010) (Edit, ZeroConstructor)
 	float                                              Volume;                                                   // 0x0078(0x0004) (Edit, ZeroConstructor, IsPlainOldData)
 	float                                              Pitch;                                                    // 0x007C(0x0004) (Edit, ZeroConstructor, IsPlainOldData)
 	int                                                NumChannels;                                              // 0x0080(0x0004) (Edit, ZeroConstructor, EditConst, IsPlainOldData)
@@ -20133,7 +20139,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SoundWave"));
+		static auto ptr = UObject::FindClass("Class Engine.SoundWave");
 		return ptr;
 	}
 
@@ -20149,7 +20155,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SoundWaveProcedural"));
+		static auto ptr = UObject::FindClass("Class Engine.SoundWaveProcedural");
 		return ptr;
 	}
 
@@ -20169,7 +20175,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SoundClass"));
+		static auto ptr = UObject::FindClass("Class Engine.SoundClass");
 		return ptr;
 	}
 
@@ -20193,7 +20199,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SoundMix"));
+		static auto ptr = UObject::FindClass("Class Engine.SoundMix");
 		return ptr;
 	}
 
@@ -20209,7 +20215,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SoundNode"));
+		static auto ptr = UObject::FindClass("Class Engine.SoundNode");
 		return ptr;
 	}
 
@@ -20224,7 +20230,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SoundNodeAssetReferencer"));
+		static auto ptr = UObject::FindClass("Class Engine.SoundNodeAssetReferencer");
 		return ptr;
 	}
 
@@ -20243,7 +20249,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SoundNodeWavePlayer"));
+		static auto ptr = UObject::FindClass("Class Engine.SoundNodeWavePlayer");
 		return ptr;
 	}
 
@@ -20262,7 +20268,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SoundNodeAttenuation"));
+		static auto ptr = UObject::FindClass("Class Engine.SoundNodeAttenuation");
 		return ptr;
 	}
 
@@ -20278,7 +20284,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SoundNodeBranch"));
+		static auto ptr = UObject::FindClass("Class Engine.SoundNodeBranch");
 		return ptr;
 	}
 
@@ -20294,7 +20300,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SoundNodeConcatenator"));
+		static auto ptr = UObject::FindClass("Class Engine.SoundNodeConcatenator");
 		return ptr;
 	}
 
@@ -20311,7 +20317,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SoundNodeDelay"));
+		static auto ptr = UObject::FindClass("Class Engine.SoundNodeDelay");
 		return ptr;
 	}
 
@@ -20329,7 +20335,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SoundNodeDialoguePlayer"));
+		static auto ptr = UObject::FindClass("Class Engine.SoundNodeDialoguePlayer");
 		return ptr;
 	}
 
@@ -20345,7 +20351,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SoundNodeDistanceCrossFade"));
+		static auto ptr = UObject::FindClass("Class Engine.SoundNodeDistanceCrossFade");
 		return ptr;
 	}
 
@@ -20361,7 +20367,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SoundNodeParamCrossFade"));
+		static auto ptr = UObject::FindClass("Class Engine.SoundNodeParamCrossFade");
 		return ptr;
 	}
 
@@ -20378,7 +20384,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SoundNodeDoppler"));
+		static auto ptr = UObject::FindClass("Class Engine.SoundNodeDoppler");
 		return ptr;
 	}
 
@@ -20408,7 +20414,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SoundNodeEnveloper"));
+		static auto ptr = UObject::FindClass("Class Engine.SoundNodeEnveloper");
 		return ptr;
 	}
 
@@ -20424,7 +20430,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SoundNodeGroupControl"));
+		static auto ptr = UObject::FindClass("Class Engine.SoundNodeGroupControl");
 		return ptr;
 	}
 
@@ -20442,7 +20448,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SoundNodeLooping"));
+		static auto ptr = UObject::FindClass("Class Engine.SoundNodeLooping");
 		return ptr;
 	}
 
@@ -20457,7 +20463,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SoundNodeMature"));
+		static auto ptr = UObject::FindClass("Class Engine.SoundNodeMature");
 		return ptr;
 	}
 
@@ -20473,7 +20479,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SoundNodeMixer"));
+		static auto ptr = UObject::FindClass("Class Engine.SoundNodeMixer");
 		return ptr;
 	}
 
@@ -20492,7 +20498,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SoundNodeModulator"));
+		static auto ptr = UObject::FindClass("Class Engine.SoundNodeModulator");
 		return ptr;
 	}
 
@@ -20509,7 +20515,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SoundNodeModulatorContinuous"));
+		static auto ptr = UObject::FindClass("Class Engine.SoundNodeModulatorContinuous");
 		return ptr;
 	}
 
@@ -20536,7 +20542,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SoundNodeOscillator"));
+		static auto ptr = UObject::FindClass("Class Engine.SoundNodeOscillator");
 		return ptr;
 	}
 
@@ -20551,7 +20557,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SoundNodeQualityLevel"));
+		static auto ptr = UObject::FindClass("Class Engine.SoundNodeQualityLevel");
 		return ptr;
 	}
 
@@ -20573,7 +20579,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SoundNodeRandom"));
+		static auto ptr = UObject::FindClass("Class Engine.SoundNodeRandom");
 		return ptr;
 	}
 
@@ -20589,7 +20595,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SoundNodeSoundClass"));
+		static auto ptr = UObject::FindClass("Class Engine.SoundNodeSoundClass");
 		return ptr;
 	}
 
@@ -20605,7 +20611,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SoundNodeSwitch"));
+		static auto ptr = UObject::FindClass("Class Engine.SoundNodeSwitch");
 		return ptr;
 	}
 
@@ -20621,7 +20627,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SoundNodeWaveParam"));
+		static auto ptr = UObject::FindClass("Class Engine.SoundNodeWaveParam");
 		return ptr;
 	}
 
@@ -20638,11 +20644,11 @@ public:
 	struct FRotator                                    RelativeRotation;                                         // 0x003C(0x000C) (Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData)
 	struct FVector                                     RelativeScale;                                            // 0x0048(0x000C) (Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x4];                                       // 0x0054(0x0004) MISSED OFFSET
-	class FString                                      Tag;                                                      // 0x0058(0x0010) (Edit, BlueprintVisible, ZeroConstructor)
+	struct FString                                     Tag;                                                      // 0x0058(0x0010) (Edit, BlueprintVisible, ZeroConstructor)
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.StaticMeshSocket"));
+		static auto ptr = UObject::FindClass("Class Engine.StaticMeshSocket");
 		return ptr;
 	}
 
@@ -20659,7 +20665,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.SubsurfaceProfile"));
+		static auto ptr = UObject::FindClass("Class Engine.SubsurfaceProfile");
 		return ptr;
 	}
 
@@ -20674,7 +20680,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.TestInterfaceAlternative"));
+		static auto ptr = UObject::FindClass("Class Engine.TestInterfaceAlternative");
 		return ptr;
 	}
 
@@ -20692,7 +20698,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.TextPropertyTestObject"));
+		static auto ptr = UObject::FindClass("Class Engine.TextPropertyTestObject");
 		return ptr;
 	}
 
@@ -20708,7 +20714,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.LightMapTexture2D"));
+		static auto ptr = UObject::FindClass("Class Engine.LightMapTexture2D");
 		return ptr;
 	}
 
@@ -20725,7 +20731,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ShadowMapTexture2D"));
+		static auto ptr = UObject::FindClass("Class Engine.ShadowMapTexture2D");
 		return ptr;
 	}
 
@@ -20742,7 +20748,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.TextureLightProfile"));
+		static auto ptr = UObject::FindClass("Class Engine.TextureLightProfile");
 		return ptr;
 	}
 
@@ -20755,12 +20761,12 @@ class UTexture2DDynamic : public UTexture
 {
 public:
 	unsigned char                                      UnknownData00[0x8];                                       // 0x0138(0x0008) MISSED OFFSET
-	unsigned char                                      Format[1];                                                   // 0x0140(0x0001) (ZeroConstructor, Transient, IsPlainOldData)
+	TEnumAsByte<EPixelFormat>                          Format;                                                   // 0x0140(0x0001) (ZeroConstructor, Transient, IsPlainOldData)
 	unsigned char                                      UnknownData01[0xF];                                       // 0x0141(0x000F) MISSED OFFSET
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.Texture2DDynamic"));
+		static auto ptr = UObject::FindClass("Class Engine.Texture2DDynamic");
 		return ptr;
 	}
 
@@ -20776,7 +20782,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.TextureCube"));
+		static auto ptr = UObject::FindClass("Class Engine.TextureCube");
 		return ptr;
 	}
 
@@ -20790,7 +20796,7 @@ class UTextureRenderTargetCube : public UTextureRenderTarget
 public:
 	int                                                SizeX;                                                    // 0x0140(0x0004) (Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData)
 	struct FLinearColor                                ClearColor;                                               // 0x0144(0x0010) (ZeroConstructor, IsPlainOldData)
-	unsigned char                                      OverrideFormat[1];                                           // 0x0154(0x0001) (ZeroConstructor, IsPlainOldData)
+	TEnumAsByte<EPixelFormat>                          OverrideFormat;                                           // 0x0154(0x0001) (ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x3];                                       // 0x0155(0x0003) MISSED OFFSET
 	unsigned char                                      bHDR : 1;                                                 // 0x0158(0x0001) (Edit, BlueprintVisible, BlueprintReadOnly)
 	unsigned char                                      bForceLinearGamma : 1;                                    // 0x0158(0x0001)
@@ -20798,7 +20804,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.TextureRenderTargetCube"));
+		static auto ptr = UObject::FindClass("Class Engine.TextureRenderTargetCube");
 		return ptr;
 	}
 
@@ -20813,7 +20819,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.ThumbnailInfo"));
+		static auto ptr = UObject::FindClass("Class Engine.ThumbnailInfo");
 		return ptr;
 	}
 
@@ -20842,7 +20848,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.TimelineTemplate"));
+		static auto ptr = UObject::FindClass("Class Engine.TimelineTemplate");
 		return ptr;
 	}
 
@@ -20867,7 +20873,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.TouchInterface"));
+		static auto ptr = UObject::FindClass("Class Engine.TouchInterface");
 		return ptr;
 	}
 
@@ -20883,7 +20889,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.UserDefinedEnum"));
+		static auto ptr = UObject::FindClass("Class Engine.UserDefinedEnum");
 		return ptr;
 	}
 
@@ -20898,7 +20904,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.AnimDataEntryStruct"));
+		static auto ptr = UObject::FindClass("Class Engine.AnimDataEntryStruct");
 		return ptr;
 	}
 
@@ -20915,7 +20921,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.VectorField"));
+		static auto ptr = UObject::FindClass("Class Engine.VectorField");
 		return ptr;
 	}
 
@@ -20945,7 +20951,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.VectorFieldAnimated"));
+		static auto ptr = UObject::FindClass("Class Engine.VectorFieldAnimated");
 		return ptr;
 	}
 
@@ -20964,7 +20970,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.VectorFieldStatic"));
+		static auto ptr = UObject::FindClass("Class Engine.VectorFieldStatic");
 		return ptr;
 	}
 
@@ -20980,7 +20986,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.VertexAnimBase"));
+		static auto ptr = UObject::FindClass("Class Engine.VertexAnimBase");
 		return ptr;
 	}
 
@@ -20996,7 +21002,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.MorphTarget"));
+		static auto ptr = UObject::FindClass("Class Engine.MorphTarget");
 		return ptr;
 	}
 
@@ -21013,7 +21019,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.VertexAnimation"));
+		static auto ptr = UObject::FindClass("Class Engine.VertexAnimation");
 		return ptr;
 	}
 
@@ -21028,7 +21034,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Engine.VisualLoggerAutomationTests"));
+		static auto ptr = UObject::FindClass("Class Engine.VisualLoggerAutomationTests");
 		return ptr;
 	}
 

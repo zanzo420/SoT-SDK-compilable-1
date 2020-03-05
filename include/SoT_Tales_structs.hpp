@@ -1,21 +1,38 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
 
-#include "SoT_Basic.hpp"
-#include "SoT_Tales_enums.hpp"
-#include "SoT_Engine_classes.hpp"
-#include "SoT_CoreUObject_classes.hpp"
-#include "SoT_MerchantContracts_classes.hpp"
-#include "SoT_Athena_classes.hpp"
-#include "SoT_PrioritisedPrompts_classes.hpp"
-
 namespace SDK
 {
+//---------------------------------------------------------------------------
+//Enums
+//---------------------------------------------------------------------------
+
+// Enum Tales.ETaleQuestStepBeginMode
+enum class ETaleQuestStepBeginMode : uint8_t
+{
+	Cold                           = 0,
+	Warm                           = 1,
+	ETaleQuestStepBeginMode_MAX    = 2
+};
+
+
+// Enum Tales.ETaleQuestStepState
+enum class ETaleQuestStepState : uint8_t
+{
+	Inactive                       = 0,
+	Active                         = 1,
+	PendingCompletion              = 2,
+	Completed                      = 3,
+	ETaleQuestStepState_MAX        = 4
+};
+
+
+
 //---------------------------------------------------------------------------
 //Script Structs
 //---------------------------------------------------------------------------

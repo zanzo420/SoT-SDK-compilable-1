@@ -1,12 +1,10 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
-
-#include "SoT_Retraction_structs.hpp"
 
 namespace SDK
 {
@@ -29,7 +27,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Retraction.RetractableComponent"));
+		static auto ptr = UObject::FindClass("Class Retraction.RetractableComponent");
 		return ptr;
 	}
 
@@ -44,7 +42,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Retraction.RetractorInterface"));
+		static auto ptr = UObject::FindClass("Class Retraction.RetractorInterface");
 		return ptr;
 	}
 
@@ -59,7 +57,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Retraction.RetractableInterface"));
+		static auto ptr = UObject::FindClass("Class Retraction.RetractableInterface");
 		return ptr;
 	}
 
@@ -74,7 +72,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Retraction.RetractableProviderInterface"));
+		static auto ptr = UObject::FindClass("Class Retraction.RetractableProviderInterface");
 		return ptr;
 	}
 
@@ -90,7 +88,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Retraction.RetractableFloatingBarrelComponent"));
+		static auto ptr = UObject::FindClass("Class Retraction.RetractableFloatingBarrelComponent");
 		return ptr;
 	}
 
@@ -111,7 +109,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Retraction.RetractorComponent"));
+		static auto ptr = UObject::FindClass("Class Retraction.RetractorComponent");
 		return ptr;
 	}
 

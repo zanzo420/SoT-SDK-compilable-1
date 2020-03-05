@@ -1,23 +1,93 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
 
-#include "SoT_Basic.hpp"
-#include "SoT_AIShips_enums.hpp"
-#include "SoT_AIModule_classes.hpp"
-#include "SoT_CoreUObject_classes.hpp"
-#include "SoT_Engine_classes.hpp"
-#include "SoT_Athena_classes.hpp"
-#include "SoT_AthenaAI_classes.hpp"
-#include "SoT_Maths_classes.hpp"
-#include "SoT_AthenaEngine_classes.hpp"
-
 namespace SDK
 {
+//---------------------------------------------------------------------------
+//Enums
+//---------------------------------------------------------------------------
+
+// Enum AIShips.EAIShipEncounterType
+enum class EAIShipEncounterType : uint8_t
+{
+	Battle                         = 0,
+	Passive                        = 1,
+	Aggressive                     = 2,
+	MAX                            = 3,
+	EAIShipEncounterType_MAX       = 4
+};
+
+
+// Enum AIShips.ECannonballIconType
+enum class ECannonballIconType : uint8_t
+{
+	Normal                         = 0,
+	Anchor                         = 1,
+	Ballast                        = 2,
+	Barrel                         = 3,
+	Boogie                         = 4,
+	Grog                           = 5,
+	Limp                           = 6,
+	Passive                        = 7,
+	Rigging                        = 8,
+	Rudder                         = 9,
+	Silence                        = 10,
+	Snake                          = 11,
+	Snooze                         = 12,
+	None                           = 13,
+	Max                            = 14,
+	ECannonballIconType_MAX        = 15
+};
+
+
+// Enum AIShips.ESkellyFormIconType
+enum class ESkellyFormIconType : uint8_t
+{
+	Normal                         = 0,
+	Metal                          = 1,
+	Plant                          = 2,
+	Shadow                         = 3,
+	None                           = 4,
+	Max                            = 5,
+	ESkellyFormIconType_MAX        = 6
+};
+
+
+// Enum AIShips.EAIShipType
+enum class EAIShipType : uint8_t
+{
+	Normal                         = 0,
+	Hard                           = 1,
+	EAIShipType_MAX                = 2
+};
+
+
+// Enum AIShips.EAIShipPlayerTrackerType
+enum class EAIShipPlayerTrackerType : uint8_t
+{
+	DefaultRadiusTracker           = 0,
+	CannonRadiusTracker            = 1,
+	OnShipTracker                  = 2,
+	BelowDeckOfShipTracker         = 3,
+	EAIShipPlayerTrackerType_MAX   = 4
+};
+
+
+// Enum AIShips.EAIShipDestructionReason
+enum class EAIShipDestructionReason : uint8_t
+{
+	Defeated                       = 0,
+	Despawn                        = 1,
+	EAIShipDestructionReason_MAX   = 2
+};
+
+
+
 //---------------------------------------------------------------------------
 //Script Structs
 //---------------------------------------------------------------------------
@@ -351,7 +421,7 @@ struct FCursedSailsBattleParams
 // 0x0010
 struct FAIShipDespawnedEvent
 {
-	class AShip*                                       Ship;                                                     // 0x0000(0x0008) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor, IsPlainOldData)
+	class AActor*                                      Ship;                                                     // 0x0000(0x0008) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor, IsPlainOldData)
 	TEnumAsByte<EAIShipDestructionReason>              ShipDestructionReason;                                    // 0x0008(0x0001) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x7];                                       // 0x0009(0x0007) MISSED OFFSET
 };
@@ -452,10 +522,10 @@ struct FAIShipWorldSettings
 // 0x0048
 struct FAIShipDamagedTelemetryEvent
 {
-	class FString                                      DamageType;                                               // 0x0000(0x0010) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor)
+	struct FString                                     DamageType;                                               // 0x0000(0x0010) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor)
 	struct FVector                                     DamageLocation;                                           // 0x0010(0x000C) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x4];                                       // 0x001C(0x0004) MISSED OFFSET
-	class FString                                      DamagedShipPart;                                          // 0x0020(0x0010) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor)
+	struct FString                                     DamagedShipPart;                                          // 0x0020(0x0010) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor)
 	int                                                DamageLevel;                                              // 0x0030(0x0004) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor, IsPlainOldData)
 	struct FGuid                                       AttackId;                                                 // 0x0034(0x0010) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData01[0x4];                                       // 0x0044(0x0004) MISSED OFFSET
@@ -465,7 +535,7 @@ struct FAIShipDamagedTelemetryEvent
 // 0x0018
 struct FAIShipDespawnTelemetryEvent
 {
-	class FString                                      AIShipId;                                                 // 0x0000(0x0010) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor)
+	struct FString                                     AIShipId;                                                 // 0x0000(0x0010) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor)
 	TEnumAsByte<EAIShipDestructionReason>              AIShipDestructionReason;                                  // 0x0010(0x0001) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x7];                                       // 0x0011(0x0007) MISSED OFFSET
 };
@@ -474,12 +544,12 @@ struct FAIShipDespawnTelemetryEvent
 // 0x0068
 struct FAIShipSpawnTelemetryEvent
 {
-	class FString                                      AIShipId;                                                 // 0x0000(0x0010) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor)
-	class FString                                      SpawningCrewId;                                           // 0x0010(0x0010) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor)
-	class FString                                      AIShipBattleId;                                           // 0x0020(0x0010) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor)
-	class FString                                      AIShipType;                                               // 0x0030(0x0010) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor)
+	struct FString                                     AIShipId;                                                 // 0x0000(0x0010) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor)
+	struct FString                                     SpawningCrewId;                                           // 0x0010(0x0010) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor)
+	struct FString                                     AIShipBattleId;                                           // 0x0020(0x0010) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor)
+	struct FString                                     AIShipType;                                               // 0x0030(0x0010) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor)
 	struct FGuid                                       SpawnConfigId;                                            // 0x0040(0x0010) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor, IsPlainOldData)
-	class FString                                      AIShipSize;                                               // 0x0050(0x0010) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor)
+	struct FString                                     AIShipSize;                                               // 0x0050(0x0010) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor)
 	int                                                AIShipWaveIndex;                                          // 0x0060(0x0004) (BlueprintVisible, BlueprintReadOnly, ZeroConstructor, IsPlainOldData)
 	unsigned char                                      UnknownData00[0x4];                                       // 0x0064(0x0004) MISSED OFFSET
 };

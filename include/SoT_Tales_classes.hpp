@@ -1,12 +1,10 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
-
-#include "SoT_Tales_structs.hpp"
 
 namespace SDK
 {
@@ -23,7 +21,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestStep"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestStep");
 		return ptr;
 	}
 
@@ -40,7 +38,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestStepDesc"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestStepDesc");
 		return ptr;
 	}
 
@@ -56,7 +54,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestService"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestService");
 		return ptr;
 	}
 
@@ -71,7 +69,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestServiceDesc"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestServiceDesc");
 		return ptr;
 	}
 
@@ -92,7 +90,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestFramedStep"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestFramedStep");
 		return ptr;
 	}
 
@@ -109,7 +107,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestFramedStepDesc"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestFramedStepDesc");
 		return ptr;
 	}
 
@@ -132,7 +130,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.SplineFootprintPathComponent"));
+		static auto ptr = UObject::FindClass("Class Tales.SplineFootprintPathComponent");
 		return ptr;
 	}
 
@@ -156,7 +154,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestCargoRunContract"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestCargoRunContract");
 		return ptr;
 	}
 
@@ -173,7 +171,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestCargoRunContractsService"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestCargoRunContractsService");
 		return ptr;
 	}
 
@@ -197,7 +195,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestMerchantContract"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestMerchantContract");
 		return ptr;
 	}
 
@@ -213,7 +211,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestMerchantContractsService"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestMerchantContractsService");
 		return ptr;
 	}
 
@@ -232,7 +230,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestMapService"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestMapService");
 		return ptr;
 	}
 
@@ -250,7 +248,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestCargoRunContractsServiceDesc"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestCargoRunContractsServiceDesc");
 		return ptr;
 	}
 
@@ -265,7 +263,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestMapServiceDesc"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestMapServiceDesc");
 		return ptr;
 	}
 
@@ -280,7 +278,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestMerchantContractsServiceDesc"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestMerchantContractsServiceDesc");
 		return ptr;
 	}
 
@@ -296,7 +294,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.DestroySpawnedActorStep"));
+		static auto ptr = UObject::FindClass("Class Tales.DestroySpawnedActorStep");
 		return ptr;
 	}
 
@@ -312,7 +310,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestAddBountyMapStep"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestAddBountyMapStep");
 		return ptr;
 	}
 
@@ -328,7 +326,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestAddCargoRunMapStep"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestAddCargoRunMapStep");
 		return ptr;
 	}
 
@@ -344,7 +342,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestAddMerchantMapStep"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestAddMerchantMapStep");
 		return ptr;
 	}
 
@@ -360,7 +358,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestAddRiddleMapStep"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestAddRiddleMapStep");
 		return ptr;
 	}
 
@@ -376,7 +374,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestAddXMarksMapStep"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestAddXMarksMapStep");
 		return ptr;
 	}
 
@@ -392,7 +390,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestAdvanceRiddleMapStep"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestAdvanceRiddleMapStep");
 		return ptr;
 	}
 
@@ -408,7 +406,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestClearTaleProposalsStep"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestClearTaleProposalsStep");
 		return ptr;
 	}
 
@@ -425,7 +423,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestGrantRewardStep"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestGrantRewardStep");
 		return ptr;
 	}
 
@@ -441,7 +439,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestPermanentPromptStep"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestPermanentPromptStep");
 		return ptr;
 	}
 
@@ -457,7 +455,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestRemoveMapStep"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestRemoveMapStep");
 		return ptr;
 	}
 
@@ -473,7 +471,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestUpdateMerchantMapStep"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestUpdateMerchantMapStep");
 		return ptr;
 	}
 
@@ -490,7 +488,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestWaitForHandInStep"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestWaitForHandInStep");
 		return ptr;
 	}
 
@@ -506,7 +504,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.DestroySpawnedActorStepDesc"));
+		static auto ptr = UObject::FindClass("Class Tales.DestroySpawnedActorStepDesc");
 		return ptr;
 	}
 
@@ -528,7 +526,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestAddBountyMapStepDesc"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestAddBountyMapStepDesc");
 		return ptr;
 	}
 
@@ -548,7 +546,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestAddCargoRunMapStepDesc"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestAddCargoRunMapStepDesc");
 		return ptr;
 	}
 
@@ -570,7 +568,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestAddMerchantMapStepDesc"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestAddMerchantMapStepDesc");
 		return ptr;
 	}
 
@@ -587,7 +585,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestAddRiddleMapBaseStepDesc"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestAddRiddleMapBaseStepDesc");
 		return ptr;
 	}
 
@@ -603,7 +601,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestAddRiddleMapStepDesc"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestAddRiddleMapStepDesc");
 		return ptr;
 	}
 
@@ -619,7 +617,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestAddRiddleMapUsingVariableStepDesc"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestAddRiddleMapUsingVariableStepDesc");
 		return ptr;
 	}
 
@@ -637,7 +635,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestAddXMarksMapStepDesc"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestAddXMarksMapStepDesc");
 		return ptr;
 	}
 
@@ -653,7 +651,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestAdvanceRiddleMapStepDesc"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestAdvanceRiddleMapStepDesc");
 		return ptr;
 	}
 
@@ -669,7 +667,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestClearTaleProposalsStepDesc"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestClearTaleProposalsStepDesc");
 		return ptr;
 	}
 
@@ -687,7 +685,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestGrantRewardStepDesc"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestGrantRewardStepDesc");
 		return ptr;
 	}
 
@@ -705,7 +703,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestPermanentPromptStepDesc"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestPermanentPromptStepDesc");
 		return ptr;
 	}
 
@@ -722,7 +720,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestRemoveMapStepDesc"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestRemoveMapStepDesc");
 		return ptr;
 	}
 
@@ -740,7 +738,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestUpdateMerchantMapStepDesc"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestUpdateMerchantMapStepDesc");
 		return ptr;
 	}
 
@@ -757,7 +755,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class Tales.TaleQuestWaitForHandInStepDesc"));
+		static auto ptr = UObject::FindClass("Class Tales.TaleQuestWaitForHandInStepDesc");
 		return ptr;
 	}
 

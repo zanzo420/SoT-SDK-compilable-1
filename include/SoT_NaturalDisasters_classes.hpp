@@ -1,12 +1,10 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
-
-#include "SoT_NaturalDisasters_structs.hpp"
 
 namespace SDK
 {
@@ -28,7 +26,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class NaturalDisasters.AshenLordAshCloudSetupDataAsset"));
+		static auto ptr = UObject::FindClass("Class NaturalDisasters.AshenLordAshCloudSetupDataAsset");
 		return ptr;
 	}
 
@@ -52,7 +50,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class NaturalDisasters.AshenLordAshCloud"));
+		static auto ptr = UObject::FindClass("Class NaturalDisasters.AshenLordAshCloud");
 		return ptr;
 	}
 
@@ -108,7 +106,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class NaturalDisasters.VolcanoSetupDataAsset"));
+		static auto ptr = UObject::FindClass("Class NaturalDisasters.VolcanoSetupDataAsset");
 		return ptr;
 	}
 
@@ -133,7 +131,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class NaturalDisasters.AshenLordVolcanoSetupDataAsset"));
+		static auto ptr = UObject::FindClass("Class NaturalDisasters.AshenLordVolcanoSetupDataAsset");
 		return ptr;
 	}
 
@@ -175,7 +173,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class NaturalDisasters.Volcano"));
+		static auto ptr = UObject::FindClass("Class NaturalDisasters.Volcano");
 		return ptr;
 	}
 
@@ -196,7 +194,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class NaturalDisasters.AshenLordVolcano"));
+		static auto ptr = UObject::FindClass("Class NaturalDisasters.AshenLordVolcano");
 		return ptr;
 	}
 
@@ -239,7 +237,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class NaturalDisasters.EarthquakeSetupDataAsset"));
+		static auto ptr = UObject::FindClass("Class NaturalDisasters.EarthquakeSetupDataAsset");
 		return ptr;
 	}
 
@@ -274,7 +272,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class NaturalDisasters.Earthquake"));
+		static auto ptr = UObject::FindClass("Class NaturalDisasters.Earthquake");
 		return ptr;
 	}
 
@@ -306,7 +304,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class NaturalDisasters.Geyser"));
+		static auto ptr = UObject::FindClass("Class NaturalDisasters.Geyser");
 		return ptr;
 	}
 
@@ -342,7 +340,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class NaturalDisasters.GeyserManagerSetupDataAsset"));
+		static auto ptr = UObject::FindClass("Class NaturalDisasters.GeyserManagerSetupDataAsset");
 		return ptr;
 	}
 
@@ -357,7 +355,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class NaturalDisasters.NaturalDisasterRegistryInterface"));
+		static auto ptr = UObject::FindClass("Class NaturalDisasters.NaturalDisasterRegistryInterface");
 		return ptr;
 	}
 
@@ -376,7 +374,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class NaturalDisasters.GeyserManager"));
+		static auto ptr = UObject::FindClass("Class NaturalDisasters.GeyserManager");
 		return ptr;
 	}
 
@@ -398,7 +396,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class NaturalDisasters.GeyserSetupDataAsset"));
+		static auto ptr = UObject::FindClass("Class NaturalDisasters.GeyserSetupDataAsset");
 		return ptr;
 	}
 
@@ -423,7 +421,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class NaturalDisasters.LavaZone"));
+		static auto ptr = UObject::FindClass("Class NaturalDisasters.LavaZone");
 		return ptr;
 	}
 
@@ -454,7 +452,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class NaturalDisasters.SuperheatedWaterSetupDataAsset"));
+		static auto ptr = UObject::FindClass("Class NaturalDisasters.SuperheatedWaterSetupDataAsset");
 		return ptr;
 	}
 
@@ -476,7 +474,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class NaturalDisasters.SuperheatedWater"));
+		static auto ptr = UObject::FindClass("Class NaturalDisasters.SuperheatedWater");
 		return ptr;
 	}
 

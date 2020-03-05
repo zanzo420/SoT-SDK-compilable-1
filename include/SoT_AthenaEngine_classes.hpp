@@ -1,12 +1,10 @@
 #pragma once
 
-// Sea of Thieves (2.0) SDK
+// SeaOfThieves (1.6.4) SDK
 
 #ifdef _MSC_VER
 	#pragma pack(push, 0x8)
 #endif
-
-#include "SoT_AthenaEngine_structs.hpp"
 
 namespace SDK
 {
@@ -22,10 +20,40 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaEngine.AthenaEngineInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaEngine.AthenaEngineInterface");
 		return ptr;
 	}
 
+};
+
+
+// Class AthenaEngine.BoxCollisionExtentAdjustOverTimeComponent
+// 0x0030 (0x00F8 - 0x00C8)
+class UBoxCollisionExtentAdjustOverTimeComponent : public UActorComponent
+{
+public:
+	float                                              DelayBeforeExtentAdjustment;                              // 0x00C8(0x0004) (Edit, ZeroConstructor, DisableEditOnInstance, IsPlainOldData)
+	bool                                               ShouldAdjustBoxExtentX;                                   // 0x00CC(0x0001) (Edit, ZeroConstructor, DisableEditOnInstance, IsPlainOldData)
+	unsigned char                                      UnknownData00[0x3];                                       // 0x00CD(0x0003) MISSED OFFSET
+	float                                              PostAdjustmentBoxExtentX;                                 // 0x00D0(0x0004) (Edit, ZeroConstructor, DisableEditOnInstance, IsPlainOldData)
+	bool                                               ShouldAdjustBoxExtentY;                                   // 0x00D4(0x0001) (Edit, ZeroConstructor, DisableEditOnInstance, IsPlainOldData)
+	unsigned char                                      UnknownData01[0x3];                                       // 0x00D5(0x0003) MISSED OFFSET
+	float                                              PostAdjustmentBoxExtentY;                                 // 0x00D8(0x0004) (Edit, ZeroConstructor, DisableEditOnInstance, IsPlainOldData)
+	bool                                               ShouldAdjustBoxExtentZ;                                   // 0x00DC(0x0001) (Edit, ZeroConstructor, DisableEditOnInstance, IsPlainOldData)
+	unsigned char                                      UnknownData02[0x3];                                       // 0x00DD(0x0003) MISSED OFFSET
+	float                                              PostAdjustmentBoxExtentZ;                                 // 0x00E0(0x0004) (Edit, ZeroConstructor, DisableEditOnInstance, IsPlainOldData)
+	unsigned char                                      UnknownData03[0x4];                                       // 0x00E4(0x0004) MISSED OFFSET
+	class UBoxComponent*                               BoxCollisionToAdjust;                                     // 0x00E8(0x0008) (ExportObject, ZeroConstructor, InstancedReference, IsPlainOldData)
+	class UWorld*                                      CachedWorld;                                              // 0x00F0(0x0008) (ZeroConstructor, IsPlainOldData)
+
+	static UClass* StaticClass()
+	{
+		static auto ptr = UObject::FindClass("Class AthenaEngine.BoxCollisionExtentAdjustOverTimeComponent");
+		return ptr;
+	}
+
+
+	void SetBoxCollisionToAdjust(class UBoxComponent* InBoxComponent);
 };
 
 
@@ -37,7 +65,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaEngine.BoxedRpcDispatcherInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaEngine.BoxedRpcDispatcherInterface");
 		return ptr;
 	}
 
@@ -52,10 +80,27 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaEngine.EmptyObject"));
+		static auto ptr = UObject::FindClass("Class AthenaEngine.EmptyObject");
 		return ptr;
 	}
 
+};
+
+
+// Class AthenaEngine.ForceFeedbackCondition
+// 0x0000 (0x0028 - 0x0028)
+class UForceFeedbackCondition : public UObject
+{
+public:
+
+	static UClass* StaticClass()
+	{
+		static auto ptr = UObject::FindClass("Class AthenaEngine.ForceFeedbackCondition");
+		return ptr;
+	}
+
+
+	bool CanPlayForceFeedback(class AActor* InOwner);
 };
 
 
@@ -67,7 +112,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaEngine.GameInstanceSessionIdProviderInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaEngine.GameInstanceSessionIdProviderInterface");
 		return ptr;
 	}
 
@@ -84,7 +129,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaEngine.NestedWorldRootDataAsset"));
+		static auto ptr = UObject::FindClass("Class AthenaEngine.NestedWorldRootDataAsset");
 		return ptr;
 	}
 
@@ -99,7 +144,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaEngine.OnlinePlayerPermissionsRetrieverInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaEngine.OnlinePlayerPermissionsRetrieverInterface");
 		return ptr;
 	}
 
@@ -114,7 +159,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaEngine.PlayModeInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaEngine.PlayModeInterface");
 		return ptr;
 	}
 
@@ -129,7 +174,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaEngine.ResourceProviderInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaEngine.ResourceProviderInterface");
 		return ptr;
 	}
 
@@ -146,7 +191,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaEngine.StringToAssetClassMap"));
+		static auto ptr = UObject::FindClass("Class AthenaEngine.StringToAssetClassMap");
 		return ptr;
 	}
 
@@ -161,7 +206,7 @@ public:
 
 	static UClass* StaticClass()
 	{
-		static auto ptr = UObject::FindObject<UClass>(_xor_("Class AthenaEngine.SyncedRandomRetrievalInterface"));
+		static auto ptr = UObject::FindClass("Class AthenaEngine.SyncedRandomRetrievalInterface");
 		return ptr;
 	}
 
